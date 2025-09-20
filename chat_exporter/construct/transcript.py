@@ -29,7 +29,7 @@ class TranscriptDAO:
         fancy_times: bool,
         before: Optional[datetime.datetime],
         after: Optional[datetime.datetime],
-        bot: Optional[discord.Client],
+        bot: Optional['discord.Client'],
         attachment_handler: Optional[AttachmentHandler],
     ):
         self.channel = channel
