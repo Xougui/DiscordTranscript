@@ -2,6 +2,8 @@
     <h2>Discord Channel To html Transcripts</h2>
 </div>
 
+Avant toute chose, je tiens à préciser que le code de base n'est pas à moi. Je l'ai trouvé ici: https://github.com/FroostySnoowman/py-discord-html-transcripts .
+
 ---
 # Prérequis
 `discord.py` v2.4.0 ou plus récent
