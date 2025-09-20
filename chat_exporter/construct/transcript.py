@@ -6,7 +6,7 @@ import re
 from typing import List, Optional
 
 from chat_exporter.construct.attachment_handler import AttachmentHandler
-from chat_exporter.ext.discord_import import discord
+from chat_exporter.ext.discord_import import discord, discord_errors
 from chat_exporter.construct.message import gather_messages
 from chat_exporter.construct.assets.component import Component
 from chat_exporter.ext.cache import clear_cache
@@ -172,8 +172,16 @@ class Transcript(TranscriptDAO):
 
         try:
             return await super().build_transcript()
+        except discord_errors.Forbidden:
+            self.html = "Whoops! I don't have permission to see this channel."
+            return self
+        except discord_errors.HTTPException:
+            self.html = "Whoops! Something went wrong while fetching the messages."
+            return self
         except Exception:
             self.html = "Whoops! Something went wrong..."
             traceback.print_exc()
-            print("Please send a screenshot of the above error to https://github.com/FroostySnoowman/py-discord-html-transcripts")
+            print(
+                "Please send a screenshot of the above error to https://github.com/Xougui/discord-channel-to-html-transcripts"
+            )
             return self

@@ -132,7 +132,7 @@ class MessageConstruct:
             )
             user_joined_at = self.message.author.joined_at if hasattr(self.message.author, "joined_at") else None
             user_display_name = (
-                f'<div class="meta__display-name">{self.message.author.display_name}</div>'
+                f'<div class="meta__display-name">{html.escape(self.message.author.display_name)}</div>'
                 if self.message.author.display_name != self.message.author.name
                 else ""
             )
@@ -366,7 +366,7 @@ class MessageConstruct:
         self.message_html += await fill_out(self.guild, message_thread, [
             ("THREAD_URL", DiscordUtils.thread_channel_icon,
              PARSE_MODE_NONE),
-            ("THREAD_NAME", self.message.content, PARSE_MODE_NONE),
+            ("THREAD_NAME", html.escape(self.message.content), PARSE_MODE_NONE),
             ("USER_COLOUR", await self._gather_user_colour(self.message.author)),
             ("NAME", str(html.escape(self.message.author.display_name))),
             ("NAME_TAG", await discriminator(self.message.author.name, self.message.author.discriminator), PARSE_MODE_NONE),
