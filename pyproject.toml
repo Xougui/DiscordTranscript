@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "discord-channel-to-html-transcripts"
 description = "A simple Discord chat exporter for Python Discord bots."
-version = "0.0.2"
+version = "0.0.3"
 readme = "README.md"
 authors = [
     { name="Xougui", email="xougui.7@gmail.com" }
@@ -15,7 +15,7 @@ license = { text = "GPL-3.0-only" }
 classifiers = [
     "Operating System :: OS Independent",
     "Intended Audience :: Developers",
-    "Natural Language :: English",
+    "Natural Language :: French",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
@@ -23,11 +23,12 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Internet",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
-dependencies = ["aiohttp", "pytz", "grapheme", "emoji"]
+dependencies = ["aiohttp", "pytz", "grapheme", "emoji", "discord.py"]
 keywords = ["chat exporter", "discord chat exporter", "discord", "discordpy", "disnake", "pycord", "nextcord"]
