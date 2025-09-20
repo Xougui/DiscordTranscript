@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transcript</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
             background-color: #36393f;
@@ -122,7 +123,7 @@
                             {% for attachment in message.attachments %}
                                 <div class="discord-attachment">
                                     {% if attachment.content_type and attachment.content_type.startswith('image/') %}
-                                        <img src="{{ attachment.url }}" alt="{{ attachment.filename }}" style="max-width: 100%;">
+                                        <img src="{{ attachment.url }}" alt="{{ attachment.filename }}" class="max-width-100">
                                     {% else %}
                                         <a href="{{ attachment.url }}">{{ attachment.filename }}</a>
                                     {% endif %}
@@ -141,7 +142,7 @@
                                         <div class="discord-embed-description">{{ embed.description | markdown }}</div>
                                     {% endif %}
                                     {% if embed.image and embed.image.url %}
-                                        <img src="{{ embed.image.url }}" alt="embed-image" style="max-width: 100%;">
+                                        <img src="{{ embed.image.url }}" alt="embed-image" class="max-width-100">
                                     {% endif %}
                                 </div>
                             {% endfor %}
