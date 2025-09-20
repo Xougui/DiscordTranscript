@@ -240,6 +240,84 @@ async def save_range(ctx: commands.Context):
 ```
 </details>
 
+<details><summary><b>Utilisation dans un Cog</b></summary>
+
+Pour garder votre code organisé, vous pouvez utiliser les Cogs pour regrouper vos commandes. Voici comment vous pouvez utiliser `chat-exporter` dans un Cog.
+
+**Exemple :**
+```python
+import io
+import discord
+import chat_exporter
+from discord.ext import commands
+
+class MyCog(commands.Cog):
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
+
+    @commands.command()
+    async def save_in_cog(self, ctx: commands.Context):
+        transcript = await chat_exporter.export(
+            ctx.channel,
+            bot=self.bot,
+        )
+
+        if transcript is None:
+            return
+
+        transcript_file = discord.File(
+            io.BytesIO(transcript.encode()),
+            filename=f"transcript-{ctx.channel.name}.html",
+        )
+
+        await ctx.send(file=transcript_file)
+
+async def setup(bot: commands.Bot):
+    await bot.add_cog(MyCog(bot))
+```
+</details>
+
+<details><summary><b>Utilisation avec les commandes d'application</b></summary>
+
+Avec `discord.py` v2.0 et plus, vous pouvez utiliser les commandes d'application (slash commands). Voici comment vous pouvez utiliser `chat-exporter` avec elles.
+
+**Exemple :**
+```python
+import io
+import discord
+import chat_exporter
+from discord import app_commands
+
+...
+
+@bot.tree.command(name="save_slash", description="Sauvegarde la conversation en utilisant une commande slash.")
+@app_commands.describe(channel="Le salon à sauvegarder")
+async def save_slash(interaction: discord.Interaction, channel: discord.TextChannel):
+    await interaction.response.defer()
+
+    transcript = await chat_exporter.export(
+        channel,
+        bot=bot,
+    )
+
+    if transcript is None:
+        await interaction.followup.send("Impossible de sauvegarder la conversation.", ephemeral=True)
+        return
+
+    transcript_file = discord.File(
+        io.BytesIO(transcript.encode()),
+        filename=f"transcript-{channel.name}.html",
+    )
+
+    await interaction.followup.send(file=transcript_file)
+
+# N'oubliez pas de synchroniser votre arbre de commandes
+# @bot.event
+# async def on_ready():
+#     await bot.tree.sync()
+```
+</details>
+
 <details><summary><b>Gestion des erreurs</b></summary>
 
 Il est important de gérer les erreurs qui peuvent survenir lors de l'exportation d'une conversation, par exemple lorsque le bot n'a pas les permissions de voir l'historique du salon.
