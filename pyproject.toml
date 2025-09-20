@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "discord-html-transcripts"
 version = "0.0.1"
 authors = [
-  { name="Jules", email="jules@example.com" },
+  { name="Xougui", email="xougui.7@gmail.com" },
 ]
 description = "A Python library to generate HTML transcripts of Discord messages."
 readme = "README.md"
@@ -23,7 +23,3 @@ dependencies = [
     "pymdown-extensions",
     "discord.py"
 ]
-
-[project.urls]
-"Homepage" = "https://github.com/your-username/discord-html-transcripts-python"
-"Bug Tracker" = "https://github.com/your-username/discord-html-transcripts-python/issues"
