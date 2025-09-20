@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+src/discord_html_transcripts/__init__.py
+src/discord_html_transcripts/main.py
+src/discord_html_transcripts.egg-info/PKG-INFO
+src/discord_html_transcripts.egg-info/SOURCES.txt
+src/discord_html_transcripts.egg-info/dependency_links.txt
+src/discord_html_transcripts.egg-info/requires.txt
+src/discord_html_transcripts.egg-info/top_level.txt
+tests/test_transcripts.py
