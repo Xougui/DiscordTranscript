@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "discord-html-transcripts"
+version = "0.0.1"
+authors = [
+  { name="Jules", email="jules@example.com" },
+]
+description = "A Python library to generate HTML transcripts of Discord messages."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "jinja2",
+    "requests",
+    "markdown",
+    "pymdown-extensions",
+    "discord.py"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/your-username/discord-html-transcripts-python"
+"Bug Tracker" = "https://github.com/your-username/discord-html-transcripts-python/issues"
