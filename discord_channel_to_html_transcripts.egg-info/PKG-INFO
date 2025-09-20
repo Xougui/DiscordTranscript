@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: discord-channel-to-html-transcripts
-Version: 0.0.3
+Version: 0.0.4
 Summary: A simple Discord chat exporter for Python Discord bots.
 Author: Xougui
 Author-email: Xougui <xougui.7@gmail.com>
