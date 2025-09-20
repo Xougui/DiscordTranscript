@@ -1,3 +1,4 @@
+from __future__ import annotations
 import html
 
 from chat_exporter.ext.discord_import import discord
