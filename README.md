@@ -1,5 +1,5 @@
 <div align="center">
-    <h2>Py-Discord-HTML-Transcripts</h2>
+    <h2>Discord Channel To html Transcripts</h2>
 </div>
 
 ---
