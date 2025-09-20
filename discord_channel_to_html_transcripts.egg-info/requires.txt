@@ -1,5 +1,0 @@
-aiohttp
-pytz
-grapheme
-emoji
-discord.py
