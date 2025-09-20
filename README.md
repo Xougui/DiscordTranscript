@@ -276,12 +276,3 @@ async def save_safe(ctx: commands.Context):
     await ctx.send(file=transcript_file)
 ```
 </details>
-
----
-## Captures d'écran
-
-<details><summary><b>Général</b></summary>
-<ol>
-</ol>
-</details>
-<p align="right">(<a href="#top">retour en haut</a>)</p>
