@@ -157,35 +157,29 @@ class ParseMarkdown:
                 match = re.search(pattern, self.content)
 
         # > quote
-        self.content = self.content.split("<br>")
-        y = None
-        new_content = ""
-        pattern = re.compile(r"^&gt;\s(.+)")
+        lines = self.content.split("<br>")
+        new_lines = []
+        in_quote = False
+        quote_content = []
+        pattern = re.compile(r"^\s*&gt;\s?(.*)")
 
-        if len(self.content) == 1:
-            if re.search(pattern, self.content[0]):
-                self.content = f'<div class="quote">{self.content[0][5:]}</div>'
-                return
-            self.content = self.content[0]
-            return
-
-        for x in self.content:
-            if re.search(pattern, x) and y:
-                y = y + "<br>" + x[5:]
-            elif not y:
-                if re.search(pattern, x):
-                    y = x[5:]
-                else:
-                    new_content = new_content + x + "<br>"
+        for line in lines:
+            match = pattern.match(line)
+            if match:
+                if not in_quote:
+                    in_quote = True
+                quote_content.append(match.group(1))
             else:
-                new_content = new_content + f'<div class="quote">{y}</div>'
-                new_content = new_content + x
-                y = ""
+                if in_quote:
+                    new_lines.append(f'<div class="quote">{"<br>".join(quote_content)}</div>')
+                    quote_content = []
+                    in_quote = False
+                new_lines.append(line)
 
-        if y:
-            new_content = new_content + f'<div class="quote">{y}</div>'
+        if in_quote:
+            new_lines.append(f'<div class="quote">{"<br>".join(quote_content)}</div>')
 
-        self.content = new_content
+        self.content = "<br>".join(new_lines)
 
     def parse_code_block_markdown(self, reference=False):
         markdown_languages = ["asciidoc", "autohotkey", "bash", "coffeescript", "cpp", "cs", "css",
@@ -204,8 +198,6 @@ class ParseMarkdown:
                 if affected_text.lower().startswith(language):
                     language_class = f"language-{language}"
                     _, _, affected_text = affected_text.partition('<br>')
-
-            affected_text = self.return_to_markdown(affected_text)
 
             second_pattern = re.compile(r"^<br>|<br>$")
             second_match = re.search(second_pattern, affected_text)
@@ -233,7 +225,6 @@ class ParseMarkdown:
         match = re.search(pattern, self.content)
         while match is not None:
             affected_text = match.group(1)
-            affected_text = self.return_to_markdown(affected_text)
             self.code_blocks_content.append(affected_text)
             self.content = self.content.replace(self.content[match.start():match.end()],
                                                 '<span class="pre pre-inline">%s</span>' % f'%s{len(self.code_blocks_content)}')
@@ -244,7 +235,6 @@ class ParseMarkdown:
         match = re.search(pattern, self.content)
         while match is not None:
             affected_text = match.group(1)
-            affected_text = self.return_to_markdown(affected_text)
             self.code_blocks_content.append(affected_text)
             self.content = self.content.replace(self.content[match.start():match.end()],
                                                 '<span class="pre pre-inline">%s</span>' % f'%s{len(self.code_blocks_content)}')
