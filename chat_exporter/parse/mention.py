@@ -2,12 +2,15 @@ import datetime
 import time
 import pytz
 import re
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from chat_exporter.ext.discord_import import discord
 from chat_exporter.parse.markdown import ParseMarkdown
 
-bot: Optional[discord.Client] = None
+if TYPE_CHECKING:
+    import discord as discord_typings
+
+bot: Optional["discord_typings.Client"] = None
 
 def pass_bot(_bot):
     # Bot is used to fetch a user who is no longer inside a guild
