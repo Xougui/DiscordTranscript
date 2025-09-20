@@ -6,3 +6,5 @@ for module in discord_modules:
         break
     except ImportError:
         continue
+
+discord_errors = discord.errors
