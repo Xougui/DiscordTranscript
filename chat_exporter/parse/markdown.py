@@ -157,7 +157,7 @@ class ParseMarkdown:
                 match = re.search(pattern, self.content)
 
         # > quote
-        lines = self.content.split("<br>")
+        lines = self.content.split("\n")
         new_lines = []
         in_quote = False
         quote_content = []
@@ -179,9 +179,11 @@ class ParseMarkdown:
         if in_quote:
             new_lines.append(f'<div class="quote">{"<br>".join(quote_content)}</div>')
 
-        self.content = "<br>".join(new_lines)
+        self.content = "\n".join(new_lines)
 
     def parse_code_block_markdown(self, reference=False):
+        # The content of a code block is treated as plain text and should not be parsed for markdown.
+        # Therefore, we do not call return_to_markdown on the extracted content.
         markdown_languages = ["asciidoc", "autohotkey", "bash", "coffeescript", "cpp", "cs", "css",
                               "diff", "fix", "glsl", "ini", "json", "md", "ml", "prolog", "py",
                               "tex", "xl", "xml", "js", "html"]
