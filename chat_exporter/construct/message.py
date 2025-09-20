@@ -1,5 +1,6 @@
+from __future__ import annotations
 import html
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from datetime import timedelta
 from pytz import timezone
 
@@ -79,7 +80,7 @@ class MessageConstruct:
 
     async def construct_message(
         self,
-    ) -> (str, dict):
+    ) -> Tuple[str, dict]:
         if discord.MessageType.pins_add == self.message.type:
             await self.build_pin()
         elif discord.MessageType.thread_created == self.message.type:
@@ -455,7 +456,7 @@ async def gather_messages(
     pytz_timezone,
     military_time,
     attachment_handler: Optional[AttachmentHandler],
-) -> (str, dict):
+) -> Tuple[str, dict]:
     message_html: str = ""
     meta_data: dict = {}
     previous_message: Optional[discord.Message] = None
