@@ -1,15 +1,18 @@
 import datetime
 import io
-from typing import List, Optional
+from typing import List, Optional, TYPE_CHECKING
 
 from chat_exporter.construct.transcript import Transcript
 from chat_exporter.ext.discord_import import discord
 from chat_exporter.construct.attachment_handler import AttachmentHandler, AttachmentToLocalFileHostHandler, AttachmentToDiscordChannelHandler
 
+if TYPE_CHECKING:
+    import discord as discord_typings
+
 async def quick_export(
-    channel: discord.TextChannel,
-    guild: Optional[discord.Guild] = None,
-    bot: Optional[discord.Client] = None,
+    channel: "discord_typings.TextChannel",
+    guild: Optional["discord_typings.Guild"] = None,
+    bot: Optional["discord_typings.Client"] = None,
 ):
     """
     Create a quick export of your Discord channel.
@@ -50,11 +53,11 @@ async def quick_export(
     return await channel.send(embed=transcript_embed, file=transcript_file)
 
 async def export(
-    channel: discord.TextChannel,
+    channel: "discord_typings.TextChannel",
     limit: Optional[int] = None,
     tz_info="UTC",
-    guild: Optional[discord.Guild] = None,
-    bot: Optional[discord.Client] = None,
+    guild: Optional["discord_typings.Guild"] = None,
+    bot: Optional["discord_typings.Client"] = None,
     military_time: Optional[bool] = True,
     fancy_times: Optional[bool] = True,
     before: Optional[datetime.datetime] = None,
@@ -95,11 +98,11 @@ async def export(
     ).html
 
 async def raw_export(
-    channel: discord.TextChannel,
-    messages: List[discord.Message],
+    channel: "discord_typings.TextChannel",
+    messages: List["discord_typings.Message"],
     tz_info="UTC",
-    guild: Optional[discord.Guild] = None,
-    bot: Optional[discord.Client] = None,
+    guild: Optional["discord_typings.Guild"] = None,
+    bot: Optional["discord_typings.Client"] = None,
     military_time: Optional[bool] = False,
     fancy_times: Optional[bool] = True,
     attachment_handler: Optional[AttachmentHandler] = None,
