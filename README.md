@@ -168,12 +168,6 @@ async def purge(ctx: commands.Context, tz_info: str, military_time: bool):
 
 <details><summary><b>General</b></summary>
 <ol>
-    <details><summary>Discord</summary>
-    <img src="https://raw.githubusercontent.com/FroostySnoowman/py-discord-html-transcripts/master/.screenshots/channel.png">
-    </details>
-    <details><summary>Chat-Exporter</summary>
-    <img src="https://raw.githubusercontent.com/FroostySnoowman/py-discord-html-transcripts/master/.screenshots/export.png">
-    </details>
 </ol>
 </details>
 <p align="right">(<a href="#top">back to top</a>)</p>
