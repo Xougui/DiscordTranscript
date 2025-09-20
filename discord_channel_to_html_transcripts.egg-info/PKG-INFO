@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: discord-channel-to-html-transcripts
-Version: 0.0.1
+Version: 0.0.3
 Summary: A simple Discord chat exporter for Python Discord bots.
 Author: Xougui
 Author-email: Xougui <xougui.7@gmail.com>
@@ -8,7 +8,7 @@ License: GPL-3.0-only
 Keywords: chat exporter,discord chat exporter,discord,discordpy,disnake,pycord,nextcord
 Classifier: Operating System :: OS Independent
 Classifier: Intended Audience :: Developers
-Classifier: Natural Language :: English
+Classifier: Natural Language :: French
 Classifier: Programming Language :: Python :: 3.6
 Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
@@ -16,6 +16,7 @@ Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
 Classifier: Topic :: Internet
 Classifier: Topic :: Software Development :: Libraries
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
@@ -27,6 +28,7 @@ Requires-Dist: aiohttp
 Requires-Dist: pytz
 Requires-Dist: grapheme
 Requires-Dist: emoji
+Requires-Dist: discord.py
 Dynamic: author
 Dynamic: requires-python
 
