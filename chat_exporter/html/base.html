@@ -274,7 +274,7 @@
         }
 
         .chatlog__followup-author {
-            user-select: none;
+            -webkit-user-select: none; user-select: none;
             cursor: pointer;
             margin-right: 0.3rem;
             font-weight: 600;
@@ -285,7 +285,7 @@
         }
 
         .chatlog__followup-content {
-            user-select: none;
+            -webkit-user-select: none; user-select: none;
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -332,7 +332,7 @@
             line-height: 1;
             direction: ltr;
             unicode-bidi: bidi-override;
-            user-select: none;
+            -webkit-user-select: none; user-select: none;
         }
 
         .chatlog__reference-attachment-icon {
@@ -360,9 +360,13 @@
             color: #ffffff;
         }
 
-        .chatlog__author-name:hover {
+                .chatlog__author-name:hover {
             text-decoration: underline;
             cursor: pointer;
+        }
+
+        .chatlog__author-name--colored {
+            color: var(--user-color);
         }
 
         .chatlog__reference-name {
@@ -595,6 +599,14 @@
             border-radius: 2px;
         }
 
+        .chatlog__component-button--colored {
+            background-color: var(--button-color);
+        }
+
+        .chatlog__component-button-link--styled {
+            text-decoration: var(--link-style);
+        }
+
         .chatlog__button-label {
             min-width: 9px;
             margin-left: 0.35em;
@@ -819,6 +831,10 @@
             background-color: rgba(79, 84, 92, 1);
         }
 
+        .chatlog__embed-color-pill--colored {
+            background-color: var(--embed-color);
+        }
+
         .chatlog__embed-content-container {
             background-color: rgba(46, 48, 54, 0.3);
             border-color: rgba(46, 48, 54, 0.6);
@@ -847,7 +863,7 @@
             flex-shrink: 0;
             align-items: center;
             padding: 6px 0 6px 0;
-            user-select: none;
+            -webkit-user-select: none; user-select: none;
             font-weight: 700;
             font-size: 20px;
             box-shadow: 0 1px 0 rgba(4, 4, 5, 0.2), 0 1.5px 0 rgba(6, 6, 7, 0.05), 0 2px 0 rgba(4, 4, 5, 0.05);
@@ -942,7 +958,7 @@
             flex-direction: column;
             justify-content: flex-end;
             flex-shrink: 0;
-            user-select: none;
+            -webkit-user-select: none; user-select: none;
         }
 
         .info__title {
@@ -972,7 +988,7 @@
             background-color: #202225;
             position: relative;
             z-index: 10;
-            user-select: none;
+            -webkit-user-select: none; user-select: none;
         }
 
         .footer__text {
@@ -1070,7 +1086,7 @@
         }
 
         .meta__header img {
-            user-select: none;
+            -webkit-user-select: none; user-select: none;
             border-radius: 50%;
             margin-bottom: 10px;
             position: relative;
@@ -1337,7 +1353,7 @@
 <body>
 
 <div class="panel">
-    <img class="panel__hashtag-icon" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-hashtag.svg"/>
+    <img class="panel__hashtag-icon" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-hashtag.svg" alt="Hashtag icon"/>
     <span>{{CHANNEL_NAME}}</span>
 
     {{CHANNEL_TOPIC}}
@@ -1582,6 +1598,38 @@
     });
 
     {{FANCY_TIME}}
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.chatlog__author-name--colored').forEach(element => {
+            const userColor = element.getAttribute('data-user-color');
+            if (userColor) {
+                element.style.setProperty('--user-color', userColor);
+            }
+        });
+
+        document.querySelectorAll('.chatlog__embed-color-pill--colored').forEach(element => {
+            const embedColor = element.getAttribute('data-embed-color');
+            if (embedColor) {
+                element.style.setProperty('--embed-color', embedColor);
+            }
+        });
+
+        document.querySelectorAll('.chatlog__component-button--colored').forEach(element => {
+            const buttonColor = element.getAttribute('data-button-color');
+            if (buttonColor) {
+                element.style.setProperty('--button-color', buttonColor);
+            }
+        });
+
+        document.querySelectorAll('.chatlog__component-button-link--styled').forEach(element => {
+            const linkStyle = element.getAttribute('data-link-style');
+            if (linkStyle) {
+                element.style.setProperty('--link-style', linkStyle);
+            }
+        });
+    });
 </script>
 
 </body>
