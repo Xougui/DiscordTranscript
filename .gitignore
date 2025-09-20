@@ -3,4 +3,6 @@ __pycache__
 *.pyc
 dist
 py_discord_html_transcripts.egg-info
+discord_channel_to_html_transcripts.egg-info
+discord_channel_to_html_transcripts-0.0.3
 DEV-README.md
