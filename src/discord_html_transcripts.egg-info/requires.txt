@@ -1,5 +1,0 @@
-jinja2
-requests
-markdown
-pymdown-extensions
-discord.py
