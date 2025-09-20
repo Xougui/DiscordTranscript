@@ -1,0 +1,319 @@
+Metadata-Version: 2.4
+Name: discord-channel-to-html-transcripts
+Version: 0.0.1
+Summary: A simple Discord chat exporter for Python Discord bots.
+Author: Xougui
+Author-email: Xougui <xougui.7@gmail.com>
+License: GPL-3.0-only
+Keywords: chat exporter,discord chat exporter,discord,discordpy,disnake,pycord,nextcord
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Internet
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Utilities
+Classifier: Typing :: Typed
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: aiohttp
+Requires-Dist: pytz
+Requires-Dist: grapheme
+Requires-Dist: emoji
+Dynamic: author
+Dynamic: requires-python
+
+<div align="center">
+    <h2>Py-Discord-HTML-Transcripts</h2>
+</div>
+
+---
+# Prérequis
+`discord.py` v2.4.0 ou plus récent
+
+---
+## Installation
+
+Pour installer la librairie dans votre environnement virtuel, pour une utilisation avec un bot, exécutez la commande :
+```sh
+pip install discord-channel-to-html-transcripts
+```
+
+**NOTE :** Cette librairie est un plugin pour `discord.py` et ne fonctionne pas seule. Vous devez avoir un bot `discord.py` fonctionnel pour utiliser cette librairie.
+
+---
+## Utilisation
+
+Il y a actuellement 3 méthodes (fonctions) dans `chat-exporter` que vous pouvez utiliser pour exporter votre conversation.<br/>
+_Développez les blocs ci-dessous pour découvrir les fonctions, les arguments et les usages._
+<details><summary><b>Utilisation de base</b></summary>
+
+`.quick_export()` est la manière la plus simple d'utiliser chat-exporter.
+
+Utiliser la fonction _quick_export_ va récupérer l'historique du salon que vous donnez, construire la transcription puis poster le fichier et l'embed directement dans le salon - retournant un objet message récupéré du message qu'il a posté.
+
+Ceci est principalement vu comme une fonction de démonstration, par opposition à une commande que vous devriez réellement utiliser.
+
+**Argument(s) requis :**<br/>
+`channel`: Objet `discord.TextChannel`, que ce soit `ctx.channel` ou n'importe quel salon que vous récupérez.
+
+**Argument(s) optionnel(s) :**<br/>
+`bot`: Objet `commands.Bot` pour récupérer les membres qui ne sont plus dans votre guilde.
+
+**Argument de retour :**<br/>
+`discord.Message`: Le message que _quick_export_ enverra, contenant l'embed et le fichier de conversation exporté.
+
+**Exemple :**
+```python
+import discord
+import chat_exporter
+from discord.ext import commands
+
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
+
+bot = commands.Bot(command_prefix="!", intents=intents)
+
+...
+
+@bot.command()
+async def save(ctx: commands.Context):
+    await chat_exporter.quick_export(ctx.channel)
+
+...
+```
+
+</details>
+
+<details><summary><b>Utilisation personnalisable</b></summary>
+
+`.export()` est la méthode la plus efficace et flexible pour exporter une conversation en utilisant chat-exporter.
+
+Utiliser la fonction _export_ va générer une transcription en utilisant le salon que vous passez, ainsi que n'importe quel des kwargs personnalisés passés pour définir des limites, des fuseaux horaires, des formats 24h et plus (listés ci-dessous).
+
+Ce serait la fonction principale à utiliser dans chat-exporter.
+
+**Argument(s) requis :**<br/>
+`channel`: Objet `discord.TextChannel`, que ce soit `ctx.channel` ou n'importe quel salon que vous récupérez.
+
+**Argument(s) optionnel(s) :**<br/>
+`limit`: Valeur entière pour définir la limite (quantité de messages) que l'exportateur de conversation récupère lors de la récupération de l'historique (défaut=illimité).<br/>
+`tz_info`: Valeur de chaîne d'un [nom de base de données TZ](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) pour définir un fuseau horaire personnalisé pour les messages exportés (défaut=UTC)<br/>
+`guild`: Objet `discord.Guild` qui peut être passé pour résoudre des bugs pour certaines forks<br/>
+`military_time`: Valeur booléenne pour définir un format 24h pour les heures dans votre conversation exportée (défaut=False | format 12h)<br/>
+`fancy_times`: Valeur booléenne qui active/désactive les 'fancy times' (Aujourd'hui|Hier|Jour)<br/>
+`before`: Objet `datetime.datetime` qui permet de récupérer les messages d'avant une certaine date
+`after`: Objet `datetime.datetime` qui permet de récupérer les messages d'après une certaine date
+`bot`: Objet `commands.Bot` pour récupérer les membres qui ne sont plus dans votre guilde.
+
+**Argument de retour :**<br/>
+`transcript`: La construction HTML pour que vous puissiez construire le fichier HTML avec Discord.
+
+**Exemple :**
+```python
+import io
+
+...
+
+@bot.command()
+async def save(ctx: commands.Context, limit: int = 100, tz_info: str = "UTC", military_time: bool = True):
+    transcript = await chat_exporter.export(
+        ctx.channel,
+        limit=limit,
+        tz_info=tz_info,
+        military_time=military_time,
+        bot=bot,
+    )
+
+    if transcript is None:
+        return
+
+    transcript_file = discord.File(
+        io.BytesIO(transcript.encode()),
+        filename=f"transcript-{ctx.channel.name}.html",
+    )
+
+    await ctx.send(file=transcript_file)
+```
+</details>
+<details><summary><b>Utilisation brute</b></summary>
+
+`.raw_export()` est pour les fous qui aiment faire leur propre truc en utilisant chat-exporter.
+
+Utiliser la fonction _raw_export_ va générer une transcription en utilisant la liste de messages que vous passez, ainsi que n'importe quel des kwargs personnalisés passés pour définir des limites, des fuseaux horaires, des formats 24h et plus (listés ci-dessous).
+
+Ce serait pour les personnes qui veulent filtrer le contenu à exporter.
+
+**Argument(s) requis :**<br/>
+`channel`: Objet `discord.TextChannel`, que ce soit `ctx.channel` ou n'importe quel salon que vous récupérez (ceci est juste pour le remplissage de l'en-tête).<br/>
+`messages`: Une liste d'objets Message que vous souhaitez exporter dans un fichier HTML.
+
+**Argument(s) optionnel(s) :**<br/>
+`tz_info`: Valeur de chaîne d'un [nom de base de données TZ](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) pour définir un fuseau horaire personnalisé pour les messages exportés (défaut=UTC)<br/>
+`military_time`: Valeur booléenne pour définir un format 24h pour les heures dans votre conversation exportée (défaut=False | format 12h)<br/>
+`fancy_times`: Valeur booléenne qui active/désactive les 'fancy times' (Aujourd'hui|Hier|Jour)<br/>
+`bot`: Objet `commands.Bot` pour récupérer les membres qui ne sont plus dans votre guilde.
+
+**Argument de retour :**<br/>
+`transcript`: La construction HTML pour que vous puissiez construire le fichier HTML avec Discord.
+
+**Exemple :**
+```python
+import io
+
+...
+
+@bot.command()
+async def purge(ctx: commands.Context, tz_info: str, military_time: bool):
+    deleted_messages = await ctx.channel.purge()
+
+    transcript = await chat_exporter.raw_export(
+        ctx.channel,
+        messages=deleted_messages,
+        tz_info=tz_info,
+        military_time=military_time,
+        bot=bot,
+    )
+
+    if transcript is None:
+        return
+
+    transcript_file = discord.File(
+        io.BytesIO(transcript.encode()),
+        filename=f"transcript-{ctx.channel.name}.html",
+    )
+
+    await ctx.send(file=transcript_file)
+```
+</details>
+
+<p align="right">(<a href="#top">retour en haut</a>)</p>
+
+---
+## Exemples avancés
+
+<details><summary><b>Sauvegarder les pièces jointes localement</b></summary>
+
+Par défaut, les pièces jointes sont intégrées dans le fichier HTML en utilisant leur URL Discord. Si vous souhaitez les sauvegarder localement, vous pouvez utiliser le `AttachmentToLocalFileHostHandler`.
+
+**Exemple :**
+```python
+import io
+import os
+import chat_exporter
+from chat_exporter.construct.attachment_handler import AttachmentToLocalFileHostHandler
+
+...
+
+@bot.command()
+async def save_with_attachments(ctx: commands.Context):
+    if not os.path.exists(f"attachments/{ctx.channel.id}"):
+        os.makedirs(f"attachments/{ctx.channel.id}")
+
+    transcript = await chat_exporter.export(
+        ctx.channel,
+        attachment_handler=AttachmentToLocalFileHostHandler(
+            path=f"attachments/{ctx.channel.id}"
+        ),
+        bot=bot,
+    )
+
+    if transcript is None:
+        return
+
+    transcript_file = discord.File(
+        io.BytesIO(transcript.encode()),
+        filename=f"transcript-{ctx.channel.name}.html",
+    )
+
+    await ctx.send(file=transcript_file)
+```
+</details>
+
+<details><summary><b>Exporter un intervalle de dates spécifique</b></summary>
+
+Vous pouvez utiliser les paramètres `before` et `after` pour exporter les messages d'un intervalle de dates spécifique.
+
+**Exemple :**
+```python
+import io
+import datetime
+
+...
+
+@bot.command()
+async def save_range(ctx: commands.Context):
+    # Exporter les messages des 7 derniers jours
+    after_date = datetime.datetime.now() - datetime.timedelta(days=7)
+
+    transcript = await chat_exporter.export(
+        ctx.channel,
+        after=after_date,
+        bot=bot,
+    )
+
+    if transcript is None:
+        return
+
+    transcript_file = discord.File(
+        io.BytesIO(transcript.encode()),
+        filename=f"transcript-{ctx.channel.name}.html",
+    )
+
+    await ctx.send(file=transcript_file)
+```
+</details>
+
+<details><summary><b>Gestion des erreurs</b></summary>
+
+Il est important de gérer les erreurs qui peuvent survenir lors de l'exportation d'une conversation, par exemple lorsque le bot n'a pas les permissions de voir l'historique du salon.
+
+**Exemple :**
+```python
+import io
+import discord
+
+...
+
+@bot.command()
+async def save_safe(ctx: commands.Context):
+    try:
+        transcript = await chat_exporter.export(
+            ctx.channel,
+            bot=bot,
+        )
+    except discord.Forbidden:
+        await ctx.send("Je n'ai pas la permission de voir l'historique de ce salon.")
+        return
+    except Exception as e:
+        await ctx.send(f"Une erreur est survenue : {e}")
+        return
+
+    if transcript is None:
+        return
+
+    transcript_file = discord.File(
+        io.BytesIO(transcript.encode()),
+        filename=f"transcript-{ctx.channel.name}.html",
+    )
+
+    await ctx.send(file=transcript_file)
+```
+</details>
+
+---
+## Captures d'écran
+
+<details><summary><b>Général</b></summary>
+<ol>
+</ol>
+</details>
+<p align="right">(<a href="#top">retour en haut</a>)</p>
