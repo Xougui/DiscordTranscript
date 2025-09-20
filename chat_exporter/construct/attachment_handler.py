@@ -60,7 +60,7 @@ class AttachmentToDiscordChannelHandler(AttachmentHandler):
 					data = io.BytesIO(await res.read())
 					data.seek(0)
 					attach = discord.File(data, attachment.filename)
-					msg: discord.Message = await self.channel.send(file=attach)
+					msg = await self.channel.send(file=attach)
 					return msg.attachments[0]
 		except discord.errors.HTTPException as e:
 			# discords http errors, including missing permissions
