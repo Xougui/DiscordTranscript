@@ -1,14 +1,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="py_discord_html_transcripts",
-    version="2.2.1",
-    author="FroostySnoowman",
-    author_email="froostysnoowmanbusiness@gmail.com",
+    name="discord-channel-to-html-transcripts",
+    version="0.0.1",
+    author="Xougui",
+    author_email="xougui.7@gmail.com",
     description="A simple Discord chat exporter for Python Discord bots.",
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/FroostySnoowman/py-discord-html-transcripts",
     packages=find_packages(),
     classifiers=[
         "Operating System :: OS Independent",
@@ -35,5 +34,5 @@ setup(
         "grapheme",
         "emoji",
     ],
-    keywords="chat exporter, discord chat exporter, discord, discordpy, disnake, pycord, nextcord",
+    keywords="chat exporter, discord chat exporter, discord, discordpy, disnake, pycord, nextcord, transcript, html transcript",
 )
