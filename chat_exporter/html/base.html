@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width" />
     <meta name="title" content="{{SERVER_NAME_SAFE}} - {{CHANNEL_NAME_SAFE}}">
     <meta name="description" content="Transcript of channel {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) from {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) with {{MESSAGE_COUNT}} messages. This transcript was generated on {{DATE_TIME}}.">
-    <meta name="theme-color" content="#638dfc" />
+    
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -1306,7 +1306,7 @@
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.5/plugin/isBetween.js"></script>
 
     <script>
-        <!--  Scroll to Message (References)  -->
+        //  Scroll to Message (References)
         function scrollToMessage(event, id) {
             var element = document.getElementById('chatlog__message-container-' + id);
 
@@ -1326,7 +1326,7 @@
             }
         }
 
-        <!--  Spoiler (|| Spoiler ||)  -->
+        //  Spoiler (|| Spoiler ||)
         function showSpoiler(event, element) {
             if (element && element.classList.contains('spoiler--hidden')) {
                 event.preventDefault();
@@ -1334,7 +1334,7 @@
             }
         }
 
-        <!--  Menu Dropdown (Selectmenu)  -->
+        //  Menu Dropdown (Selectmenu)
         function showDropdown(dropdownID) {
           <!--    If you are reading this and can improve the JS logic, let me know!-->
           document.getElementById("dropdownButton" + dropdownID).classList.toggle("chatlog__component-dropdown-border");
@@ -1342,7 +1342,7 @@
           document.getElementById("dropdownMenu" + dropdownID).classList.toggle("chatlog__component-dropdown-show");
         }
 
-        <!--  Code Block Markdown (```lang```) -->
+        //  Code Block Markdown (```lang```)
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.pre--multiline').forEach((block) => {
                 hljs.highlightBlock(block);
@@ -1419,7 +1419,7 @@
 {{META_DATA}}
 
 <script>
-    <!-- Right Click - Copy ID -->
+    // Right Click - Copy ID
     let metaPopout = undefined
     const contextMenu = document.getElementById("context-menu");
     const scope = document.querySelector("body");
@@ -1567,7 +1567,7 @@
         }
     }
 
-    <!-- Timestamps: Tooltips -->
+    // Timestamps: Tooltips
     tippy('.chatlog__timestamp', {
         placement: 'top',
         animation: 'fade',
@@ -1589,7 +1589,7 @@
         theme: 'disc',
     });
 
-    <!-- Timestamps: Tooltips -->
+    // Timestamps: Tooltips
     tippy('.unix-timestamp', {
         placement: 'top',
         animation: 'fade',
