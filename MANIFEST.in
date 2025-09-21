@@ -1,2 +1,2 @@
 include README.md
-recursive-include chat_exporter/html *.html
+recursive-include DiscordTranscript/html *.html
