@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="discord-channel-to-html-transcripts",
-    version="0.0.7",
+    name="DiscordTranscript",
+    version="0.0.9",
     author="Xougui",
     author_email="xougui.7@gmail.com",
-    description="A simple Discord chat exporter for Python Discord bots.",
+    description="A Discord chat exporter that is easy to use and customizable. // Un exporteur de chat Discord facile à utiliser et personnalisable.",
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
     packages=find_packages(),
@@ -35,5 +35,5 @@ setup(
         "emoji",
         "discord.py",
     ],
-    keywords="chat exporter, discord chat exporter, discord, discordpy, disnake, pycord, nextcord, transcript, html transcript",
+    keywords=['archive', 'backup', 'channel-exporter', 'chat', 'chat-archive', 'chat exporter', 'chat-logs', 'discord', 'discord-api', 'discord-archive', 'discord-backup', 'discord-bot', 'discord-channel', 'discord-channel-exporter', 'discord-channel-history', 'discord-channel-logs', 'discord-chat', 'discord chat exporter', 'discord-export', 'discord-history', 'discord-html', 'discord-logs', 'discord-message-export', 'discord-messages', 'discord-transcript', 'discordpy', 'disnake', 'export', 'export-chat', 'export-discord', 'file', 'html', 'html-generator', 'html transcript', 'logs', 'message-archive', 'nextcord', 'pycord', 'transcript'],
 )
