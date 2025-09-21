@@ -256,6 +256,7 @@ class MessageConstruct:
             )
 
         self.message.content = await fill_out(self.guild, img_attachment, [
+            ("SPOILER_CLASSES", "", PARSE_MODE_NONE),
             ("ATTACH_URL", str(sticker_image_url), PARSE_MODE_NONE),
             ("ATTACH_URL_THUMB", str(sticker_image_url), PARSE_MODE_NONE)
         ])
