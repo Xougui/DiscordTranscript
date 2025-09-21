@@ -30,7 +30,12 @@ class Attachment:
         await self.file()
 
     async def image(self):
+        spoiler_classes = ""
+        if self.attachments.filename.startswith("SPOILER_"):
+            spoiler_classes = "spoiler-image spoiler--hidden"
+
         self.attachments = await fill_out(self.guild, img_attachment, [
+            ("SPOILER_CLASSES", spoiler_classes, PARSE_MODE_NONE),
             ("ATTACH_URL", self.attachments.proxy_url, PARSE_MODE_NONE),
             ("ATTACH_URL_THUMB", self.attachments.proxy_url, PARSE_MODE_NONE)
         ])
