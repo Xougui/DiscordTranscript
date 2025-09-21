@@ -136,8 +136,9 @@ class ParseMarkdown:
         self.order_list_markdown_to_html()
         holder = (
             [r"\*\*(.*?)\*\*", '<strong>%s</strong>'],
-            [r"\*(.*?)\*", '<em>%s</em>'],
             [r"__(.*?)__", '<span style="text-decoration: underline">%s</span>'],
+            [r"\*(.*?)\*", '<em><span>%s</span></em>'],
+            [r"_(.*?)_", '<em><span>%s</span></em>'],
             [r"~~(.*?)~~", '<span style="text-decoration: line-through">%s</span>'],
             [r"^###\s(.*?)$", '<h3>%s</h3>'],
             [r"^##\s(.*?)$", '<h2>%s</h2>'],
@@ -230,7 +231,7 @@ class ParseMarkdown:
             affected_text = html.escape(affected_text)
             self.code_blocks_content.append(affected_text)
             self.content = self.content.replace(self.content[match.start():match.end()],
-                                                '<span class="pre pre-inline">%s</span>' % f'%s{len(self.code_blocks_content)}')
+                                                '<code class="inline">%s</code>' % f'%s{len(self.code_blocks_content)}')
             match = re.search(pattern, self.content)
 
         # `code`
