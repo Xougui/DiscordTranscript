@@ -2,18 +2,21 @@ from setuptools import setup, find_packages
 
 setup(
     name="DiscordTranscript",
-    version="0.0.11",
+    version="0.1.0",
     author="Xougui",
     author_email="xougui.7@gmail.com",
     description="A Discord chat exporter that is easy to use and customizable. // Un exporteur de chat Discord facile à utiliser et personnalisable.",
-    long_description=open('README.md').read(),
+    long_description=open("README.md", encoding="utf-8").read(),
+    project_urls={
+        "Source Code (GitHub)": "https://github.com/Xougui/DiscordTranscript"
+    },
     long_description_content_type="text/markdown",
     packages=find_packages(),
     include_package_data=True,
     classifiers=[
         "Operating System :: OS Independent",
         "Intended Audience :: Developers",
-        "Natural Language :: English",
+        "Natural Language :: French",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
@@ -21,6 +24,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Topic :: Internet",
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Libraries :: Python Modules",
