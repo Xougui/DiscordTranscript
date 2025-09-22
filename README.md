@@ -11,6 +11,8 @@
     </p>
 </div>
 
+## Documentation
+
 <details>
 <summary>🇬🇧 English Documentation</summary>
 
@@ -80,7 +82,9 @@ The `.quick_export()` function is the simplest way to use the library. It retrie
 **Returns:**
 - `discord.Message`: The message containing the transcript.
 
-**Example:**
+<details>
+<summary>Example</summary>
+
 ```python
 import discord
 import DiscordTranscript
@@ -98,6 +102,8 @@ async def save(ctx: commands.Context):
 
 bot.run("YOUR_TOKEN")
 ```
+
+</details>
 
 ### <a id="customizable-usage-en"></a>Customizable Usage
 
@@ -118,7 +124,9 @@ The `.export()` function is the most flexible method. It allows you to customize
 **Returns:**
 - `str`: The HTML content of the transcript.
 
-**Example:**
+<details>
+<summary>Example</summary>
+
 ```python
 import io
 import discord
@@ -148,6 +156,8 @@ async def save_custom(ctx: commands.Context):
     await ctx.send(file=transcript_file)
 ```
 
+</details>
+
 ### <a id="raw-usage-en"></a>Raw Usage
 
 The `.raw_export()` function allows you to create a transcript from a list of messages you provide.
@@ -162,7 +172,9 @@ The `.raw_export()` function allows you to create a transcript from a list of me
 **Returns:**
 - `str`: The HTML content of the transcript.
 
-**Example:**
+<details>
+<summary>Example</summary>
+
 ```python
 import io
 import discord
@@ -192,6 +204,8 @@ async def save_purged(ctx: commands.Context):
     await ctx.send("Here is the transcript of the deleted messages:", file=transcript_file)
 ```
 
+</details>
+
 ---
 
 ## <a id="advanced-examples-en"></a>Advanced Examples
@@ -200,7 +214,9 @@ async def save_purged(ctx: commands.Context):
 
 By default, attachments are linked via their Discord URL. To save them locally, use `AttachmentToLocalFileHostHandler`.
 
-**Example:**
+<details>
+<summary>Example</summary>
+
 ```python
 import io
 import os
@@ -235,11 +251,15 @@ async def save_local_attachments(ctx: commands.Context):
     await ctx.send(file=transcript_file)
 ```
 
+</details>
+
 ### <a id="exporting-a-specific-date-range-en"></a>Exporting a Specific Date Range
 
 Use the `before` and `after` parameters to export a specific period.
 
-**Example:**
+<details>
+<summary>Example</summary>
+
 ```python
 import io
 import discord
@@ -270,11 +290,15 @@ async def save_last_week(ctx: commands.Context):
     await ctx.send(file=transcript_file)
 ```
 
+</details>
+
 ### <a id="usage-in-a-cog-en"></a>Usage in a Cog
 
 Organize your code using Cogs.
 
-**Example:**
+<details>
+<summary>Example</summary>
+
 ```python
 # cogs/transcript_cog.py
 import io
@@ -307,11 +331,15 @@ async def setup(bot: commands.Bot):
     await bot.add_cog(TranscriptCog(bot))
 ```
 
+</details>
+
 ### <a id="usage-with-application-commands-en"></a>Usage with Application Commands
 
 Use `DiscordTranscript` with slash commands.
 
-**Example:**
+<details>
+<summary>Example</summary>
+
 ```python
 import io
 import discord
@@ -350,11 +378,15 @@ async def save_slash(interaction: discord.Interaction, channel: discord.TextChan
 #     await bot.tree.sync()
 ```
 
+</details>
+
 ### <a id="error-handling-en"></a>Error Handling
 
 It is important to handle potential errors, such as missing permissions.
 
-**Example:**
+<details>
+<summary>Example</summary>
+
 ```python
 import io
 import discord
@@ -387,6 +419,8 @@ async def save_safe(ctx: commands.Context):
 
     await ctx.send(file=transcript_file)
 ```
+
+</details>
 
 </details>
 
@@ -460,7 +494,9 @@ La fonction `.quick_export()` est la manière la plus simple d'utiliser la libra
 **Retourne :**
 - `discord.Message`: Le message contenant la transcription.
 
-**Exemple :**
+<details>
+<summary>Exemple</summary>
+
 ```python
 import discord
 import DiscordTranscript
@@ -478,6 +514,8 @@ async def save(ctx: commands.Context):
 
 bot.run("VOTRE_TOKEN")
 ```
+
+</details>
 
 ### <a id="utilisation-personnalisable"></a>Utilisation personnalisable
 
@@ -498,7 +536,9 @@ La fonction `.export()` est la méthode la plus flexible. Elle permet de personn
 **Retourne :**
 - `str`: Le contenu HTML de la transcription.
 
-**Exemple :**
+<details>
+<summary>Exemple</summary>
+
 ```python
 import io
 import discord
@@ -528,6 +568,8 @@ async def save_custom(ctx: commands.Context):
     await ctx.send(file=transcript_file)
 ```
 
+</details>
+
 ### <a id="utilisation-brute-raw"></a>Utilisation brute (raw)
 
 La fonction `.raw_export()` permet de créer une transcription à partir d'une liste de messages que vous fournissez.
@@ -542,7 +584,9 @@ La fonction `.raw_export()` permet de créer une transcription à partir d'une l
 **Retourne :**
 - `str`: Le contenu HTML de la transcription.
 
-**Exemple :**
+<details>
+<summary>Exemple</summary>
+
 ```python
 import io
 import discord
@@ -572,6 +616,8 @@ async def save_purged(ctx: commands.Context):
     await ctx.send("Voici la transcription des messages supprimés :", file=transcript_file)
 ```
 
+</details>
+
 ---
 
 ## <a id="exemples-avancés"></a>Exemples avancés
@@ -580,7 +626,9 @@ async def save_purged(ctx: commands.Context):
 
 Par défaut, les pièces jointes sont liées via leur URL Discord. Pour les sauvegarder localement, utilisez `AttachmentToLocalFileHostHandler`.
 
-**Exemple :**
+<details>
+<summary>Exemple</summary>
+
 ```python
 import io
 import os
@@ -615,11 +663,15 @@ async def save_local_attachments(ctx: commands.Context):
     await ctx.send(file=transcript_file)
 ```
 
+</details>
+
 ### <a id="exporter-un-intervalle-de-dates-spécifique"></a>Exporter un intervalle de dates spécifique
 
 Utilisez les paramètres `before` et `after` pour exporter une période précise.
 
-**Exemple :**
+<details>
+<summary>Exemple</summary>
+
 ```python
 import io
 import discord
@@ -650,11 +702,15 @@ async def save_last_week(ctx: commands.Context):
     await ctx.send(file=transcript_file)
 ```
 
+</details>
+
 ### <a id="utilisation-dans-un-cog"></a>Utilisation dans un Cog
 
 Organisez votre code en utilisant des Cogs.
 
-**Exemple :**
+<details>
+<summary>Exemple</summary>
+
 ```python
 # cogs/transcript_cog.py
 import io
@@ -687,11 +743,15 @@ async def setup(bot: commands.Bot):
     await bot.add_cog(TranscriptCog(bot))
 ```
 
+</details>
+
 ### <a id="utilisation-avec-les-commandes-dapplication"></a>Utilisation avec les commandes d'application
 
 Utilisez `DiscordTranscript` avec les commandes slash.
 
-**Exemple :**
+<details>
+<summary>Exemple</summary>
+
 ```python
 import io
 import discord
@@ -730,11 +790,15 @@ async def save_slash(interaction: discord.Interaction, channel: discord.TextChan
 #     await bot.tree.sync()
 ```
 
+</details>
+
 ### <a id="gestion-des-erreurs"></a>Gestion des erreurs
 
 Il est important de gérer les erreurs potentielles, comme les permissions manquantes.
 
-**Exemple :**
+<details>
+<summary>Exemple</summary>
+
 ```python
 import io
 import discord
@@ -767,3 +831,5 @@ async def save_safe(ctx: commands.Context):
 
     await ctx.send(file=transcript_file)
 ```
+
+</details>
