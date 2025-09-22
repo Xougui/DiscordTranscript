@@ -5,11 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "DiscordTranscript"
 description = "A Discord chat exporter that is easy to use and customizable. // Un exporteur de chat Discord facile à utiliser et personnalisable."
-version = "0.0.11"
+version = "0.1.0"
 readme = "README.md"
 authors = [
     { name="Xougui", email="xougui.7@gmail.com" }
 ]
+urls = {
+    "Source Code (GitHub)" = "https://github.com/Xougui/DiscordTranscript",
+}
 requires-python = ">=3.6"
 license = { text = "GPL-3.0-only" }
 classifiers = [
@@ -32,3 +35,10 @@ classifiers = [
 ]
 dependencies = ["aiohttp", "pytz", "grapheme", "emoji", "discord.py"]
 keywords = ["archive", "backup", "channel-exporter", "chat", "chat-archive", "chat exporter", "chat-logs", "discord", "discord-api", "discord-archive", "discord-backup", "discord-bot", "discord-channel", "discord-channel-exporter", "discord-channel-history", "discord-channel-logs", "discord-chat", "discord chat exporter", "discord-export", "discord-history", "discord-html", "discord-logs", "discord-message-export", "discord-messages", "discord-transcript", "discordpy", "disnake", "export", "export-chat", "export-discord", "file", "html", "html-generator", "html transcript", "logs", "message-archive", "nextcord", "pycord", "transcript"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["DiscordTranscript*"]
