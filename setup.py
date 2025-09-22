@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="DiscordTranscript",
-    version="0.0.9",
+    version="0.0.11",
     author="Xougui",
     author_email="xougui.7@gmail.com",
     description="A Discord chat exporter that is easy to use and customizable. // Un exporteur de chat Discord facile à utiliser et personnalisable.",
