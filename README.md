@@ -83,7 +83,7 @@ The `.quick_export()` function is the simplest way to use the library. It retrie
 **Example:**
 ```python
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 intents = discord.Intents.default()
@@ -94,7 +94,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.command()
 async def save(ctx: commands.Context):
-    await chat_exporter.quick_export(ctx.channel, bot=bot)
+    await DiscordTranscript.quick_export(ctx.channel, bot=bot)
 
 bot.run("YOUR_TOKEN")
 ```
@@ -122,14 +122,14 @@ The `.export()` function is the most flexible method. It allows you to customize
 ```python
 import io
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 # ... (bot initialization)
 
 @bot.command()
 async def save_custom(ctx: commands.Context):
-    transcript = await chat_exporter.export(
+    transcript = await DiscordTranscript.export(
         ctx.channel,
         limit=100,
         tz_info="America/New_York",
@@ -166,7 +166,7 @@ The `.raw_export()` function allows you to create a transcript from a list of me
 ```python
 import io
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 # ... (bot initialization)
@@ -175,7 +175,7 @@ from discord.ext import commands
 async def save_purged(ctx: commands.Context):
     deleted_messages = await ctx.channel.purge(limit=50)
 
-    transcript = await chat_exporter.raw_export(
+    transcript = await DiscordTranscript.raw_export(
         ctx.channel,
         messages=deleted_messages,
         bot=bot,
@@ -205,7 +205,7 @@ By default, attachments are linked via their Discord URL. To save them locally, 
 import io
 import os
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from DiscordTranscript.construct.attachment_handler import AttachmentToLocalFileHostHandler
 from discord.ext import commands
 
@@ -216,7 +216,7 @@ async def save_local_attachments(ctx: commands.Context):
     if not os.path.exists(f"attachments/{ctx.channel.id}"):
         os.makedirs(f"attachments/{ctx.channel.id}")
 
-    transcript = await chat_exporter.export(
+    transcript = await DiscordTranscript.export(
         ctx.channel,
         attachment_handler=AttachmentToLocalFileHostHandler(
             path=f"attachments/{ctx.channel.id}"
@@ -244,7 +244,7 @@ Use the `before` and `after` parameters to export a specific period.
 import io
 import discord
 import datetime
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 # ... (bot initialization)
@@ -253,7 +253,7 @@ from discord.ext import commands
 async def save_last_week(ctx: commands.Context):
     after_date = datetime.datetime.now() - datetime.timedelta(days=7)
 
-    transcript = await chat_exporter.export(
+    transcript = await DiscordTranscript.export(
         ctx.channel,
         after=after_date,
         bot=bot,
@@ -279,7 +279,7 @@ Organize your code using Cogs.
 # cogs/transcript_cog.py
 import io
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 class TranscriptCog(commands.Cog):
@@ -288,7 +288,7 @@ class TranscriptCog(commands.Cog):
 
     @commands.command()
     async def save_in_cog(self, ctx: commands.Context):
-        transcript = await chat_exporter.export(
+        transcript = await DiscordTranscript.export(
             ctx.channel,
             bot=self.bot,
         )
@@ -309,13 +309,13 @@ async def setup(bot: commands.Bot):
 
 ### <a id="usage-with-application-commands-en"></a>Usage with Application Commands
 
-Use `chat-exporter` with slash commands.
+Use `DiscordTranscript` with slash commands.
 
 **Example:**
 ```python
 import io
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord import app_commands
 
 # ... (bot initialization)
@@ -328,7 +328,7 @@ async def save_slash(interaction: discord.Interaction, channel: discord.TextChan
     if channel is None:
         channel = interaction.channel
 
-    transcript = await chat_exporter.export(
+    transcript = await DiscordTranscript.export(
         channel,
         bot=bot,
     )
@@ -358,7 +358,7 @@ It is important to handle potential errors, such as missing permissions.
 ```python
 import io
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 # ... (bot initialization)
@@ -366,7 +366,7 @@ from discord.ext import commands
 @bot.command()
 async def save_safe(ctx: commands.Context):
     try:
-        transcript = await chat_exporter.export(
+        transcript = await DiscordTranscript.export(
             ctx.channel,
             bot=bot,
         )
@@ -463,7 +463,7 @@ La fonction `.quick_export()` est la manière la plus simple d'utiliser la libra
 **Exemple :**
 ```python
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 intents = discord.Intents.default()
@@ -474,7 +474,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.command()
 async def save(ctx: commands.Context):
-    await chat_exporter.quick_export(ctx.channel, bot=bot)
+    await DiscordTranscript.quick_export(ctx.channel, bot=bot)
 
 bot.run("VOTRE_TOKEN")
 ```
@@ -502,14 +502,14 @@ La fonction `.export()` est la méthode la plus flexible. Elle permet de personn
 ```python
 import io
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 # ... (initialisation du bot)
 
 @bot.command()
 async def save_custom(ctx: commands.Context):
-    transcript = await chat_exporter.export(
+    transcript = await DiscordTranscript.export(
         ctx.channel,
         limit=100,
         tz_info="Europe/Paris",
@@ -546,7 +546,7 @@ La fonction `.raw_export()` permet de créer une transcription à partir d'une l
 ```python
 import io
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 # ... (initialisation du bot)
@@ -555,7 +555,7 @@ from discord.ext import commands
 async def save_purged(ctx: commands.Context):
     deleted_messages = await ctx.channel.purge(limit=50)
 
-    transcript = await chat_exporter.raw_export(
+    transcript = await DiscordTranscript.raw_export(
         ctx.channel,
         messages=deleted_messages,
         bot=bot,
@@ -585,7 +585,7 @@ Par défaut, les pièces jointes sont liées via leur URL Discord. Pour les sauv
 import io
 import os
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from DiscordTranscript.construct.attachment_handler import AttachmentToLocalFileHostHandler
 from discord.ext import commands
 
@@ -596,7 +596,7 @@ async def save_local_attachments(ctx: commands.Context):
     if not os.path.exists(f"attachments/{ctx.channel.id}"):
         os.makedirs(f"attachments/{ctx.channel.id}")
 
-    transcript = await chat_exporter.export(
+    transcript = await DiscordTranscript.export(
         ctx.channel,
         attachment_handler=AttachmentToLocalFileHostHandler(
             path=f"attachments/{ctx.channel.id}"
@@ -624,7 +624,7 @@ Utilisez les paramètres `before` et `after` pour exporter une période précise
 import io
 import discord
 import datetime
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 # ... (initialisation du bot)
@@ -633,7 +633,7 @@ from discord.ext import commands
 async def save_last_week(ctx: commands.Context):
     after_date = datetime.datetime.now() - datetime.timedelta(days=7)
 
-    transcript = await chat_exporter.export(
+    transcript = await DiscordTranscript.export(
         ctx.channel,
         after=after_date,
         bot=bot,
@@ -659,7 +659,7 @@ Organisez votre code en utilisant des Cogs.
 # cogs/transcript_cog.py
 import io
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 class TranscriptCog(commands.Cog):
@@ -668,7 +668,7 @@ class TranscriptCog(commands.Cog):
 
     @commands.command()
     async def save_in_cog(self, ctx: commands.Context):
-        transcript = await chat_exporter.export(
+        transcript = await DiscordTranscript.export(
             ctx.channel,
             bot=self.bot,
         )
@@ -689,13 +689,13 @@ async def setup(bot: commands.Bot):
 
 ### <a id="utilisation-avec-les-commandes-dapplication"></a>Utilisation avec les commandes d'application
 
-Utilisez `chat-exporter` avec les commandes slash.
+Utilisez `DiscordTranscript` avec les commandes slash.
 
 **Exemple :**
 ```python
 import io
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord import app_commands
 
 # ... (initialisation du bot)
@@ -708,7 +708,7 @@ async def save_slash(interaction: discord.Interaction, channel: discord.TextChan
     if channel is None:
         channel = interaction.channel
 
-    transcript = await chat_exporter.export(
+    transcript = await DiscordTranscript.export(
         channel,
         bot=bot,
     )
@@ -738,7 +738,7 @@ Il est important de gérer les erreurs potentielles, comme les permissions manqu
 ```python
 import io
 import discord
-import DiscordTranscript as chat_exporter
+import DiscordTranscript
 from discord.ext import commands
 
 # ... (initialisation du bot)
@@ -746,7 +746,7 @@ from discord.ext import commands
 @bot.command()
 async def save_safe(ctx: commands.Context):
     try:
-        transcript = await chat_exporter.export(
+        transcript = await DiscordTranscript.export(
             ctx.channel,
             bot=bot,
         )
