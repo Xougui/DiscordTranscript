@@ -31,7 +31,7 @@ A Python library for creating HTML transcripts of Discord channels.
 
 ## Preview
 
-<img src="https://raw.githubusercontent.com/Xougui/DiscordTranscript/blob/main/screenshots/1.png">
+![Preview 1](screenshots/1.png)
 ![Preview 2](screenshots/2.png)
 ![Preview 3](screenshots/3.png)
 
