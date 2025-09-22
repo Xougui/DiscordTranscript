@@ -3,12 +3,12 @@
 <div align="center">
     <p>
         <a href="https://github.com/Xougui/DiscordTranscript/">
-            <img src="https://img.shields.io/badge/GitHub-DiscordTranscript-blue.svg" alt="GitHub Repo>
+            <img src="https://img.shields.io/badge/GitHub-DiscordTranscript-blue.svg" alt="GitHub Repo">
         </a>
         <a href="https://pypi.org/project/DiscordTranscript/">
             <img src="https://img.shields.io/pypi/v/DiscordTranscript.svg" alt="PyPI Version">
         </a>
-        <a href="https://pypi.org/project/DiscordTranscript/">
+        <a href="https://pypi.org/search/?q=&o=&c=Programming+Language+%3A%3A+Python+%3A%3A+3.6&c=Programming+Language+%3A%3A+Python+%3A%3A+3.7&c=Programming+Language+%3A%3A+Python+%3A%3A+3.8&c=Programming+Language+%3A%3A+Python+%3A%3A+3.9&c=Programming+Language+%3A%3A+Python+%3A%3A+3.10&c=Programming+Language+%3A%3A+Python+%3A%3A+3.11&c=Programming+Language+%3A%3A+Python+%3A%3A+3.12&c=Programming+Language+%3A%3A+Python+%3A%3A+3.13">
             <img src="https://img.shields.io/pypi/pyversions/DiscordTranscript.svg" alt="PyPI Python Versions">
         </a>
     </p>
