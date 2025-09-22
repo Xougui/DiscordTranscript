@@ -2,14 +2,23 @@
 
 <div align="center">
     <p>
+        <a href="https://pypi.org/project/DiscordTranscript/">
+            <img src="https://img.shields.io/pypi/dm/DiscordTranscript" alt="PyPI Downloads">
+        </a>
         <a href="https://github.com/Xougui/DiscordTranscript/">
-            <img src="https://img.shields.io/badge/GitHub-DiscordTranscript-blue.svg" alt="GitHub Repo">
+            <img src="https://img.shields.io/badge/GitHub-DiscordTranscript-green.svg?logo=github" alt="GitHub Repo">
+        </a>
+        <a href="https://github.com/Xougui/DiscordTranscript/">
+            <img src="https://img.shields.io/github/commit-activity/t/Xougui/DiscordTranscript?logo=github" alt="Commit Activity">
+        </a>
+        <a href="https://github.com/Xougui/DiscordTranscript/">
+            <img src="https://img.shields.io/github/last-commit/Xougui/DiscordTranscript/main?logo=github" alt="Last Commit Branch">
         </a>
         <a href="https://pypi.org/project/DiscordTranscript/">
-            <img src="https://img.shields.io/pypi/v/DiscordTranscript.svg" alt="PyPI Version">
+            <img src="https://img.shields.io/pypi/v/DiscordTranscript.svg?logo=pypi&logoColor=ffffff" alt="PyPI Version">
         </a>
         <a href="https://pypi.org/search/?q=&o=&c=Programming+Language+%3A%3A+Python+%3A%3A+3.6&c=Programming+Language+%3A%3A+Python+%3A%3A+3.7&c=Programming+Language+%3A%3A+Python+%3A%3A+3.8&c=Programming+Language+%3A%3A+Python+%3A%3A+3.9&c=Programming+Language+%3A%3A+Python+%3A%3A+3.10&c=Programming+Language+%3A%3A+Python+%3A%3A+3.11&c=Programming+Language+%3A%3A+Python+%3A%3A+3.12&c=Programming+Language+%3A%3A+Python+%3A%3A+3.13">
-            <img src="https://img.shields.io/pypi/pyversions/DiscordTranscript.svg" alt="PyPI Python Versions">
+            <img src="https://img.shields.io/pypi/pyversions/DiscordTranscript.svg?logo=python&logoColor=ffffff" alt="PyPI Python Versions">
         </a>
     </p>
 </div>
