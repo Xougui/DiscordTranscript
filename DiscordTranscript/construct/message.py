@@ -65,7 +65,8 @@ class MessageConstruct:
         guild: discord.Guild,
         meta_data: dict,
         message_dict: dict,
-        attachment_handler: Optional[AttachmentHandler]
+        attachment_handler: Optional[AttachmentHandler],
+        tenor_api_key: Optional[str] = None
     ):
         self.message = message
         self.previous_message = previous_message
@@ -74,6 +75,7 @@ class MessageConstruct:
         self.guild = guild
         self.message_dict = message_dict
         self.attachment_handler = attachment_handler
+        self.tenor_api_key = tenor_api_key
         self.time_format = "%A, %e %B %Y %I:%M %p"
         if self.military_time:
             self.time_format = "%A, %e %B %Y %H:%M"
@@ -149,14 +151,33 @@ class MessageConstruct:
             self.message.content = ""
             return
 
+        content = self.message.content
+        placeholders = {}
+
+        if self.tenor_api_key and "tenor.com/view" in content:
+            async with aiohttp.ClientSession() as session:
+                links = [word for word in content.split() if "tenor.com/view" in word]
+                for i, link in enumerate(links):
+                    gif_url = await _process_tenor_link(session, self.tenor_api_key, link)
+                    if gif_url:
+                        placeholder = f"%%TENOR_GIF_{i}%%"
+                        placeholders[placeholder] = f'<img src="{gif_url}" alt="GIF from Tenor" style="max-width: 100%;">'
+                        content = content.replace(link, placeholder)
+
         if self.message_edited_at:
             self.message_edited_at = _set_edit_at(self.message_edited_at)
 
-        self.message.content = html.escape(self.message.content).replace('&#96;', '`')
-        self.message.content = await fill_out(self.guild, message_content, [
-            ("MESSAGE_CONTENT", self.message.content, PARSE_MODE_MARKDOWN),
-            ("EDIT", self.message_edited_at, PARSE_MODE_NONE)
-        ])
+        self.message.content = content
+
+        self.message.content = await fill_out(
+            self.guild,
+            message_content,
+            [
+                ("MESSAGE_CONTENT", self.message.content, PARSE_MODE_MARKDOWN),
+                ("EDIT", self.message_edited_at, PARSE_MODE_NONE),
+            ],
+            placeholders=placeholders,
+        )
 
     async def build_reference(self):
         if not self.message.reference:
@@ -455,7 +476,7 @@ class MessageConstruct:
         return local_time.strftime(self.time_format)
 
 async def _process_tenor_link(session: aiohttp.ClientSession, tenor_api_key: str, link: str) -> Optional[str]:
-    """Process a tenor link and return an img tag if it's a valid tenor gif."""
+    """Process a tenor link and return the direct gif url."""
     tenor_regex = r"https?:\/\/tenor\.com\/view\/[a-zA-Z0-9\-%]+\-([0-9]{16,20})"
     match = re.search(tenor_regex, link)
     if not match:
@@ -473,7 +494,7 @@ async def _process_tenor_link(session: aiohttp.ClientSession, tenor_api_key: str
                 data = await response.json()
                 if data and "results" in data and data["results"]:
                     gif_url = data["results"][0]["media_formats"]["gif"]["url"]
-                    return f'<img src="{gif_url}" alt="GIF from Tenor" style="max-width: 100%;">'
+                    return gif_url
             return None
     except Exception:
         return None
@@ -493,70 +514,32 @@ async def gather_messages(
 
     message_dict = {message.id: message for message in messages}
 
-    if tenor_api_key:
-        async with aiohttp.ClientSession() as tenor_session:
-            if messages and "thread" in str(messages[0].channel.type) and messages[0].reference:
-                channel = guild.get_channel(messages[0].reference.channel_id)
+    if messages and "thread" in str(messages[0].channel.type) and messages[0].reference:
+        channel = guild.get_channel(messages[0].reference.channel_id)
 
-                if not channel:
-                    channel = await guild.fetch_channel(messages[0].reference.channel_id)
+        if not channel:
+            channel = await guild.fetch_channel(messages[0].reference.channel_id)
 
-                message = await channel.fetch_message(messages[0].reference.message_id)
-                messages[0] = message
-                messages[0].reference = None
+        message = await channel.fetch_message(messages[0].reference.message_id)
+        messages[0] = message
+        messages[0].reference = None
 
-            for message in messages:
-                if message.content and "tenor.com/view" in message.content:
-                    new_content_parts = []
-                    for part in message.content.split():
-                        if "tenor.com/view" in part:
-                            img_tag = await _process_tenor_link(tenor_session, tenor_api_key, part)
-                            if img_tag:
-                                new_content_parts.append(img_tag)
-                            else:
-                                new_content_parts.append(part)
-                        else:
-                            new_content_parts.append(part)
-                    message.content = " ".join(new_content_parts)
+    for message in messages:
+        mc = MessageConstruct(
+            message,
+            previous_message,
+            pytz_timezone,
+            military_time,
+            guild,
+            meta_data,
+            message_dict,
+            attachment_handler,
+            tenor_api_key=tenor_api_key
+        )
+        content_html, meta_data = await mc.construct_message()
 
-                content_html, meta_data = await MessageConstruct(
-                    message,
-                    previous_message,
-                    pytz_timezone,
-                    military_time,
-                    guild,
-                    meta_data,
-                    message_dict,
-                    attachment_handler,
-                ).construct_message()
-
-                message_html += content_html
-                previous_message = message
-    else:
-        if messages and "thread" in str(messages[0].channel.type) and messages[0].reference:
-            channel = guild.get_channel(messages[0].reference.channel_id)
-
-            if not channel:
-                channel = await guild.fetch_channel(messages[0].reference.channel_id)
-
-            message = await channel.fetch_message(messages[0].reference.message_id)
-            messages[0] = message
-            messages[0].reference = None
-
-        for message in messages:
-            content_html, meta_data = await MessageConstruct(
-                message,
-                previous_message,
-                pytz_timezone,
-                military_time,
-                guild,
-                meta_data,
-                message_dict,
-                attachment_handler,
-            ).construct_message()
-
-            message_html += content_html
-            previous_message = message
+        message_html += content_html
+        previous_message = message
 
     message_html += "</div>"
     return message_html, meta_data

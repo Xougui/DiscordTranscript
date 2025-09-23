@@ -16,7 +16,7 @@ PARSE_MODE_REFERENCE = 5
 PARSE_MODE_EMOJI = 6
 PARSE_MODE_HTML_SAFE = 7
 
-async def fill_out(guild, base, replacements):
+async def fill_out(guild, base, replacements, placeholders: dict = None):
     for r in replacements:
         if len(r) == 2:  # default case
             k, v = r
@@ -27,7 +27,7 @@ async def fill_out(guild, base, replacements):
         if mode != PARSE_MODE_NONE:
             v = await ParseMention(v, guild).flow()
         if mode == PARSE_MODE_MARKDOWN:
-            v = await ParseMarkdown(v).standard_message_flow()
+            v = await ParseMarkdown(v, placeholders=placeholders).standard_message_flow()
         elif mode == PARSE_MODE_EMBED:
             v = await ParseMarkdown(v).standard_embed_flow()
         elif mode == PARSE_MODE_SPECIAL_EMBED:
