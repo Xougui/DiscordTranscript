@@ -10,18 +10,23 @@ from DiscordTranscript.construct.attachment_handler import AttachmentHandler, At
 if TYPE_CHECKING:
     import discord as discord_typings
 
+
 async def quick_export(
     channel: "discord_typings.TextChannel",
     guild: Optional["discord_typings.Guild"] = None,
     bot: Optional["discord_typings.Client"] = None,
 ):
-    """
-    Create a quick export of your Discord channel.
-    This function will produce the transcript and post it back in to your channel.
-    :param channel: discord.TextChannel
-    :param guild: (optional) discord.Guild
-    :param bot: (optional) discord.Client
-    :return: discord.Message (posted transcript)
+    """Creates a quick export of a Discord channel.
+
+    This function will produce the transcript and post it back into the channel.
+
+    Args:
+        channel (discord.TextChannel): The Discord channel to export.
+        guild (Optional[discord.Guild]): The guild the channel belongs to. Defaults to None.
+        bot (Optional[discord.Client]): The bot instance. Defaults to None.
+
+    Returns:
+        discord.Message: The message containing the transcript.
     """
 
     if guild:
@@ -53,6 +58,7 @@ async def quick_export(
     transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f"transcript-{channel.name}.html")
     return await channel.send(embed=transcript_embed, file=transcript_file)
 
+
 async def export(
     channel: "discord_typings.TextChannel",
     limit: Optional[int] = None,
@@ -66,20 +72,25 @@ async def export(
     attachment_handler: Optional[AttachmentHandler] = None,
     tenor_api_key: Optional[str] = None,
 ):
-    """
-    Create a customised transcript of your Discord channel.
-    This function will return the transcript which you can then turn in to a file to post wherever.
-    :param channel: discord.TextChannel - channel to Export
-    :param limit: (optional) integer - limit of messages to capture
-    :param tz_info: (optional) TZ Database Name - set the timezone of your transcript
-    :param guild: (optional) discord.Guild - solution for edpy
-    :param bot: (optional) discord.Client - set getting member role colour
-    :param military_time: (optional) boolean - set military time (24hour clock)
-    :param fancy_times: (optional) boolean - set javascript around time display
-    :param before: (optional) datetime.datetime - allows before time for history
-    :param after: (optional) datetime.datetime - allows after time for history
-    :param attachment_handler: (optional) attachment_handler.AttachmentHandler - allows custom asset handling
-    :return: string - transcript file make up
+    """Creates a customized transcript of a Discord channel.
+
+    This function will return the transcript which you can then turn into a file.
+
+    Args:
+        channel (discord.TextChannel): The channel to export.
+        limit (Optional[int]): The number of messages to fetch. Defaults to None (all messages).
+        tz_info (str): The timezone to use for timestamps. Defaults to "UTC".
+        guild (Optional[discord.Guild]): The guild the channel belongs to. Defaults to None.
+        bot (Optional[discord.Client]): The bot instance. Defaults to None.
+        military_time (bool): Whether to use military time. Defaults to True.
+        fancy_times (bool): Whether to use fancy times. Defaults to True.
+        before (Optional[datetime.datetime]): The date to fetch messages before. Defaults to None.
+        after (Optional[datetime.datetime]): The date to fetch messages after. Defaults to None.
+        attachment_handler (Optional[AttachmentHandler]): The attachment handler to use. Defaults to None.
+        tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs. Defaults to None.
+
+    Returns:
+        str: The transcript HTML.
     """
     if guild:
         channel.guild = guild
@@ -102,6 +113,7 @@ async def export(
         ).export()
     ).html
 
+
 async def raw_export(
     channel: "discord_typings.TextChannel",
     messages: List["discord_typings.Message"],
@@ -113,18 +125,23 @@ async def raw_export(
     attachment_handler: Optional[AttachmentHandler] = None,
     tenor_api_key: Optional[str] = None,
 ):
-    """
-    Create a customised transcript with your own captured Discord messages
-    This function will return the transcript which you can then turn in to a file to post wherever.
-    :param channel: discord.TextChannel - channel to Export
-    :param messages: List[discord.Message] - list of Discord messages to export
-    :param tz_info: (optional) TZ Database Name - set the timezone of your transcript
-    :param guild: (optional) discord.Guild - solution for edpy
-    :param bot: (optional) discord.Client - set getting member role colour
-    :param military_time: (optional) boolean - set military time (24hour clock)
-    :param fancy_times: (optional) boolean - set javascript around time display
-    :param attachment_handler: (optional) AttachmentHandler - allows custom asset handling
-    :return: string - transcript file make up
+    """Creates a customized transcript with your own captured Discord messages.
+
+    This function will return the transcript which you can then turn into a file.
+
+    Args:
+        channel (discord.TextChannel): The channel to export.
+        messages (List[discord.Message]): The messages to export.
+        tz_info (str): The timezone to use for timestamps. Defaults to "UTC".
+        guild (Optional[discord.Guild]): The guild the channel belongs to. Defaults to None.
+        bot (Optional[discord.Client]): The bot instance. Defaults to None.
+        military_time (bool): Whether to use military time. Defaults to False.
+        fancy_times (bool): Whether to use fancy times. Defaults to True.
+        attachment_handler (Optional[AttachmentHandler]): The attachment handler to use. Defaults to None.
+        tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs. Defaults to None.
+
+    Returns:
+        str: The transcript HTML.
     """
     if guild:
         channel.guild = guild

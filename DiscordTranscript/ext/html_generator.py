@@ -17,6 +17,17 @@ PARSE_MODE_EMOJI = 6
 PARSE_MODE_HTML_SAFE = 7
 
 async def fill_out(guild, base, replacements, placeholders: dict = None):
+    """Fills out an HTML template with the given replacements.
+
+    Args:
+        guild (discord.Guild): The guild the message is in.
+        base (str): The HTML template to fill out.
+        replacements (list): A list of replacements to make.
+        placeholders (dict, optional): A dictionary of placeholders to use. Defaults to None.
+
+    Returns:
+        str: The filled out HTML template.
+    """
     for r in replacements:
         if len(r) == 2:  # default case
             k, v = r

@@ -45,6 +45,30 @@ def _set_edit_at(message_edited_at):
     return f'<span class="chatlog__reference-edited-timestamp" data-timestamp="{message_edited_at}">(edited)</span>'
 
 class MessageConstruct:
+    """A class to construct a single message's HTML.
+
+    Attributes:
+        message (discord.Message): The message to construct.
+        previous_message (Optional[discord.Message]): The previous message in the channel.
+        pytz_timezone (str): The timezone to use for timestamps.
+        military_time (bool): Whether to use military time.
+        guild (discord.Guild): The guild the channel belongs to.
+        message_dict (dict): A dictionary of all messages in the channel.
+        attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
+        tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs.
+        processed_tenor_links (List[str]): A list of Tenor links that have already been processed.
+        time_format (str): The format to use for timestamps.
+        message_created_at (str): The message's creation time.
+        message_edited_at (str): The message's edit time.
+        meta_data (dict): A dictionary of metadata for the transcript.
+        message_html (str): The HTML for the message.
+        embeds (str): The HTML for the message's embeds.
+        reactions (str): The HTML for the message's reactions.
+        components (str): The HTML for the message's components.
+        attachments (str): The HTML for the message's attachments.
+        interaction (str): The HTML for the message's interaction.
+    """
+
     message_html: str = ""
 
     # Asset Types
@@ -68,6 +92,19 @@ class MessageConstruct:
         attachment_handler: Optional[AttachmentHandler],
         tenor_api_key: Optional[str] = None
     ):
+        """Initializes the MessageConstruct.
+
+        Args:
+            message (discord.Message): The message to construct.
+            previous_message (Optional[discord.Message]): The previous message in the channel.
+            pytz_timezone (str): The timezone to use for timestamps.
+            military_time (bool): Whether to use military time.
+            guild (discord.Guild): The guild the channel belongs to.
+            meta_data (dict): A dictionary of metadata for the transcript.
+            message_dict (dict): A dictionary of all messages in the channel.
+            attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
+            tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs.
+        """
         self.message = message
         self.previous_message = previous_message
         self.pytz_timezone = pytz_timezone
@@ -87,6 +124,11 @@ class MessageConstruct:
     async def construct_message(
         self,
     ) -> Tuple[str, dict]:
+        """Constructs the HTML for the message.
+
+        Returns:
+            Tuple[str, dict]: A tuple containing the message's HTML and the transcript's metadata.
+        """
         if discord.MessageType.pins_add == self.message.type:
             await self.build_pin()
         elif discord.MessageType.thread_created == self.message.type:
@@ -100,6 +142,7 @@ class MessageConstruct:
         return self.message_html, self.meta_data
 
     async def build_message(self):
+        """Builds the HTML for a regular message."""
         await self.build_content()
         await self.build_reference()
         await self.build_interaction()
@@ -109,22 +152,27 @@ class MessageConstruct:
         await self.build_meta_data()
 
     async def build_pin(self):
+        """Builds the HTML for a message pin."""
         await self.generate_message_divider(channel_audit=True)
         await self.build_pin_template()
 
     async def build_thread(self):
+        """Builds the HTML for a thread creation message."""
         await self.generate_message_divider(channel_audit=True)
         await self.build_thread_template()
 
     async def build_thread_remove(self):
+        """Builds the HTML for a thread remove message."""
         await self.generate_message_divider(channel_audit=True)
         await self.build_remove()
 
     async def build_thread_add(self):
+        """Builds the HTML for a thread add message."""
         await self.generate_message_divider(channel_audit=True)
         await self.build_add()
 
     async def build_meta_data(self):
+        """Builds the metadata for the transcript."""
         user_id = self.message.author.id
 
         if user_id in self.meta_data:
@@ -148,6 +196,7 @@ class MessageConstruct:
             ]
 
     async def build_content(self):
+        """Builds the HTML for the message's content."""
         if not self.message.content:
             self.message.content = ""
             return
@@ -182,6 +231,7 @@ class MessageConstruct:
         )
 
     async def build_reference(self):
+        """Builds the HTML for a message reference."""
         if not self.message.reference:
             self.message.reference = ""
             return
@@ -238,6 +288,7 @@ class MessageConstruct:
         ])
 
     async def build_interaction(self):
+        """Builds the HTML for a message interaction."""
         if hasattr(self.message, 'interaction_metadata'):
             if not self.message.interaction_metadata:
                 self.interaction = ""
@@ -270,6 +321,7 @@ class MessageConstruct:
         ])
 
     async def build_sticker(self):
+        """Builds the HTML for a message sticker."""
         if not self.message.stickers or not hasattr(self.message.stickers[0], "url"):
             return
 
@@ -288,6 +340,7 @@ class MessageConstruct:
         ])
 
     async def build_assets(self):
+        """Builds the HTML for the message's assets (embeds, attachments, components, reactions)."""
         if self.processed_tenor_links:
             self.message.embeds = [
                 embed for embed in self.message.embeds
@@ -312,6 +365,7 @@ class MessageConstruct:
             self.reactions = f'<div class="chatlog__reactions">{self.reactions}</div>'
 
     async def build_message_template(self):
+        """Builds the HTML for the message's template."""
         started = await self.generate_message_divider()
 
         if started:
@@ -331,6 +385,7 @@ class MessageConstruct:
         return self.message_html
 
     def _generate_message_divider_check(self):
+        """Checks if a message divider should be generated."""
         return bool(
             self.previous_message is None or self.message.reference != "" or
             self.previous_message.type is not discord.MessageType.default or self.interaction != "" or
@@ -339,6 +394,14 @@ class MessageConstruct:
         )
 
     async def generate_message_divider(self, channel_audit=False):
+        """Generates a message divider if necessary.
+
+        Args:
+            channel_audit (bool): Whether the message is a channel audit message.
+
+        Returns:
+            bool: Whether a message divider was generated.
+        """
         if channel_audit or self._generate_message_divider_check():
             if self.previous_message is not None:
                 self.message_html += await fill_out(self.guild, end_message, [])
@@ -387,6 +450,7 @@ class MessageConstruct:
             return True
 
     async def build_pin_template(self):
+        """Builds the HTML for a message pin."""
         self.message_html += await fill_out(self.guild, message_pin, [
             ("PIN_URL", DiscordUtils.pinned_message_icon, PARSE_MODE_NONE),
             ("USER_COLOUR", await self._gather_user_colour(self.message.author)),
@@ -397,6 +461,7 @@ class MessageConstruct:
         ])
 
     async def build_thread_template(self):
+        """Builds the HTML for a thread creation message."""
         self.message_html += await fill_out(self.guild, message_thread, [
             ("THREAD_URL", DiscordUtils.thread_channel_icon,
              PARSE_MODE_NONE),
@@ -408,6 +473,7 @@ class MessageConstruct:
         ])
 
     async def build_remove(self):
+        """Builds the HTML for a message about a user being removed from a thread."""
         removed_member: discord.Member = self.message.mentions[0]
         self.message_html += await fill_out(self.guild, message_thread_remove, [
             ("THREAD_URL", DiscordUtils.thread_remove_recipient,
@@ -424,6 +490,7 @@ class MessageConstruct:
         ])
 
     async def build_add(self):
+        """Builds the HTML for a message about a user being added to a thread."""
         removed_member: discord.Member = self.message.mentions[0]
         self.message_html += await fill_out(self.guild, message_thread_add, [
             ("THREAD_URL", DiscordUtils.thread_add_recipient,
@@ -441,6 +508,14 @@ class MessageConstruct:
 
     @cache()
     async def _gather_member(self, author: discord.Member):
+        """Gathers a member from the guild.
+
+        Args:
+            author (discord.Member): The member to gather.
+
+        Returns:
+            Optional[discord.Member]: The gathered member, or None if not found.
+        """
         member = self.guild.get_member(author.id)
 
         if member:
@@ -452,11 +527,27 @@ class MessageConstruct:
             return None
 
     async def _gather_user_colour(self, author: discord.Member):
+        """Gathers a user's colour.
+
+        Args:
+            author (discord.Member): The user to gather the colour from.
+
+        Returns:
+            str: The user's colour.
+        """
         member = await self._gather_member(author)
         user_colour = member.colour if member and str(member.colour) != "#000000" else "#FFFFFF"
         return f"color: {user_colour};"
 
     async def _gather_user_icon(self, author: discord.Member):
+        """Gathers a user's icon.
+
+        Args:
+            author (discord.Member): The user to gather the icon from.
+
+        Returns:
+            str: The user's icon.
+        """
         member = await self._gather_member(author)
 
         if not member:
@@ -468,14 +559,30 @@ class MessageConstruct:
             return f"<img class='chatlog__role-icon' src='{member.top_role.icon}' alt='Role Icon'>"
         return ""
 
-    def set_time(self, message: Optional[discord.Message] = None):
+    def set_time(self, message: Optional[discord.Message] = None) -> Tuple[str, str]:
+        """Sets the time for a message.
+
+        Args:
+            message (Optional[discord.Message]): The message to set the time for. Defaults to None.
+
+        Returns:
+            Tuple[str, str]: A tuple containing the created_at and edited_at times.
+        """
         message = message if message else self.message
         created_at_str = self.to_local_time_str(message.created_at)
         edited_at_str = self.to_local_time_str(message.edited_at) if message.edited_at else ""
 
         return created_at_str, edited_at_str
 
-    def to_local_time_str(self, time):
+    def to_local_time_str(self, time) -> str:
+        """Converts a time to a local time string.
+
+        Args:
+            time: The time to convert.
+
+        Returns:
+            str: The converted time.
+        """
         if not self.message.created_at.tzinfo:
             time = timezone("UTC").localize(time)
 
@@ -484,7 +591,16 @@ class MessageConstruct:
         return local_time.strftime(self.time_format)
 
 async def _process_tenor_link(session: aiohttp.ClientSession, tenor_api_key: str, link: str) -> Optional[str]:
-    """Process a tenor link and return the direct gif url."""
+    """Processes a Tenor link and returns the direct GIF URL.
+
+    Args:
+        session (aiohttp.ClientSession): The aiohttp client session.
+        tenor_api_key (str): The Tenor API key.
+        link (str): The Tenor link to process.
+
+    Returns:
+        Optional[str]: The direct GIF URL, or None if not found.
+    """
     tenor_regex = r"https?:\/\/tenor\.com\/view\/[a-zA-Z0-9\-%]+\-([0-9]{16,20})"
     match = re.search(tenor_regex, link)
     if not match:
@@ -516,6 +632,19 @@ async def gather_messages(
     attachment_handler: Optional[AttachmentHandler],
     tenor_api_key: Optional[str] = None,
 ) -> Tuple[str, dict]:
+    """Gathers all messages in a channel and returns the HTML and metadata.
+
+    Args:
+        messages (List[discord.Message]): The messages to gather.
+        guild (discord.Guild): The guild the channel belongs to.
+        pytz_timezone (str): The timezone to use for timestamps.
+        military_time (bool): Whether to use military time.
+        attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
+        tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs.
+
+    Returns:
+        Tuple[str, dict]: A tuple containing the HTML and metadata.
+    """
     message_html: str = ""
     meta_data: dict = {}
     previous_message: Optional[discord.Message] = None

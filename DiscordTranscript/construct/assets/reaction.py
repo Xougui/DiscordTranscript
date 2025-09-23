@@ -5,16 +5,34 @@ from DiscordTranscript.ext.html_generator import fill_out, emoji, custom_emoji, 
 
 
 class Reaction:
+    """A class to represent a Discord reaction.
+
+    Attributes:
+        reaction (discord.Reaction): The reaction to represent.
+        guild (discord.Guild): The guild the reaction is in.
+    """
     def __init__(self, reaction, guild):
+        """Initializes the Reaction.
+
+        Args:
+            reaction (discord.Reaction): The reaction to represent.
+            guild (discord.Guild): The guild the reaction is in.
+        """
         self.reaction = reaction
         self.guild = guild
 
     async def flow(self):
+        """Builds the reaction and returns the HTML.
+
+        Returns:
+            str: The HTML of the reaction.
+        """
         await self.build_reaction()
 
         return self.reaction
 
     async def build_reaction(self):
+        """Builds the reaction's HTML based on its type."""
         if ":" in str(self.reaction.emoji):
             emoji_animated = re.compile(r"&lt;a:.*:.*&gt;")
             if emoji_animated.search(str(self.reaction.emoji)):
@@ -25,6 +43,11 @@ class Reaction:
             await self.create_standard_emoji()
 
     async def create_discord_reaction(self, emoji_type):
+        """Builds a custom Discord reaction.
+
+        Args:
+            emoji_type (str): The type of emoji (e.g. "gif", "png").
+        """
         pattern = r":.*:(\d*)"
         emoji_id = re.search(pattern, str(self.reaction.emoji)).group(1)
         self.reaction = await fill_out(self.guild, custom_emoji, [
@@ -34,6 +57,7 @@ class Reaction:
         ])
 
     async def create_standard_emoji(self):
+        """Builds a standard emoji reaction."""
         react_emoji = await convert_emoji(self.reaction.emoji)
         self.reaction = await fill_out(self.guild, emoji, [
             ("EMOJI", str(react_emoji), PARSE_MODE_NONE),

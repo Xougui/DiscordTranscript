@@ -29,6 +29,23 @@ def _gather_checker():
     return None
 
 class Embed:
+    """A class to represent a Discord embed.
+
+    Attributes:
+        r (str): The red value of the embed color.
+        g (str): The green value of the embed color.
+        b (str): The blue value of the embed color.
+        title (str): The title of the embed.
+        description (str): The description of the embed.
+        author (str): The author of the embed.
+        image (str): The image of the embed.
+        thumbnail (str): The thumbnail of the embed.
+        footer (str): The footer of the embed.
+        fields (str): The fields of the embed.
+        check_against (Any): The value to check against for empty values.
+        embed (discord.Embed): The embed to represent.
+        guild (discord.Guild): The guild the embed is in.
+    """
     r: str
     g: str
     b: str
@@ -43,10 +60,21 @@ class Embed:
     check_against = None
 
     def __init__(self, embed, guild):
+        """Initializes the Embed.
+
+        Args:
+            embed (discord.Embed): The embed to represent.
+            guild (discord.Guild): The guild the embed is in.
+        """
         self.embed: discord.Embed = embed
         self.guild: discord.Guild = guild
 
     async def flow(self):
+        """Builds the embed and returns the HTML.
+
+        Returns:
+            str: The HTML of the embed.
+        """
         self.check_against = _gather_checker()
         self.build_colour()
         await self.build_title()
@@ -61,12 +89,14 @@ class Embed:
         return self.embed
 
     def build_colour(self):
+        """Builds the color of the embed."""
         self.r, self.g, self.b = (
             (self.embed.colour.r, self.embed.colour.g, self.embed.colour.b)
             if self.embed.colour != self.check_against else (0x20, 0x22, 0x25)  # default colour
         )
 
     async def build_title(self):
+        """Builds the title of the embed."""
         self.title = html.escape(self.embed.title) if self.embed.title != self.check_against else ""
 
         if self.title:
@@ -75,6 +105,7 @@ class Embed:
             ])
 
     async def build_description(self):
+        """Builds the description of the embed."""
         self.description = html.escape(self.embed.description) if self.embed.description != self.check_against else ""
 
         if self.description:
@@ -83,6 +114,7 @@ class Embed:
             ])
 
     async def build_fields(self):
+        """Builds the fields of the embed."""
         self.fields = ""
 
         # This does not have to be here, but Pycord.
@@ -104,6 +136,7 @@ class Embed:
                     ("FIELD_VALUE", field.value, PARSE_MODE_EMBED)])
 
     async def build_author(self):
+        """Builds the author of the embed."""
         self.author = html.escape(self.embed.author.name) if (
                 self.embed.author and self.embed.author.name != self.check_against
         ) else ""
@@ -124,16 +157,19 @@ class Embed:
             self.author = author_icon
 
     async def build_image(self):
+        """Builds the image of the embed."""
         self.image = await fill_out(self.guild, embed_image, [
             ("EMBED_IMAGE", str(self.embed.image.proxy_url), PARSE_MODE_NONE)
         ]) if self.embed.image and self.embed.image.url != self.check_against else ""
 
     async def build_thumbnail(self):
+        """Builds the thumbnail of the embed."""
         self.thumbnail = await fill_out(self.guild, embed_thumbnail, [
             ("EMBED_THUMBNAIL", str(self.embed.thumbnail.url), PARSE_MODE_NONE)]) \
             if self.embed.thumbnail and self.embed.thumbnail.url != self.check_against else ""
 
     async def build_footer(self):
+        """Builds the footer of the embed."""
         self.footer = html.escape(self.embed.footer.text) if (
                 self.embed.footer and self.embed.footer.text != self.check_against
         ) else ""
@@ -155,6 +191,7 @@ class Embed:
                 ("EMBED_FOOTER", self.footer, PARSE_MODE_NONE)])
 
     async def build_embed(self):
+        """Builds the embed."""
         self.embed = await fill_out(self.guild, embed_body, [
             ("EMBED_R", str(self.r)),
             ("EMBED_G", str(self.g)),

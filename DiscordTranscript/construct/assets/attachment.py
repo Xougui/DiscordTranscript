@@ -11,15 +11,33 @@ from DiscordTranscript.ext.html_generator import (
 )
 
 class Attachment:
+    """A class to represent a Discord attachment.
+
+    Attributes:
+        attachments (discord.Attachment): The attachment to represent.
+        guild (discord.Guild): The guild the attachment is in.
+    """
     def __init__(self, attachments, guild):
+        """Initializes the Attachment.
+
+        Args:
+            attachments (discord.Attachment): The attachment to represent.
+            guild (discord.Guild): The guild the attachment is in.
+        """
         self.attachments = attachments
         self.guild = guild
 
     async def flow(self):
+        """Builds the attachment and returns the HTML.
+
+        Returns:
+            str: The HTML of the attachment.
+        """
         await self.build_attachment()
         return self.attachments
 
     async def build_attachment(self):
+        """Builds the attachment's HTML based on its content type."""
         if self.attachments.content_type is not None:
             if "image" in self.attachments.content_type:
                 return await self.image()
@@ -32,6 +50,7 @@ class Attachment:
         await self.file()
 
     async def image(self):
+        """Builds an image attachment."""
         spoiler_classes = ""
         if self.attachments.filename.startswith("SPOILER_"):
             spoiler_classes = "spoiler spoiler-image spoiler--hidden"
@@ -43,11 +62,13 @@ class Attachment:
         ])
 
     async def video(self):
+        """Builds a video attachment."""
         self.attachments = await fill_out(self.guild, video_attachment, [
             ("ATTACH_URL", self.attachments.proxy_url, PARSE_MODE_NONE)
         ])
 
     async def audio(self):
+        """Builds an audio attachment."""
         file_icon = DiscordUtils.file_attachment_audio
         file_size = self.get_file_size(self.attachments.size)
 
@@ -60,6 +81,7 @@ class Attachment:
         ])
 
     async def file(self):
+        """Builds a file attachment."""
         file_icon = await self.get_file_icon()
 
         file_size = self.get_file_size(self.attachments.size)
@@ -73,6 +95,14 @@ class Attachment:
 
     @staticmethod
     def get_file_size(file_size):
+        """Gets the file size in a human-readable format.
+
+        Args:
+            file_size (int): The size of the file in bytes.
+
+        Returns:
+            str: The file size in a human-readable format.
+        """
         if file_size == 0:
             return "0 bytes"
         size_name = ("bytes", "KB", "MB")
@@ -82,6 +112,11 @@ class Attachment:
         return "%s %s" % (s, size_name[i])
 
     async def get_file_icon(self) -> str:
+        """Gets the file icon based on the file extension.
+
+        Returns:
+            str: The URL of the file icon.
+        """
         acrobat_types = "pdf"
         webcode_types = "html", "htm", "css", "rss", "xhtml", "xml"
         code_types = "py", "cgi", "pl", "gadget", "jar", "msi", "wsf", "bat", "php", "js"
