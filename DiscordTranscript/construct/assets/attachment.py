@@ -27,12 +27,14 @@ class Attachment:
                 return await self.video()
             elif "audio" in self.attachments.content_type:
                 return await self.audio()
+        if self.attachments.filename and self.attachments.filename.lower().endswith(".gif"):
+            return await self.image()
         await self.file()
 
     async def image(self):
         spoiler_classes = ""
         if self.attachments.filename.startswith("SPOILER_"):
-            spoiler_classes = "spoiler-image spoiler--hidden"
+            spoiler_classes = "spoiler spoiler-image spoiler--hidden"
 
         self.attachments = await fill_out(self.guild, img_attachment, [
             ("SPOILER_CLASSES", spoiler_classes, PARSE_MODE_NONE),

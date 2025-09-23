@@ -1,5 +1,8 @@
 from __future__ import annotations
 import html
+import json
+import re
+import aiohttp
 from typing import List, Optional, Tuple
 from datetime import timedelta
 from pytz import timezone
@@ -62,7 +65,8 @@ class MessageConstruct:
         guild: discord.Guild,
         meta_data: dict,
         message_dict: dict,
-        attachment_handler: Optional[AttachmentHandler]
+        attachment_handler: Optional[AttachmentHandler],
+        tenor_api_key: Optional[str] = None
     ):
         self.message = message
         self.previous_message = previous_message
@@ -71,6 +75,8 @@ class MessageConstruct:
         self.guild = guild
         self.message_dict = message_dict
         self.attachment_handler = attachment_handler
+        self.tenor_api_key = tenor_api_key
+        self.processed_tenor_links = []
         self.time_format = "%A, %e %B %Y %I:%M %p"
         if self.military_time:
             self.time_format = "%A, %e %B %Y %H:%M"
@@ -146,14 +152,34 @@ class MessageConstruct:
             self.message.content = ""
             return
 
+        content = self.message.content
+        placeholders = {}
+
+        if self.tenor_api_key and "tenor.com/view" in content:
+            async with aiohttp.ClientSession() as session:
+                links = [word for word in content.split() if "tenor.com/view" in word]
+                for i, link in enumerate(links):
+                    gif_url = await _process_tenor_link(session, self.tenor_api_key, link)
+                    if gif_url:
+                        placeholder = f"TENORGIFPLACEHOLDER{i}"
+                        placeholders[placeholder] = f'<img src="{gif_url}" alt="GIF from Tenor" style="max-width: 100%;">'
+                        content = content.replace(link, placeholder)
+                        self.processed_tenor_links.append(link)
+
         if self.message_edited_at:
             self.message_edited_at = _set_edit_at(self.message_edited_at)
 
-        self.message.content = html.escape(self.message.content).replace('&#96;', '`')
-        self.message.content = await fill_out(self.guild, message_content, [
-            ("MESSAGE_CONTENT", self.message.content, PARSE_MODE_MARKDOWN),
-            ("EDIT", self.message_edited_at, PARSE_MODE_NONE)
-        ])
+        self.message.content = html.escape(content).replace('&#96;', '`')
+
+        self.message.content = await fill_out(
+            self.guild,
+            message_content,
+            [
+                ("MESSAGE_CONTENT", self.message.content, PARSE_MODE_MARKDOWN),
+                ("EDIT", self.message_edited_at, PARSE_MODE_NONE),
+            ],
+            placeholders=placeholders,
+        )
 
     async def build_reference(self):
         if not self.message.reference:
@@ -262,6 +288,12 @@ class MessageConstruct:
         ])
 
     async def build_assets(self):
+        if self.processed_tenor_links:
+            self.message.embeds = [
+                embed for embed in self.message.embeds
+                if not (embed.url and embed.url in self.processed_tenor_links)
+            ]
+
         for e in self.message.embeds:
             self.embeds += await Embed(e, self.guild).flow()
 
@@ -451,12 +483,38 @@ class MessageConstruct:
 
         return local_time.strftime(self.time_format)
 
+async def _process_tenor_link(session: aiohttp.ClientSession, tenor_api_key: str, link: str) -> Optional[str]:
+    """Process a tenor link and return the direct gif url."""
+    tenor_regex = r"https?:\/\/tenor\.com\/view\/[a-zA-Z0-9\-%]+\-([0-9]{16,20})"
+    match = re.search(tenor_regex, link)
+    if not match:
+        return None
+
+    gif_id = match.group(1)
+    if not gif_id:
+        return None
+
+    url = f"https://tenor.googleapis.com/v2/posts?ids={gif_id}&key={tenor_api_key}&media_filter=gif"
+
+    try:
+        async with session.get(url) as response:
+            if response.status == 200:
+                data = await response.json()
+                if data and "results" in data and data["results"]:
+                    gif_url = data["results"][0]["media_formats"]["gif"]["url"]
+                    return gif_url
+            return None
+    except Exception:
+        return None
+
+
 async def gather_messages(
     messages: List[discord.Message],
     guild: discord.Guild,
     pytz_timezone,
     military_time,
     attachment_handler: Optional[AttachmentHandler],
+    tenor_api_key: Optional[str] = None,
 ) -> Tuple[str, dict]:
     message_html: str = ""
     meta_data: dict = {}
@@ -475,7 +533,7 @@ async def gather_messages(
         messages[0].reference = None
 
     for message in messages:
-        content_html, meta_data = await MessageConstruct(
+        mc = MessageConstruct(
             message,
             previous_message,
             pytz_timezone,
@@ -484,7 +542,9 @@ async def gather_messages(
             meta_data,
             message_dict,
             attachment_handler,
-            ).construct_message()
+            tenor_api_key=tenor_api_key
+        )
+        content_html, meta_data = await mc.construct_message()
 
         message_html += content_html
         previous_message = message

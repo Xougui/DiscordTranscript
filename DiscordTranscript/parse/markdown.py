@@ -3,9 +3,10 @@ import re
 from DiscordTranscript.ext.emoji_convert import convert_emoji
 
 class ParseMarkdown:
-    def __init__(self, content):
+    def __init__(self, content, placeholders: dict = None):
         self.content = content
         self.code_blocks_content = []
+        self.placeholders = placeholders or {}
 
     async def standard_message_flow(self):
         self.parse_code_block_markdown()
@@ -14,6 +15,7 @@ class ParseMarkdown:
 
         await self.parse_emoji()
         self.reverse_code_block_markdown()
+        self.reverse_tenor_placeholders()
         return self.content
 
     async def link_embed_flow(self):
@@ -250,6 +252,10 @@ class ParseMarkdown:
     def reverse_code_block_markdown(self):
         for x in range(len(self.code_blocks_content)):
             self.content = self.content.replace(f'%s{x + 1}', self.code_blocks_content[x])
+
+    def reverse_tenor_placeholders(self):
+        for placeholder, img_tag in self.placeholders.items():
+            self.content = self.content.replace(html.escape(placeholder), img_tag)
 
     def parse_embed_markdown(self):
         # [Message](Link)

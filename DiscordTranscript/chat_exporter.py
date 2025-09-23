@@ -1,5 +1,6 @@
 import datetime
 import io
+import os
 from typing import List, Optional, TYPE_CHECKING
 
 from DiscordTranscript.construct.transcript import Transcript
@@ -63,6 +64,7 @@ async def export(
     before: Optional[datetime.datetime] = None,
     after: Optional[datetime.datetime] = None,
     attachment_handler: Optional[AttachmentHandler] = None,
+    tenor_api_key: Optional[str] = None,
 ):
     """
     Create a customised transcript of your Discord channel.
@@ -82,6 +84,8 @@ async def export(
     if guild:
         channel.guild = guild
 
+    tenor_api_key = tenor_api_key or os.getenv("TENOR_API_KEY")
+
     return (
         await Transcript(
             channel=channel,
@@ -94,6 +98,7 @@ async def export(
             after=after,
             bot=bot,
             attachment_handler=attachment_handler,
+            tenor_api_key=tenor_api_key,
         ).export()
     ).html
 
@@ -106,6 +111,7 @@ async def raw_export(
     military_time: Optional[bool] = False,
     fancy_times: Optional[bool] = True,
     attachment_handler: Optional[AttachmentHandler] = None,
+    tenor_api_key: Optional[str] = None,
 ):
     """
     Create a customised transcript with your own captured Discord messages
@@ -123,6 +129,8 @@ async def raw_export(
     if guild:
         channel.guild = guild
 
+    tenor_api_key = tenor_api_key or os.getenv("TENOR_API_KEY")
+
     return (
         await Transcript(
             channel=channel,
@@ -134,6 +142,7 @@ async def raw_export(
             before=None,
             after=None,
             bot=bot,
-            attachment_handler=attachment_handler
+            attachment_handler=attachment_handler,
+            tenor_api_key=tenor_api_key
         ).export()
     ).html
