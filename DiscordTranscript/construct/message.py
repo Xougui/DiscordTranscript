@@ -160,7 +160,7 @@ class MessageConstruct:
                 for i, link in enumerate(links):
                     gif_url = await _process_tenor_link(session, self.tenor_api_key, link)
                     if gif_url:
-                        placeholder = f"%%TENOR_GIF_{i}%%"
+                        placeholder = f"TENORGIFPLACEHOLDER{i}"
                         placeholders[placeholder] = f'<img src="{gif_url}" alt="GIF from Tenor" style="max-width: 100%;">'
                         content = content.replace(link, placeholder)
 
