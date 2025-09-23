@@ -52,8 +52,7 @@ A Python library for creating HTML transcripts of Discord channels. This is usef
 - [Utilisation](#utilisation)
 - [Exemples](#exemples)
 - [Paramètres](#paramètres)
-- [Contribuer](#contribuer)
-- [Licence](#licence)
+- [Obtenir une clé API Tenor](#obtaining-a-tenor-api-key)
 
 ---
 
@@ -229,6 +228,7 @@ Voici une liste des paramètres que vous pouvez utiliser dans les fonctions `exp
 
 | Paramètre | Type | Description | Défaut |
 | --- | --- | --- | --- |
+| `messages` | `List[discord.Message]` | Une liste de messages à utiliser pour la transcription. | `None` |
 | `limit` | `int` | Le nombre maximum de messages à récupérer. | `None` (illimité) |
 | `before` | `datetime.datetime` | Récupère les messages avant cette date. | `None` |
 | `after` | `datetime.datetime` | Récupère les messages après cette date. | `None` |
@@ -236,17 +236,132 @@ Voici une liste des paramètres que vous pouvez utiliser dans les fonctions `exp
 | `military_time` | `bool` | Si `True`, utilise le format 24h. Si `False`, utilise le format 12h (AM/PM). | `True` |
 | `fancy_times` | `bool` | Si `True`, utilise des horodatages relatifs (ex: "Aujourd'hui à..."). Si `False`, affiche la date complète. | `True` |
 | `bot` | `discord.Client` | L'instance de votre bot. Nécessaire pour résoudre les informations des utilisateurs qui ont quitté le serveur. | `None` |
+| `guild`| `discord.Guild` | L'instance de votre serveur. Nécessaire pour résoudre les informations des membres (rôles, couleurs, etc.). | `None` |
 | `attachment_handler` | `AttachmentHandler` | Un gestionnaire pour contrôler la façon dont les pièces jointes sont sauvegardées. Voir l'exemple [Sauvegarder les pièces jointes localement](#sauvegarder-les-pièces-jointes-localement). | `None` (les liens des pièces jointes pointent vers le CDN de Discord) |
+| `tenor_api_key` | `str` | Votre clé API Tenor pour afficher les GIFs. | `None` |
+
+**Note :** Le paramètre `messages` est uniquement disponible pour la fonction `raw_export()`.
+
+### Exemples de paramètres
+
+Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transcriptions.
+
+- **`messages`**: Pour créer une transcription à partir d'une liste de messages que vous avez déjà. (Uniquement pour `raw_export`)
+  ```python
+  # Récupère les 50 derniers messages
+  my_messages = await ctx.channel.history(limit=50).flatten()
+
+  transcript = await DiscordTranscript.raw_export(
+      ctx.channel,
+      messages=my_messages, # Fournit la liste de messages
+      bot=bot,
+  )
+  ```
+
+- **`limit`**: Pour limiter le nombre de messages à 100.
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      limit=100, # Limite à 100 messages
+      bot=bot,
+  )
+  ```
+
+- **`before` et `after`**: Pour exporter les messages d'une période spécifique.
+  ```python
+  import datetime
+
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      # Exportera les messages envoyés entre le 10 et le 20 juin 2023
+      after=datetime.datetime(2023, 6, 10),  # Après le 10 juin 2023
+      before=datetime.datetime(2023, 6, 20), # Avant le 20 juin 2023
+      bot=bot,
+  )
+  ```
+
+- **`tz_info`**: Pour afficher les heures en fonction d'un fuseau horaire (ex: heure de Paris).
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      tz_info="Europe/Paris", # Fuseau horaire de Paris
+      bot=bot,
+  )
+  ```
+
+- **`military_time`**: Pour utiliser le format 12h (AM/PM) au lieu du format 24h.
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      military_time=False, # Affiche 1:00 PM au lieu de 13:00
+      bot=bot,
+  )
+  ```
+
+- **`fancy_times`**: Pour afficher la date complète au lieu de "Aujourd'hui à...".
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      fancy_times=False, # Affiche la date complète (ex: 23/09/2025)
+      bot=bot,
+  )
+  ```
+
+- **`bot`**: Pour résoudre les informations des utilisateurs (même s'ils ont quitté le serveur).
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      bot=bot, # Fournit l'instance du bot
+  )
+  ```
+
+- **`guild`**: Pour vous assurer que les rôles et les couleurs des membres sont corrects.
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      guild=ctx.guild, # Fournit l'instance du serveur
+      bot=bot,
+  )
+  ```
+
+- **`attachment_handler`**: Pour sauvegarder les pièces jointes localement.
+  ```python
+  from DiscordTranscript.construct.attachment_handler import AttachmentToLocalFileHostHandler
+
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      # Sauvegarde les pièces jointes dans le dossier "attachments/ID_DU_SALON"
+      attachment_handler=AttachmentToLocalFileHostHandler(path=f"attachments/{ctx.channel.id}"),
+      bot=bot,
+  )
+  ```
+
+- **`tenor_api_key`**: Pour afficher les GIFs Tenor directement dans la transcription.
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      tenor_api_key="VOTRE_CLÉ_API_TENOR", # Fournit votre clé API Tenor
+      bot=bot,
+  )
+  ```
 
 ---
 
-## <a id="contribuer"></a>Contribuer
+## <a id="obtaining-a-tenor-api-key"></a>Obtenir une clé API Tenor
 
-Les contributions sont les bienvenues ! Veuillez ouvrir une issue ou soumettre une pull request sur le [dépôt GitHub](https://github.com/Xougui/DiscordTranscript).
+Pour utiliser la fonctionnalité d'affichage des GIFs Tenor, vous devez fournir une clé API Tenor. **Suivez attentivement le [guide de démarrage rapide de Tenor](https://developers.google.com/tenor/guides/quickstart) pour en obtenir une.**
 
-## <a id="licence"></a>Licence
+1.  **Connectez-vous à la [console Google Cloud](https://console.cloud.google.com/)**.
+2.  **Créez un nouveau projet** (ou sélectionnez-en un existant).
+3.  **Activez l'API Tenor** :
+    -   Dans le menu de navigation, allez dans `APIs & Services` > `Bibliothèque`.
+    -   Recherchez `Tenor API` et activez-la pour votre projet.
+4.  **Générez une clé API** :
+    -   Allez dans `APIs & Services` > `Identifiants`.
+    -   Cliquez sur `Créer des identifiants` et sélectionnez `Clé API`.
+5.  **Copiez votre clé** et utilisez-la dans le paramètre `tenor_api_key`.
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Il est recommandé de restreindre votre clé API pour éviter toute utilisation non autorisée. Vous pouvez le faire depuis la page `Identifiants`.
 
 </details>
 
@@ -265,8 +380,7 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 - [Usage](#usage-en)
 - [Examples](#examples-en)
 - [Parameters](#parameters-en)
-- [Contributing](#contributing-en)
-- [License](#license-en)
+- [Getting a Tenor API Key](#getting-a-tenor-api-key-en)
 
 ---
 
@@ -443,6 +557,7 @@ Here is a list of parameters you can use in the `export()` and `raw_export()` fu
 
 | Parameter | Type | Description | Default |
 | --- | --- | --- | --- |
+| `messages` | `List[discord.Message]` | A list of messages to use for the transcript. | `None` |
 | `limit` | `int` | The maximum number of messages to retrieve. | `None` (unlimited) |
 | `before` | `datetime.datetime` | Retrieves messages before this date. | `None` |
 | `after` | `datetime.datetime` | Retrieves messages after this date. | `None` |
@@ -450,16 +565,131 @@ Here is a list of parameters you can use in the `export()` and `raw_export()` fu
 | `military_time` | `bool` | If `True`, uses 24h format. If `False`, uses 12h format (AM/PM). | `True` |
 | `fancy_times` | `bool` | If `True`, uses relative timestamps (e.g., "Today at..."). If `False`, displays the full date. | `True` |
 | `bot` | `discord.Client` | Your bot's instance. Necessary to resolve user information for members who have left the server. | `None` |
+| `guild`| `discord.Guild` | Your server's instance. Necessary to resolve member information (roles, colors, etc.). | `None` |
 | `attachment_handler`| `AttachmentHandler` | A handler to control how attachments are saved. See the [Saving Attachments Locally](#saving-attachments-locally-en) example. | `None` (attachment links point to Discord's CDN) |
+| `tenor_api_key` | `str` | Your Tenor API key to display GIFs. | `None` |
+
+**Note:** The `messages` parameter is only available for the `raw_export()` function.
+
+### Parameter Examples
+
+Here’s how you can use the parameters to customize your transcripts.
+
+- **`messages`**: To create a transcript from a list of messages you already have. (Only for `raw_export`)
+  ```python
+  # Fetches the last 50 messages
+  my_messages = await ctx.channel.history(limit=50).flatten()
+
+  transcript = await DiscordTranscript.raw_export(
+      ctx.channel,
+      messages=my_messages, # Provide the list of messages
+      bot=bot,
+  )
+  ```
+
+- **`limit`**: To limit the number of messages to 100.
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      limit=100, # Limit to 100 messages
+      bot=bot,
+  )
+  ```
+
+- **`before` and `after`**: To export messages from a specific period.
+  ```python
+  import datetime
+
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      # Will export messages sent between June 10th and June 20th, 2023
+      after=datetime.datetime(2023, 6, 10),  # After June 10, 2023
+      before=datetime.datetime(2023, 6, 20), # Before June 20, 2023
+      bot=bot,
+  )
+  ```
+
+- **`tz_info`**: To display times in a specific timezone (e.g., New York time).
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      tz_info="America/New_York", # New York timezone
+      bot=bot,
+  )
+  ```
+
+- **`military_time`**: To use 12-hour format (AM/PM) instead of 24-hour format.
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      military_time=False, # Displays 1:00 PM instead of 13:00
+      bot=bot,
+  )
+  ```
+
+- **`fancy_times`**: To display the full date instead of "Today at...".
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      fancy_times=False, # Displays the full date (e.g., 09/23/2025)
+      bot=bot,
+  )
+  ```
+
+- **`bot`**: To resolve user information (even if they have left the server).
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      bot=bot, # Provide the bot instance
+  )
+  ```
+
+- **`guild`**: To ensure member roles and colors are correct.
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      guild=ctx.guild, # Provide the guild instance
+      bot=bot,
+  )
+  ```
+
+- **`attachment_handler`**: To save attachments locally.
+  ```python
+  from DiscordTranscript.construct.attachment_handler import AttachmentToLocalFileHostHandler
+
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      # Saves attachments to the "attachments/CHANNEL_ID" folder
+      attachment_handler=AttachmentToLocalFileHostHandler(path=f"attachments/{ctx.channel.id}"),
+      bot=bot,
+  )
+  ```
+
+- **`tenor_api_key`**: To display Tenor GIFs directly in the transcript.
+  ```python
+  transcript = await DiscordTranscript.export(
+      ctx.channel,
+      tenor_api_key="YOUR_TENOR_API_KEY", # Provide your Tenor API key
+      bot=bot,
+  )
+  ```
 
 ---
 
-## <a id="contributing-en"></a>Contributing
+## <a id="getting-a-tenor-api-key-en"></a>Getting a Tenor API Key
 
-Contributions are welcome! Please open an issue or submit a pull request on the [GitHub repository](https://github.com/Xougui/DiscordTranscript).
+To use the Tenor GIF display feature, you need to provide a Tenor API key. **Carefully follow the [Tenor quickstart guide](https://developers.google.com/tenor/guides/quickstart) to get one.**
 
-## <a id="license-en"></a>License
+1.  **Log in to the [Google Cloud console](https://console.cloud.google.com/)**.
+2.  **Create a new project** (or select an existing one).
+3.  **Enable the Tenor API**:
+    -   In the navigation menu, go to `APIs & Services` > `Library`.
+    -   Search for `Tenor API` and enable it for your project.
+4.  **Generate an API key**:
+    -   Go to `APIs & Services` > `Credentials`.
+    -   Click `Create credentials` and select `API key`.
+5.  **Copy your key** and use it in the `tenor_api_key` parameter.
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+It is recommended to restrict your API key to prevent unauthorized use. You can do this from the `Credentials` page.
 
 </details>
