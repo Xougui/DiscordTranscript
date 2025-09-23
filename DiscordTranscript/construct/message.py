@@ -1,5 +1,8 @@
 from __future__ import annotations
 import html
+import json
+import re
+import aiohttp
 from typing import List, Optional, Tuple
 from datetime import timedelta
 from pytz import timezone
@@ -451,18 +454,46 @@ class MessageConstruct:
 
         return local_time.strftime(self.time_format)
 
+async def _process_tenor_link(session: aiohttp.ClientSession, tenor_api_key: str, link: str) -> Optional[str]:
+    """Process a tenor link and return an img tag if it's a valid tenor gif."""
+    tenor_regex = r"https?:\/\/tenor\.com\/view\/[a-zA-Z0-9\-%]+\-([0-9]{16,20})"
+    match = re.search(tenor_regex, link)
+    if not match:
+        return None
+
+    gif_id = match.group(1)
+    if not gif_id:
+        return None
+
+    url = f"https://tenor.googleapis.com/v2/posts?ids={gif_id}&key={tenor_api_key}&media_filter=gif"
+
+    try:
+        async with session.get(url) as response:
+            if response.status == 200:
+                data = await response.json()
+                if data and "results" in data and data["results"]:
+                    gif_url = data["results"][0]["media_formats"]["gif"]["url"]
+                    return f'<img src="{gif_url}" alt="GIF from Tenor" style="max-width: 100%;">'
+            return None
+    except Exception:
+        return None
+
+
 async def gather_messages(
     messages: List[discord.Message],
     guild: discord.Guild,
     pytz_timezone,
     military_time,
     attachment_handler: Optional[AttachmentHandler],
+    tenor_api_key: Optional[str] = None,
 ) -> Tuple[str, dict]:
     message_html: str = ""
     meta_data: dict = {}
     previous_message: Optional[discord.Message] = None
 
     message_dict = {message.id: message for message in messages}
+
+    tenor_session = aiohttp.ClientSession() if tenor_api_key else None
 
     if messages and "thread" in str(messages[0].channel.type) and messages[0].reference:
         channel = guild.get_channel(messages[0].reference.channel_id)
@@ -475,6 +506,19 @@ async def gather_messages(
         messages[0].reference = None
 
     for message in messages:
+        if tenor_session and message.content and "tenor.com/view" in message.content:
+            new_content_parts = []
+            for part in message.content.split():
+                if "tenor.com/view" in part:
+                    img_tag = await _process_tenor_link(tenor_session, tenor_api_key, part)
+                    if img_tag:
+                        new_content_parts.append(img_tag)
+                    else:
+                        new_content_parts.append(part)
+                else:
+                    new_content_parts.append(part)
+            message.content = " ".join(new_content_parts)
+
         content_html, meta_data = await MessageConstruct(
             message,
             previous_message,
@@ -488,6 +532,9 @@ async def gather_messages(
 
         message_html += content_html
         previous_message = message
+
+    if tenor_session:
+        await tenor_session.close()
 
     message_html += "</div>"
     return message_html, meta_data
