@@ -493,48 +493,70 @@ async def gather_messages(
 
     message_dict = {message.id: message for message in messages}
 
-    tenor_session = aiohttp.ClientSession() if tenor_api_key else None
+    if tenor_api_key:
+        async with aiohttp.ClientSession() as tenor_session:
+            if messages and "thread" in str(messages[0].channel.type) and messages[0].reference:
+                channel = guild.get_channel(messages[0].reference.channel_id)
 
-    if messages and "thread" in str(messages[0].channel.type) and messages[0].reference:
-        channel = guild.get_channel(messages[0].reference.channel_id)
+                if not channel:
+                    channel = await guild.fetch_channel(messages[0].reference.channel_id)
 
-        if not channel:
-            channel = await guild.fetch_channel(messages[0].reference.channel_id)
+                message = await channel.fetch_message(messages[0].reference.message_id)
+                messages[0] = message
+                messages[0].reference = None
 
-        message = await channel.fetch_message(messages[0].reference.message_id)
-        messages[0] = message
-        messages[0].reference = None
+            for message in messages:
+                if message.content and "tenor.com/view" in message.content:
+                    new_content_parts = []
+                    for part in message.content.split():
+                        if "tenor.com/view" in part:
+                            img_tag = await _process_tenor_link(tenor_session, tenor_api_key, part)
+                            if img_tag:
+                                new_content_parts.append(img_tag)
+                            else:
+                                new_content_parts.append(part)
+                        else:
+                            new_content_parts.append(part)
+                    message.content = " ".join(new_content_parts)
 
-    for message in messages:
-        if tenor_session and message.content and "tenor.com/view" in message.content:
-            new_content_parts = []
-            for part in message.content.split():
-                if "tenor.com/view" in part:
-                    img_tag = await _process_tenor_link(tenor_session, tenor_api_key, part)
-                    if img_tag:
-                        new_content_parts.append(img_tag)
-                    else:
-                        new_content_parts.append(part)
-                else:
-                    new_content_parts.append(part)
-            message.content = " ".join(new_content_parts)
+                content_html, meta_data = await MessageConstruct(
+                    message,
+                    previous_message,
+                    pytz_timezone,
+                    military_time,
+                    guild,
+                    meta_data,
+                    message_dict,
+                    attachment_handler,
+                ).construct_message()
 
-        content_html, meta_data = await MessageConstruct(
-            message,
-            previous_message,
-            pytz_timezone,
-            military_time,
-            guild,
-            meta_data,
-            message_dict,
-            attachment_handler,
+                message_html += content_html
+                previous_message = message
+    else:
+        if messages and "thread" in str(messages[0].channel.type) and messages[0].reference:
+            channel = guild.get_channel(messages[0].reference.channel_id)
+
+            if not channel:
+                channel = await guild.fetch_channel(messages[0].reference.channel_id)
+
+            message = await channel.fetch_message(messages[0].reference.message_id)
+            messages[0] = message
+            messages[0].reference = None
+
+        for message in messages:
+            content_html, meta_data = await MessageConstruct(
+                message,
+                previous_message,
+                pytz_timezone,
+                military_time,
+                guild,
+                meta_data,
+                message_dict,
+                attachment_handler,
             ).construct_message()
 
-        message_html += content_html
-        previous_message = message
-
-    if tenor_session:
-        await tenor_session.close()
+            message_html += content_html
+            previous_message = message
 
     message_html += "</div>"
     return message_html, meta_data

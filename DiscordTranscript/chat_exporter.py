@@ -1,5 +1,6 @@
 import datetime
 import io
+import os
 from typing import List, Optional, TYPE_CHECKING
 
 from DiscordTranscript.construct.transcript import Transcript
@@ -83,6 +84,8 @@ async def export(
     if guild:
         channel.guild = guild
 
+    tenor_api_key = tenor_api_key or os.getenv("TENOR_API_KEY")
+
     return (
         await Transcript(
             channel=channel,
@@ -125,6 +128,8 @@ async def raw_export(
     """
     if guild:
         channel.guild = guild
+
+    tenor_api_key = tenor_api_key or os.getenv("TENOR_API_KEY")
 
     return (
         await Transcript(
