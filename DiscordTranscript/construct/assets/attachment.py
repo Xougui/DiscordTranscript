@@ -27,6 +27,8 @@ class Attachment:
                 return await self.video()
             elif "audio" in self.attachments.content_type:
                 return await self.audio()
+        if self.attachments.filename and self.attachments.filename.lower().endswith(".gif"):
+            return await self.image()
         await self.file()
 
     async def image(self):
