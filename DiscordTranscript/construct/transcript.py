@@ -80,7 +80,7 @@ class TranscriptDAO:
         if bot:
             pass_bot(bot)
 
-    async def build_transcript(self) -> TranscriptDAO:
+    async def build_transcript(self) -> 'TranscriptDAO':
         """Builds the transcript.
 
         Returns:
@@ -204,7 +204,7 @@ class TranscriptDAO:
 
 class Transcript(TranscriptDAO):
     """A class to create a transcript of a Discord channel."""
-    async def export(self) -> TranscriptDAO:
+    async def export(self) -> 'TranscriptDAO':
         """Exports the transcript.
 
         Returns:
