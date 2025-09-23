@@ -76,6 +76,7 @@ class MessageConstruct:
         self.message_dict = message_dict
         self.attachment_handler = attachment_handler
         self.tenor_api_key = tenor_api_key
+        self.processed_tenor_links = []
         self.time_format = "%A, %e %B %Y %I:%M %p"
         if self.military_time:
             self.time_format = "%A, %e %B %Y %H:%M"
@@ -163,11 +164,12 @@ class MessageConstruct:
                         placeholder = f"TENORGIFPLACEHOLDER{i}"
                         placeholders[placeholder] = f'<img src="{gif_url}" alt="GIF from Tenor" style="max-width: 100%;">'
                         content = content.replace(link, placeholder)
+                        self.processed_tenor_links.append(link)
 
         if self.message_edited_at:
             self.message_edited_at = _set_edit_at(self.message_edited_at)
 
-        self.message.content = content
+        self.message.content = html.escape(content).replace('&#96;', '`')
 
         self.message.content = await fill_out(
             self.guild,
@@ -286,6 +288,12 @@ class MessageConstruct:
         ])
 
     async def build_assets(self):
+        if self.processed_tenor_links:
+            self.message.embeds = [
+                embed for embed in self.message.embeds
+                if not (embed.url and embed.url in self.processed_tenor_links)
+            ]
+
         for e in self.message.embeds:
             self.embeds += await Embed(e, self.guild).flow()
 
