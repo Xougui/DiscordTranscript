@@ -217,15 +217,15 @@ class Transcript(TranscriptDAO):
                 after=self.after,
             )]
 
-        if not self.after:
+        if self.after is None:
             self.messages.reverse()
 
         try:
             return await super().build_transcript()
-        except discord_errors.Forbidden:
+        except discord.errors.Forbidden:
             self.html = "Whoops! I don't have permission to see this channel."
             return self
-        except discord_errors.HTTPException:
+        except discord.errors.HTTPException:
             self.html = "Whoops! Something went wrong while fetching the messages."
             return self
         except Exception:
