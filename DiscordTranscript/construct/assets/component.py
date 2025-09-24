@@ -12,6 +12,17 @@ from DiscordTranscript.ext.html_generator import (
 )
 
 class Component:
+    """A class to represent a Discord component.
+
+    Attributes:
+        styles (dict): A dictionary of button styles.
+        components (str): The HTML for the components.
+        menus (str): The HTML for the menus.
+        buttons (str): The HTML for the buttons.
+        menu_div_id (int): The ID of the menu div.
+        component (discord.Component): The component to represent.
+        guild (discord.Guild): The guild the component is in.
+    """
     styles = {
         "primary": "#5865F2",
         "secondary": "#4F545C",
@@ -31,10 +42,21 @@ class Component:
     menu_div_id: int = 0
 
     def __init__(self, component, guild):
+        """Initializes the Component.
+
+        Args:
+            component (discord.Component): The component to represent.
+            guild (discord.Guild): The guild the component is in.
+        """
         self.component = component
         self.guild = guild
 
     async def build_component(self, c):
+        """Builds a component.
+
+        Args:
+            c (discord.Component): The component to build.
+        """
         if isinstance(c, discord.Button):
             await self.build_button(c)
         elif isinstance(c, discord.SelectMenu):
@@ -42,6 +64,11 @@ class Component:
             Component.menu_div_id += 1
 
     async def build_button(self, c):
+        """Builds a button.
+
+        Args:
+            c (discord.Button): The button to build.
+        """
         if c.url:
             url = str(c.url)
             target = " target='_blank'"
@@ -66,6 +93,11 @@ class Component:
         ])
 
     async def build_menu(self, c):
+        """Builds a menu.
+
+        Args:
+            c (discord.SelectMenu): The menu to build.
+        """
         placeholder = c.placeholder if c.placeholder else ""
         options = c.options
         content = ""
@@ -82,6 +114,14 @@ class Component:
         ])
 
     async def build_menu_options(self, options):
+        """Builds the options for a menu.
+
+        Args:
+            options (list): The options to build.
+
+        Returns:
+            str: The HTML for the menu options.
+        """
         content = []
         for option in options:
             if option.emoji:
@@ -102,6 +142,11 @@ class Component:
         return content
 
     async def flow(self):
+        """Builds the components and returns the HTML.
+
+        Returns:
+            str: The HTML for the components.
+        """
         for c in self.component.children:
             await self.build_component(c)
 

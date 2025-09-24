@@ -3,12 +3,30 @@ import re
 from DiscordTranscript.ext.emoji_convert import convert_emoji
 
 class ParseMarkdown:
+    """A class to parse markdown in a message.
+
+    Attributes:
+        content (str): The content to parse.
+        code_blocks_content (list): A list of code blocks in the content.
+        placeholders (dict): A dictionary of placeholders to replace.
+    """
     def __init__(self, content, placeholders: dict = None):
+        """Initializes the ParseMarkdown class.
+
+        Args:
+            content (str): The content to parse.
+            placeholders (dict, optional): A dictionary of placeholders to replace. Defaults to None.
+        """
         self.content = content
         self.code_blocks_content = []
         self.placeholders = placeholders or {}
 
     async def standard_message_flow(self):
+        """The standard flow for parsing a message.
+
+        Returns:
+            str: The parsed content.
+        """
         self.parse_code_block_markdown()
         self.https_http_links()
         self.parse_normal_markdown()
@@ -19,10 +37,20 @@ class ParseMarkdown:
         return self.content
 
     async def link_embed_flow(self):
+        """The flow for parsing a link embed.
+
+        Returns:
+            str: The parsed content.
+        """
         self.parse_embed_markdown()
         await self.parse_emoji()
 
     async def standard_embed_flow(self):
+        """The standard flow for parsing an embed.
+
+        Returns:
+            str: The parsed content.
+        """
         self.parse_code_block_markdown()
         self.https_http_links()
         self.parse_embed_markdown()
@@ -33,6 +61,11 @@ class ParseMarkdown:
         return self.content
 
     async def special_embed_flow(self):
+        """The flow for parsing a special embed.
+
+        Returns:
+            str: The parsed content.
+        """
         self.https_http_links()
         self.parse_code_block_markdown()
         self.parse_normal_markdown()
@@ -42,6 +75,11 @@ class ParseMarkdown:
         return self.content
 
     async def message_reference_flow(self):
+        """The flow for parsing a message reference.
+
+        Returns:
+            str: The parsed content.
+        """
         self.strip_preserve()
         self.parse_code_block_markdown(reference=True)
         self.parse_normal_markdown()
@@ -51,13 +89,20 @@ class ParseMarkdown:
         return self.content
 
     async def special_emoji_flow(self):
+        """The flow for parsing a special emoji.
+
+        Returns:
+            str: The parsed content.
+        """
         await self.parse_emoji()
         return self.content
 
     def parse_br(self):
+        """Parses <br> tags."""
         self.content = self.content.replace("<br>", " ")
 
     async def parse_emoji(self):
+        """Parses emojis."""
         holder = (
             [r"&lt;:.*?:(\d*)&gt;", '<img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/%s.png">'],
             [r"&lt;a:.*?:(\d*)&gt;", '<img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/%s.gif">'],
@@ -77,6 +122,7 @@ class ParseMarkdown:
                 match = re.search(p, self.content)
 
     def strip_preserve(self):
+        """Strips the preserve tags from the content."""
         p = r'<span class="chatlog__markdown-preserve">(.*)</span>'
         r = '%s'
 
@@ -89,6 +135,7 @@ class ParseMarkdown:
             match = re.search(pattern, self.content)
 
     def order_list_markdown_to_html(self):
+        """Converts a markdown ordered list to HTML."""
         lines = self.content.split('\n')
         html = ''
         indent_stack = [0]
@@ -135,6 +182,7 @@ class ParseMarkdown:
         self.content = html
 
     def parse_normal_markdown(self):
+        """Parses normal markdown."""
         self.order_list_markdown_to_html()
         holder = (
             [r"\*\*(.*?)\*\*", '<strong>%s</strong>'],
@@ -185,6 +233,7 @@ class ParseMarkdown:
         self.content = "\n".join(new_lines)
 
     def parse_code_block_markdown(self, reference=False):
+        """Parses code block markdown."""
         # The content of a code block is treated as plain text and should not be parsed for markdown.
         # Therefore, we do not call return_to_markdown on the extracted content.
         markdown_languages = ["asciidoc", "autohotkey", "bash", "coffeescript", "cpp", "cs", "css",
@@ -250,14 +299,17 @@ class ParseMarkdown:
         self.content = re.sub(r"<br>", "\n", self.content)
 
     def reverse_code_block_markdown(self):
+        """Reverses the code block markdown parsing."""
         for x in range(len(self.code_blocks_content)):
             self.content = self.content.replace(f'%s{x + 1}', self.code_blocks_content[x])
 
     def reverse_tenor_placeholders(self):
+        """Reverses the tenor placeholders."""
         for placeholder, img_tag in self.placeholders.items():
             self.content = self.content.replace(html.escape(placeholder), img_tag)
 
     def parse_embed_markdown(self):
+        """Parses embed markdown."""
         # [Message](Link)
         pattern = re.compile(r"\[(.+?)]\((.+?)\)")
         match = re.search(pattern, self.content)
@@ -300,6 +352,7 @@ class ParseMarkdown:
 
     @staticmethod
     def order_list_html_to_markdown(content):
+        """Converts an HTML ordered list to markdown."""
         lines = content.split('<br>')
         html = ''
         ul_level = -1
@@ -326,6 +379,7 @@ class ParseMarkdown:
         return html
 
     def return_to_markdown(self, content):
+        """Returns the content to markdown."""
         # content = self.order_list_html_to_markdown(content)
         holders = (
             [r"<strong>(.*?)</strong>", '**%s**'],
@@ -368,6 +422,7 @@ class ParseMarkdown:
         return content.lstrip().rstrip()
 
     def https_http_links(self):
+        """Parses https and http links."""
         def remove_silent_link(url, raw_url=None):
             pattern = rf"`.*{raw_url}.*`"
             match = re.search(pattern, self.content)

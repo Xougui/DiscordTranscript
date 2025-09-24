@@ -19,6 +19,13 @@ def pass_bot(_bot):
     bot = _bot
 
 class ParseMention:
+    """A class to parse mentions in a message.
+
+    Attributes:
+        content (str): The content to parse.
+        guild (discord.Guild): The guild the message is in.
+        code_blocks_content (list): A list of code blocks in the content.
+    """
     REGEX_ROLES = r"&lt;@&amp;([0-9]+)&gt;"
     REGEX_ROLES_2 = r"<@&([0-9]+)>"
     REGEX_EVERYONE = r"@(everyone)(?:[$\s\t\n\f\r\0]|$)"
@@ -46,11 +53,22 @@ class ParseMention:
     ESCAPE_AMP = "______amp______"
 
     def __init__(self, content, guild):
+        """Initializes the ParseMention class.
+
+        Args:
+            content (str): The content to parse.
+            guild (discord.Guild): The guild the message is in.
+        """
         self.content = content
         self.guild = guild
         self.code_blocks_content = []
 
     async def flow(self):
+        """The main flow for parsing mentions.
+
+        Returns:
+            str: The parsed content.
+        """
         markdown = ParseMarkdown(self.content)
         markdown.parse_code_block_markdown()
         self.content = markdown.content
@@ -69,6 +87,7 @@ class ParseMention:
 
 
     async def escape_mentions(self):
+        """Escapes mentions to prevent them from being parsed."""
         for match in re.finditer("(%s|%s|%s|%s|%s|%s|%s|%s)"
                                  % (self.REGEX_ROLES, self.REGEX_MEMBERS, self.REGEX_CHANNELS, self.REGEX_EMOJIS,
                                     self.REGEX_ROLES_2, self.REGEX_MEMBERS_2, self.REGEX_CHANNELS_2,
@@ -84,12 +103,14 @@ class ParseMention:
             self.content = pre_content + match_content + post_content
 
     async def unescape_mentions(self):
+        """Unescapes mentions."""
         self.content = self.content.replace(self.ESCAPE_LT, "<")
         self.content = self.content.replace(self.ESCAPE_GT, ">")
         self.content = self.content.replace(self.ESCAPE_AMP, "&")
         pass
 
     async def channel_mention(self):
+        """Parses channel mentions."""
         holder = self.REGEX_CHANNELS, self.REGEX_CHANNELS_2
         for regex in holder:
             match = re.search(regex, self.content)
@@ -107,6 +128,7 @@ class ParseMention:
                 match = re.search(regex, self.content)
 
     async def role_mention(self):
+        """Parses role mentions."""
         holder = self.REGEX_EVERYONE, self.REGEX_HERE
         for regex in holder:
             match = re.search(regex, self.content)
@@ -136,6 +158,7 @@ class ParseMention:
                 match = re.search(regex, self.content)
 
     async def slash_command_mention(self):
+        """Parses slash command mentions."""
         match = re.search(self.REGEX_SLASH_COMMAND, self.content)
         while match is not None:
             slash_command_name = match.group(1)
@@ -148,6 +171,7 @@ class ParseMention:
             match = re.search(self.REGEX_SLASH_COMMAND, self.content)
 
     async def member_mention(self):
+        """Parses member mentions."""
         holder = self.REGEX_MEMBERS, self.REGEX_MEMBERS_2
         for regex in holder:
             match = re.search(regex, self.content)
@@ -173,6 +197,7 @@ class ParseMention:
                 match = re.search(regex, self.content)
 
     async def time_mention(self):
+        """Parses time mentions."""
         holder = self.REGEX_TIME_HOLDER
         timezone = pytz.timezone("UTC")
 

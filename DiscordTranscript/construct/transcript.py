@@ -17,6 +17,21 @@ from DiscordTranscript.ext.html_generator import (
 )
 
 class TranscriptDAO:
+    """A class to create a transcript of a Discord channel.
+
+    Attributes:
+        html (str): The HTML of the transcript.
+        channel (discord.TextChannel): The channel to create a transcript of.
+        limit (Optional[int]): The maximum number of messages to fetch.
+        messages (Optional[List[discord.Message]]): A list of messages to use instead of fetching them.
+        pytz_timezone (str): The timezone to use for the transcript.
+        military_time (bool): Whether to use military time.
+        fancy_times (bool): Whether to use fancy times.
+        before (Optional[datetime.datetime]): The date to fetch messages before.
+        after (Optional[datetime.datetime]): The date to fetch messages after.
+        attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
+        tenor_api_key (Optional[str]): The Tenor API key to use.
+    """
     html: str
 
     def __init__(
@@ -33,6 +48,21 @@ class TranscriptDAO:
         attachment_handler: Optional[AttachmentHandler],
         tenor_api_key: Optional[str] = None,
     ):
+        """Initializes the TranscriptDAO.
+
+        Args:
+            channel (discord.TextChannel): The channel to create a transcript of.
+            limit (Optional[int]): The maximum number of messages to fetch.
+            messages (Optional[List[discord.Message]]): A list of messages to use instead of fetching them.
+            pytz_timezone (str): The timezone to use for the transcript.
+            military_time (bool): Whether to use military time.
+            fancy_times (bool): Whether to use fancy times.
+            before (Optional[datetime.datetime]): The date to fetch messages before.
+            after (Optional[datetime.datetime]): The date to fetch messages after.
+            bot (Optional['discord.Client']): The bot to use for fetching members.
+            attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
+            tenor_api_key (Optional[str]): The Tenor API key to use.
+        """
         self.channel = channel
         self.messages = messages
         self.limit = int(limit) if limit else None
@@ -50,7 +80,12 @@ class TranscriptDAO:
         if bot:
             pass_bot(bot)
 
-    async def build_transcript(self):
+    async def build_transcript(self) -> 'TranscriptDAO':
+        """Builds the transcript.
+
+        Returns:
+            TranscriptDAO: The TranscriptDAO object.
+        """
         message_html, meta_data = await gather_messages(
             self.messages,
             self.channel.guild,
@@ -65,6 +100,12 @@ class TranscriptDAO:
         return self
 
     async def export_transcript(self, message_html: str, meta_data: str):
+        """Exports the transcript to HTML.
+
+        Args:
+            message_html (str): The HTML of the messages.
+            meta_data (str): The metadata of the transcript.
+        """
         guild_icon = self.channel.guild.icon if (
                 self.channel.guild.icon and len(self.channel.guild.icon) > 2
         ) else DiscordUtils.default_avatar
@@ -162,7 +203,13 @@ class TranscriptDAO:
         ])
 
 class Transcript(TranscriptDAO):
-    async def export(self):
+    """A class to create a transcript of a Discord channel."""
+    async def export(self) -> 'TranscriptDAO':
+        """Exports the transcript.
+
+        Returns:
+            TranscriptDAO: The TranscriptDAO object.
+        """
         if not self.messages:
             self.messages = [message async for message in self.channel.history(
                 limit=self.limit,
