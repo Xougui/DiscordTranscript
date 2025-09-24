@@ -181,31 +181,25 @@ async def save_purged(ctx: commands.Context):
 ```
 </details>
 
-### Sauvegarder les pièces jointes localement
+### Intégrer les pièces jointes dans le HTML
 
 <details>
 <summary>Exemple</summary>
 
 ```python
 import io
-import os
 import discord
 import DiscordTranscript
-from DiscordTranscript.construct.attachment_handler import AttachmentToLocalFileHostHandler
+from DiscordTranscript.construct.attachment_handler import AttachmentToDataURIHandler
 from discord.ext import commands
 
 # ... (initialisation du bot)
 
 @bot.command()
-async def save_local_attachments(ctx: commands.Context):
-    if not os.path.exists(f"attachments/{ctx.channel.id}"):
-        os.makedirs(f"attachments/{ctx.channel.id}")
-
+async def save_with_embedded_attachments(ctx: commands.Context):
     transcript = await DiscordTranscript.export(
         ctx.channel,
-        attachment_handler=AttachmentToLocalFileHostHandler(
-            path=f"attachments/{ctx.channel.id}"
-        ),
+        attachment_handler=AttachmentToDataURIHandler(),
         bot=bot,
     )
 
@@ -237,7 +231,7 @@ Voici une liste des paramètres que vous pouvez utiliser dans les fonctions `exp
 | `fancy_times` | `bool` | Si `True`, utilise des horodatages relatifs (ex: "Aujourd'hui à..."). Si `False`, affiche la date complète. | `True` |
 | `bot` | `discord.Client` | L'instance de votre bot. Nécessaire pour résoudre les informations des utilisateurs qui ont quitté le serveur. | `None` |
 | `guild`| `discord.Guild` | L'instance de votre serveur. Nécessaire pour résoudre les informations des membres (rôles, couleurs, etc.). | `None` |
-| `attachment_handler` | `AttachmentHandler` | Un gestionnaire pour contrôler la façon dont les pièces jointes sont sauvegardées. Voir l'exemple [Sauvegarder les pièces jointes localement](#sauvegarder-les-pièces-jointes-localement). | `None` (les liens des pièces jointes pointent vers le CDN de Discord) |
+| `attachment_handler` | `AttachmentHandler` | Un gestionnaire pour contrôler la façon dont les pièces jointes sont traitées. Voir l'exemple [Intégrer les pièces jointes dans le HTML](#intégrer-les-pièces-jointes-dans-le-html). | `None` (les liens des pièces jointes pointent vers le CDN de Discord) |
 | `tenor_api_key` | `str` | Votre clé API Tenor pour afficher les GIFs. | `None` |
 
 **Note :** Le paramètre `messages` est uniquement disponible pour la fonction `raw_export()`.
@@ -324,14 +318,14 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
   )
   ```
 
-- **`attachment_handler`**: Pour sauvegarder les pièces jointes localement.
+- **`attachment_handler`**: Pour intégrer les pièces jointes directement dans le fichier HTML.
   ```python
-  from DiscordTranscript.construct.attachment_handler import AttachmentToLocalFileHostHandler
+  from DiscordTranscript.construct.attachment_handler import AttachmentToDataURIHandler
 
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      # Sauvegarde les pièces jointes dans le dossier "attachments/ID_DU_SALON"
-      attachment_handler=AttachmentToLocalFileHostHandler(path=f"attachments/{ctx.channel.id}"),
+      # Intègre les pièces jointes en tant que Data URIs
+      attachment_handler=AttachmentToDataURIHandler(),
       bot=bot,
   )
   ```
@@ -509,31 +503,25 @@ async def save_purged(ctx: commands.Context):
 ```
 </details>
 
-### Saving Attachments Locally
+### Embedding Attachments in HTML
 
 <details>
 <summary>Example</summary>
 
 ```python
 import io
-import os
 import discord
 import DiscordTranscript
-from DiscordTranscript.construct.attachment_handler import AttachmentToLocalFileHostHandler
+from DiscordTranscript.construct.attachment_handler import AttachmentToDataURIHandler
 from discord.ext import commands
 
 # ... (bot initialization)
 
 @bot.command()
-async def save_local_attachments(ctx: commands.Context):
-    if not os.path.exists(f"attachments/{ctx.channel.id}"):
-        os.makedirs(f"attachments/{ctx.channel.id}")
-
+async def save_with_embedded_attachments(ctx: commands.Context):
     transcript = await DiscordTranscript.export(
         ctx.channel,
-        attachment_handler=AttachmentToLocalFileHostHandler(
-            path=f"attachments/{ctx.channel.id}"
-        ),
+        attachment_handler=AttachmentToDataURIHandler(),
         bot=bot,
     )
 
@@ -566,7 +554,7 @@ Here is a list of parameters you can use in the `export()` and `raw_export()` fu
 | `fancy_times` | `bool` | If `True`, uses relative timestamps (e.g., "Today at..."). If `False`, displays the full date. | `True` |
 | `bot` | `discord.Client` | Your bot's instance. Necessary to resolve user information for members who have left the server. | `None` |
 | `guild`| `discord.Guild` | Your server's instance. Necessary to resolve member information (roles, colors, etc.). | `None` |
-| `attachment_handler`| `AttachmentHandler` | A handler to control how attachments are saved. See the [Saving Attachments Locally](#saving-attachments-locally-en) example. | `None` (attachment links point to Discord's CDN) |
+| `attachment_handler`| `AttachmentHandler` | A handler to control how attachments are processed. See the [Embedding Attachments in HTML](#embedding-attachments-in-html) example. | `None` (attachment links point to Discord's CDN) |
 | `tenor_api_key` | `str` | Your Tenor API key to display GIFs. | `None` |
 
 **Note:** The `messages` parameter is only available for the `raw_export()` function.
@@ -653,14 +641,14 @@ Here’s how you can use the parameters to customize your transcripts.
   )
   ```
 
-- **`attachment_handler`**: To save attachments locally.
+- **`attachment_handler`**: To embed attachments directly into the HTML file.
   ```python
-  from DiscordTranscript.construct.attachment_handler import AttachmentToLocalFileHostHandler
+  from DiscordTranscript.construct.attachment_handler import AttachmentToDataURIHandler
 
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      # Saves attachments to the "attachments/CHANNEL_ID" folder
-      attachment_handler=AttachmentToLocalFileHostHandler(path=f"attachments/{ctx.channel.id}"),
+      # Embeds attachments as Data URIs
+      attachment_handler=AttachmentToDataURIHandler(),
       bot=bot,
   )
   ```
