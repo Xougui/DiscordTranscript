@@ -2,7 +2,7 @@ name: Publish Python 🐍 distributions 📦 to TestPyPI
 
 on:
   release:
-    types: [published, prereleased]
+    types: [published, prereleased, edited]
 
 jobs:
   build-and-publish:
@@ -31,7 +31,4 @@ jobs:
     - name: Publish package to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
-        # You will need to create a TestPyPI API token and add it to your
-        # GitHub repository secrets with the name TEST_PYPI_API_TOKEN
-        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
         repository_url: https://test.pypi.org/legacy/
