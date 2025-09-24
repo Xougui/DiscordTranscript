@@ -1,8 +1,7 @@
 from __future__ import annotations
+import base64
 import datetime
 import io
-import pathlib
-from typing import Union
 import urllib.parse
 
 import aiohttp
@@ -14,6 +13,8 @@ class AttachmentHandler:
 
     Subclass this to implement your own asset handler.
     """
+
+
 
     async def process_asset(self, attachment: discord.Attachment) -> discord.Attachment:
         """Processes an asset and returns a URL to the stored attachment.
@@ -27,28 +28,11 @@ class AttachmentHandler:
         raise NotImplementedError
 
 
-class AttachmentToLocalFileHostHandler(AttachmentHandler):
-    """Saves assets to a local file host and embeds them in the transcript.
-
-    Attributes:
-        base_path (pathlib.Path): The base path to save assets to.
-        url_base (str): The base URL to serve assets from.
-    """
-
-    def __init__(self, base_path: Union[str, pathlib.Path], url_base: str):
-        """Initializes the AttachmentToLocalFileHostHandler.
-
-        Args:
-            base_path (Union[str, pathlib.Path]): The base path to save assets to.
-            url_base (str): The base URL to serve assets from.
-        """
-        if isinstance(base_path, str):
-            base_path = pathlib.Path(base_path)
-        self.base_path = base_path
-        self.url_base = url_base
+class AttachmentToDataURIHandler(AttachmentHandler):
+    """Saves assets to a data URI and embeds them in the transcript."""
 
     async def process_asset(self, attachment: discord.Attachment) -> discord.Attachment:
-        """Saves an asset to the local file host and returns a new attachment.
+        """Saves an asset to a data URI and returns a new attachment.
 
         Args:
             attachment (discord.Attachment): The attachment to process.
@@ -56,13 +40,19 @@ class AttachmentToLocalFileHostHandler(AttachmentHandler):
         Returns:
             discord.Attachment: The processed attachment with a new URL.
         """
-        file_name = urllib.parse.quote_plus(f"{datetime.datetime.utcnow().timestamp()}_{attachment.filename}")
-        asset_path = self.base_path / file_name
-        await attachment.save(asset_path)
-        file_url = f"{self.url_base}/{file_name}"
-        attachment.url = file_url
-        attachment.proxy_url = file_url
-        return attachment
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(attachment.url) as res:
+                    if res.status != 200:
+                        return attachment
+                    data = await res.read()
+                    encoded_data = base64.b64encode(data).decode("utf-8")
+                    data_uri = f"data:{attachment.content_type};base64,{encoded_data}"
+                    attachment.url = data_uri
+                    attachment.proxy_url = data_uri
+                    return attachment
+        except Exception:
+            return attachment
 
 
 class AttachmentToDiscordChannelHandler(AttachmentHandler):

@@ -5,7 +5,7 @@ from typing import List, Optional, TYPE_CHECKING
 
 from DiscordTranscript.construct.transcript import Transcript
 from DiscordTranscript.ext.discord_import import discord
-from DiscordTranscript.construct.attachment_handler import AttachmentHandler, AttachmentToLocalFileHostHandler, AttachmentToDiscordChannelHandler
+from DiscordTranscript.construct.attachment_handler import AttachmentHandler, AttachmentToDataURIHandler, AttachmentToDiscordChannelHandler
 
 if TYPE_CHECKING:
     import discord as discord_typings

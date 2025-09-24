@@ -3,7 +3,7 @@ from DiscordTranscript.chat_exporter import (
     raw_export,
     quick_export,
     AttachmentHandler,
-    AttachmentToLocalFileHostHandler,
+    AttachmentToDataURIHandler,
     AttachmentToDiscordChannelHandler)
 
 __version__ = "2.3.1"
@@ -13,6 +13,6 @@ __all__ = (
     raw_export,
     quick_export,
     AttachmentHandler,
-    AttachmentToLocalFileHostHandler,
+    AttachmentToDataURIHandler,
     AttachmentToDiscordChannelHandler,
 )
