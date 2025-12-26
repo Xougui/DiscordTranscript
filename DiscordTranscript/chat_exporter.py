@@ -1,11 +1,13 @@
 import datetime
 import io
 import os
-from typing import List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
+from DiscordTranscript.construct.attachment_handler import (
+    AttachmentHandler,
+)
 from DiscordTranscript.construct.transcript import Transcript
 from DiscordTranscript.ext.discord_import import discord
-from DiscordTranscript.construct.attachment_handler import AttachmentHandler, AttachmentToDataURIHandler, AttachmentToDiscordChannelHandler
 
 if TYPE_CHECKING:
     import discord as discord_typings
@@ -43,34 +45,36 @@ async def quick_export(
             before=None,
             after=None,
             bot=bot,
-            attachment_handler=None
-            ).export()
-        ).html
+            attachment_handler=None,
+        ).export()
+    ).html
 
     if not transcript:
         return
 
     transcript_embed = discord.Embed(
         description=f"**Transcript Name:** transcript-{channel.name}\n\n",
-        colour=discord.Colour.blurple()
+        colour=discord.Colour.blurple(),
     )
 
-    transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f"transcript-{channel.name}.html")
+    transcript_file = discord.File(
+        io.BytesIO(transcript.encode()), filename=f"transcript-{channel.name}.html"
+    )
     return await channel.send(embed=transcript_embed, file=transcript_file)
 
 
 async def export(
     channel: "discord_typings.TextChannel",
-    limit: Optional[int] = None,
+    limit: int | None = None,
     tz_info="UTC",
     guild: Optional["discord_typings.Guild"] = None,
     bot: Optional["discord_typings.Client"] = None,
-    military_time: Optional[bool] = True,
-    fancy_times: Optional[bool] = True,
-    before: Optional[datetime.datetime] = None,
-    after: Optional[datetime.datetime] = None,
-    attachment_handler: Optional[AttachmentHandler] = None,
-    tenor_api_key: Optional[str] = None,
+    military_time: bool | None = True,
+    fancy_times: bool | None = True,
+    before: datetime.datetime | None = None,
+    after: datetime.datetime | None = None,
+    attachment_handler: AttachmentHandler | None = None,
+    tenor_api_key: str | None = None,
 ):
     """Creates a customized transcript of a Discord channel.
 
@@ -116,14 +120,14 @@ async def export(
 
 async def raw_export(
     channel: "discord_typings.TextChannel",
-    messages: List["discord_typings.Message"],
+    messages: list["discord_typings.Message"],
     tz_info="UTC",
     guild: Optional["discord_typings.Guild"] = None,
     bot: Optional["discord_typings.Client"] = None,
-    military_time: Optional[bool] = False,
-    fancy_times: Optional[bool] = True,
-    attachment_handler: Optional[AttachmentHandler] = None,
-    tenor_api_key: Optional[str] = None,
+    military_time: bool | None = False,
+    fancy_times: bool | None = True,
+    attachment_handler: AttachmentHandler | None = None,
+    tenor_api_key: str | None = None,
 ):
     """Creates a customized transcript with your own captured Discord messages.
 
@@ -160,6 +164,6 @@ async def raw_export(
             after=None,
             bot=bot,
             attachment_handler=attachment_handler,
-            tenor_api_key=tenor_api_key
+            tenor_api_key=tenor_api_key,
         ).export()
     ).html
