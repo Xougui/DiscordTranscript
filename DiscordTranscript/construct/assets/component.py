@@ -10,6 +10,10 @@ from DiscordTranscript.ext.html_generator import (
     PARSE_MODE_EMOJI,
     PARSE_MODE_MARKDOWN,
 )
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import discord as discord_typings
 
 class Component:
     """A class to represent a Discord component.
@@ -41,15 +45,19 @@ class Component:
     buttons: str = ""
     menu_div_id: int = 0
 
-    def __init__(self, component, guild):
+    def __init__(self, component, guild, bot: Optional["discord_typings.Client"] = None, timezone: str = "UTC"):
         """Initializes the Component.
 
         Args:
             component (discord.Component): The component to represent.
             guild (discord.Guild): The guild the component is in.
+            bot (Optional[discord.Client]): The bot instance. Defaults to None.
+            timezone (str): The timezone to use. Defaults to "UTC".
         """
         self.component = component
         self.guild = guild
+        self.bot = bot
+        self.timezone = timezone
 
     async def build_component(self, c):
         """Builds a component.
@@ -90,7 +98,7 @@ class Component:
             ("ICON", icon, PARSE_MODE_NONE),
             ("TARGET", target, PARSE_MODE_NONE),
             ("STYLE", style, PARSE_MODE_NONE)
-        ])
+        ], bot=self.bot, timezone=self.timezone)
 
     async def build_menu(self, c):
         """Builds a menu.
@@ -111,7 +119,7 @@ class Component:
             ("PLACEHOLDER", str(placeholder), PARSE_MODE_MARKDOWN),
             ("CONTENT", str(content), PARSE_MODE_NONE),
             ("ICON", DiscordUtils.interaction_dropdown_icon, PARSE_MODE_NONE),
-        ])
+        ], bot=self.bot, timezone=self.timezone)
 
     async def build_menu_options(self, options):
         """Builds the options for a menu.
@@ -129,12 +137,12 @@ class Component:
                     ("EMOJI", str(option.emoji), PARSE_MODE_EMOJI),
                     ("TITLE", str(option.label), PARSE_MODE_MARKDOWN),
                     ("DESCRIPTION", str(option.description) if option.description else "", PARSE_MODE_MARKDOWN)
-                ]))
+                ], bot=self.bot, timezone=self.timezone))
             else:
                 content.append(await fill_out(self.guild, component_menu_options, [
                     ("TITLE", str(option.label), PARSE_MODE_MARKDOWN),
                     ("DESCRIPTION", str(option.description) if option.description else "", PARSE_MODE_MARKDOWN)
-                ]))
+                ], bot=self.bot, timezone=self.timezone))
 
         if content:
             content = f'<div id="dropdownMenu{self.menu_div_id}" class="dropdownContent">{"".join(content)}</div>'

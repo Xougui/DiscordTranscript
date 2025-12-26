@@ -10,7 +10,6 @@ from DiscordTranscript.ext.discord_import import discord, discord_errors
 from DiscordTranscript.construct.message import gather_messages
 from DiscordTranscript.construct.assets.component import Component
 from DiscordTranscript.ext.cache import clear_cache
-from DiscordTranscript.parse.mention import pass_bot
 from DiscordTranscript.ext.discord_utils import DiscordUtils
 from DiscordTranscript.ext.html_generator import (
     fill_out, total, channel_topic, meta_data_temp, fancy_time, channel_subject, PARSE_MODE_NONE, PARSE_MODE_HTML_SAFE
@@ -31,6 +30,7 @@ class TranscriptDAO:
         after (Optional[datetime.datetime]): The date to fetch messages after.
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
         tenor_api_key (Optional[str]): The Tenor API key to use.
+        bot (Optional[discord.Client]): The bot to use for fetching members.
     """
     html: str
 
@@ -73,12 +73,7 @@ class TranscriptDAO:
         self.pytz_timezone = pytz_timezone
         self.attachment_handler = attachment_handler
         self.tenor_api_key = tenor_api_key
-
-        # This is to pass timezone in to mention.py without rewriting
-        setattr(discord.Guild, "timezone", self.pytz_timezone)
-
-        if bot:
-            pass_bot(bot)
+        self.bot = bot
 
     async def build_transcript(self) -> 'TranscriptDAO':
         """Builds the transcript.
@@ -92,7 +87,8 @@ class TranscriptDAO:
             self.pytz_timezone,
             self.military_time,
             self.attachment_handler,
-            self.tenor_api_key
+            self.tenor_api_key,
+            bot=self.bot
         )
         await self.export_transcript(message_html, meta_data)
         clear_cache()
@@ -143,7 +139,7 @@ class TranscriptDAO:
                 ("USER_AVATAR", str(meta_data[int(data)][3]), PARSE_MODE_NONE),
                 ("DISPLAY", str(meta_data[int(data)][6]), PARSE_MODE_NONE),
                 ("MESSAGE_COUNT", str(meta_data[int(data)][4]))
-            ])
+            ], bot=self.bot, timezone=self.pytz_timezone)
 
         if self.military_time:
             channel_creation_time = self.channel.created_at.astimezone(timezone).strftime("%b %d, %Y (%H:%M:%S)")
@@ -158,7 +154,7 @@ class TranscriptDAO:
         if raw_channel_topic:
             channel_topic_html = await fill_out(self.channel.guild, channel_topic, [
                 ("CHANNEL_TOPIC", html.escape(raw_channel_topic))
-            ])
+            ], bot=self.bot, timezone=self.pytz_timezone)
 
         limit = "start"
         if self.limit:
@@ -168,7 +164,7 @@ class TranscriptDAO:
             ("LIMIT", limit, PARSE_MODE_NONE),
             ("CHANNEL_NAME", self.channel.name),
             ("RAW_CHANNEL_TOPIC", str(raw_channel_topic))
-        ])
+        ], bot=self.bot, timezone=self.pytz_timezone)
 
         _fancy_time = ""
 
@@ -181,7 +177,7 @@ class TranscriptDAO:
             _fancy_time = await fill_out(self.channel.guild, fancy_time, [
                 ("TIME_FORMAT", time_format, PARSE_MODE_NONE),
                 ("TIMEZONE", str(self.pytz_timezone), PARSE_MODE_NONE)
-            ])
+            ], bot=self.bot, timezone=self.pytz_timezone)
 
         self.html = await fill_out(self.channel.guild, total, [
             ("SERVER_NAME", f"{guild_name}"),
@@ -200,7 +196,7 @@ class TranscriptDAO:
             ("FANCY_TIME", _fancy_time, PARSE_MODE_NONE),
             ("SERVER_NAME_SAFE", f"{guild_name}", PARSE_MODE_HTML_SAFE),
             ("CHANNEL_NAME_SAFE", f"{html.escape(self.channel.name)}", PARSE_MODE_HTML_SAFE),
-        ])
+        ], bot=self.bot, timezone=self.pytz_timezone)
 
 class Transcript(TranscriptDAO):
     """A class to create a transcript of a Discord channel."""

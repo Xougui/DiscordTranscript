@@ -1,8 +1,10 @@
 import re
-
+from typing import Optional, TYPE_CHECKING
 from DiscordTranscript.ext.emoji_convert import convert_emoji
 from DiscordTranscript.ext.html_generator import fill_out, emoji, custom_emoji, PARSE_MODE_NONE
 
+if TYPE_CHECKING:
+    import discord as discord_typings
 
 class Reaction:
     """A class to represent a Discord reaction.
@@ -11,15 +13,19 @@ class Reaction:
         reaction (discord.Reaction): The reaction to represent.
         guild (discord.Guild): The guild the reaction is in.
     """
-    def __init__(self, reaction, guild):
+    def __init__(self, reaction, guild, bot: Optional["discord_typings.Client"] = None, timezone: str = "UTC"):
         """Initializes the Reaction.
 
         Args:
             reaction (discord.Reaction): The reaction to represent.
             guild (discord.Guild): The guild the reaction is in.
+            bot (Optional[discord.Client]): The bot instance. Defaults to None.
+            timezone (str): The timezone to use. Defaults to "UTC".
         """
         self.reaction = reaction
         self.guild = guild
+        self.bot = bot
+        self.timezone = timezone
 
     async def flow(self):
         """Builds the reaction and returns the HTML.
@@ -54,7 +60,7 @@ class Reaction:
             ("EMOJI", str(emoji_id), PARSE_MODE_NONE),
             ("EMOJI_COUNT", str(self.reaction.count), PARSE_MODE_NONE),
             ("EMOJI_FILE", emoji_type, PARSE_MODE_NONE)
-        ])
+        ], bot=self.bot, timezone=self.timezone)
 
     async def create_standard_emoji(self):
         """Builds a standard emoji reaction."""
@@ -62,4 +68,4 @@ class Reaction:
         self.reaction = await fill_out(self.guild, emoji, [
             ("EMOJI", str(react_emoji), PARSE_MODE_NONE),
             ("EMOJI_COUNT", str(self.reaction.count), PARSE_MODE_NONE)
-        ])
+        ], bot=self.bot, timezone=self.timezone)
