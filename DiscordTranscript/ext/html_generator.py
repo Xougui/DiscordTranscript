@@ -1,11 +1,17 @@
 import html
 import json
 import os
+from typing import TYPE_CHECKING, Optional
 
-from DiscordTranscript.parse.mention import ParseMention
 from DiscordTranscript.parse.markdown import ParseMarkdown
+from DiscordTranscript.parse.mention import ParseMention
 
-dir_path = os.path.abspath(os.path.join((os.path.dirname(os.path.realpath(__file__))), ".."))
+if TYPE_CHECKING:
+    import discord as discord_typings
+
+dir_path = os.path.abspath(
+    os.path.join((os.path.dirname(os.path.realpath(__file__))), "..")
+)
 
 PARSE_MODE_NONE = 0
 PARSE_MODE_NO_MARKDOWN = 1
@@ -16,7 +22,15 @@ PARSE_MODE_REFERENCE = 5
 PARSE_MODE_EMOJI = 6
 PARSE_MODE_HTML_SAFE = 7
 
-async def fill_out(guild, base, replacements, placeholders: dict = None, bot = None, timezone: str = "UTC"):
+
+async def fill_out(
+    guild,
+    base,
+    replacements,
+    placeholders: dict | None = None,
+    bot: Optional["discord_typings.Client"] = None,
+    timezone: str = "UTC",
+):
     """Fills out an HTML template with the given replacements.
 
     Args:
@@ -40,7 +54,9 @@ async def fill_out(guild, base, replacements, placeholders: dict = None, bot = N
         if mode != PARSE_MODE_NONE:
             v = await ParseMention(v, guild, bot=bot, timezone=timezone).flow()
         if mode == PARSE_MODE_MARKDOWN:
-            v = await ParseMarkdown(v, placeholders=placeholders).standard_message_flow()
+            v = await ParseMarkdown(
+                v, placeholders=placeholders
+            ).standard_message_flow()
         elif mode == PARSE_MODE_EMBED:
             v = await ParseMarkdown(v).standard_embed_flow()
         elif mode == PARSE_MODE_SPECIAL_EMBED:
@@ -59,10 +75,12 @@ async def fill_out(guild, base, replacements, placeholders: dict = None, bot = N
 
     return base
 
+
 def read_file(filename):
-    with open(filename, "r") as f:
+    with open(filename) as f:
         s = f.read()
     return s
+
 
 # MESSAGES
 start_message = read_file(dir_path + "/html/message/start.html")
@@ -83,8 +101,12 @@ meta_data_temp = read_file(dir_path + "/html/message/meta.html")
 # COMPONENTS
 component_button = read_file(dir_path + "/html/component/component_button.html")
 component_menu = read_file(dir_path + "/html/component/component_menu.html")
-component_menu_options = read_file(dir_path + "/html/component/component_menu_options.html")
-component_menu_options_emoji = read_file(dir_path + "/html/component/component_menu_options_emoji.html")
+component_menu_options = read_file(
+    dir_path + "/html/component/component_menu_options.html"
+)
+component_menu_options_emoji = read_file(
+    dir_path + "/html/component/component_menu_options_emoji.html"
+)
 
 # EMBED
 embed_body = read_file(dir_path + "/html/embed/body.html")
