@@ -1,10 +1,10 @@
 from __future__ import annotations
+
 import base64
-import datetime
 import io
-import urllib.parse
 
 import aiohttp
+
 from DiscordTranscript.ext.discord_import import discord
 
 
@@ -13,8 +13,6 @@ class AttachmentHandler:
 
     Subclass this to implement your own asset handler.
     """
-
-
 
     async def process_asset(self, attachment: discord.Attachment) -> discord.Attachment:
         """Processes an asset and returns a URL to the stored attachment.
@@ -62,9 +60,7 @@ class AttachmentToDiscordChannelHandler(AttachmentHandler):
         channel (discord.TextChannel): The channel to save attachments to.
     """
 
-
-
-    def __init__(self, channel: discord.TextChannel):
+    def __init__(self, channel: discord.TextChannel) -> None:
         """Initializes the AttachmentToDiscordChannelHandler.
 
         Args:
