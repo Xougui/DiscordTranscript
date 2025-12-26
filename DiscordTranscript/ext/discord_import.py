@@ -1,4 +1,4 @@
-discord_modules = ['nextcord', 'disnake', 'discord']
+discord_modules = ["nextcord", "disnake", "discord"]
 discord = None
 discord_errors = None
 
@@ -8,16 +8,20 @@ for module in discord_modules:
         discord.module = module
         # Attempt to import DiscordException, which is a common base for discord errors
         # If the specific 'discord_errors' is something else, this might need adjustment
-        if hasattr(discord, 'DiscordException'):
+        if hasattr(discord, "DiscordException"):
             discord_errors = discord.DiscordException
-        elif hasattr(discord, 'HTTPException'): # Fallback for older versions or specific error types
+        elif hasattr(
+            discord, "HTTPException"
+        ):  # Fallback for older versions or specific error types
             discord_errors = discord.HTTPException
         break
     except ImportError:
         continue
 
 if discord is None:
-    raise ImportError("Could not find any of the discord modules: nextcord, disnake, or discord")
+    raise ImportError(
+        "Could not find any of the discord modules: nextcord, disnake, or discord"
+    )
 
 if discord_errors is None:
     # If DiscordException or HTTPException are not found, we might need to define a generic error
@@ -30,4 +34,4 @@ if discord_errors is None:
         try:
             from discord import HTTPException as discord_errors
         except ImportError:
-            discord_errors = Exception # Generic fallback
+            discord_errors = Exception  # Generic fallback
