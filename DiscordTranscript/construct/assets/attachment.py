@@ -1,18 +1,19 @@
 import math
-from typing import Optional, TYPE_CHECKING
-from DiscordTranscript.ext.discord_import import discord
+from typing import TYPE_CHECKING, Optional
+
 from DiscordTranscript.ext.discord_utils import DiscordUtils
 from DiscordTranscript.ext.html_generator import (
+    PARSE_MODE_NONE,
+    audio_attachment,
     fill_out,
     img_attachment,
     msg_attachment,
-    audio_attachment,
     video_attachment,
-    PARSE_MODE_NONE,
 )
 
 if TYPE_CHECKING:
     import discord as discord_typings
+
 
 class Attachment:
     """A class to represent a Discord attachment.
@@ -21,7 +22,14 @@ class Attachment:
         attachments (discord.Attachment): The attachment to represent.
         guild (discord.Guild): The guild the attachment is in.
     """
-    def __init__(self, attachments, guild, bot: Optional["discord_typings.Client"] = None, timezone: str = "UTC"):
+
+    def __init__(
+        self,
+        attachments,
+        guild,
+        bot: Optional["discord_typings.Client"] = None,
+        timezone: str = "UTC",
+    ) -> None:
         """Initializes the Attachment.
 
         Args:
@@ -53,56 +61,80 @@ class Attachment:
                 return await self.video()
             elif "audio" in self.attachments.content_type:
                 return await self.audio()
-        if self.attachments.filename and self.attachments.filename.lower().endswith(".gif"):
+        if self.attachments.filename and self.attachments.filename.lower().endswith(
+            ".gif"
+        ):
             return await self.image()
         await self.file()
 
-    async def image(self):
+    async def image(self) -> None:
         """Builds an image attachment."""
         spoiler_classes = ""
         if self.attachments.filename.startswith("SPOILER_"):
             spoiler_classes = "spoiler spoiler-image spoiler--hidden"
 
-        self.attachments = await fill_out(self.guild, img_attachment, [
-            ("SPOILER_CLASSES", spoiler_classes, PARSE_MODE_NONE),
-            ("ATTACH_URL", self.attachments.proxy_url, PARSE_MODE_NONE),
-            ("ATTACH_URL_THUMB", self.attachments.proxy_url, PARSE_MODE_NONE)
-        ], bot=self.bot, timezone=self.timezone)
+        self.attachments = await fill_out(
+            self.guild,
+            img_attachment,
+            [
+                ("SPOILER_CLASSES", spoiler_classes, PARSE_MODE_NONE),
+                ("ATTACH_URL", self.attachments.proxy_url, PARSE_MODE_NONE),
+                ("ATTACH_URL_THUMB", self.attachments.proxy_url, PARSE_MODE_NONE),
+            ],
+            bot=self.bot,
+            timezone=self.timezone,
+        )
 
-    async def video(self):
+    async def video(self) -> None:
         """Builds a video attachment."""
-        self.attachments = await fill_out(self.guild, video_attachment, [
-            ("ATTACH_URL", self.attachments.proxy_url, PARSE_MODE_NONE)
-        ], bot=self.bot, timezone=self.timezone)
+        self.attachments = await fill_out(
+            self.guild,
+            video_attachment,
+            [("ATTACH_URL", self.attachments.proxy_url, PARSE_MODE_NONE)],
+            bot=self.bot,
+            timezone=self.timezone,
+        )
 
-    async def audio(self):
+    async def audio(self) -> None:
         """Builds an audio attachment."""
         file_icon = DiscordUtils.file_attachment_audio
         file_size = self.get_file_size(self.attachments.size)
 
-        self.attachments = await fill_out(self.guild, audio_attachment, [
-            ("ATTACH_ICON", file_icon, PARSE_MODE_NONE),
-            ("ATTACH_URL", self.attachments.proxy_url, PARSE_MODE_NONE),
-            ("ATTACH_BYTES", str(file_size), PARSE_MODE_NONE),
-            ("ATTACH_AUDIO", self.attachments.proxy_url, PARSE_MODE_NONE),
-            ("ATTACH_FILE", str(self.attachments.filename), PARSE_MODE_NONE)
-        ], bot=self.bot, timezone=self.timezone)
+        self.attachments = await fill_out(
+            self.guild,
+            audio_attachment,
+            [
+                ("ATTACH_ICON", file_icon, PARSE_MODE_NONE),
+                ("ATTACH_URL", self.attachments.proxy_url, PARSE_MODE_NONE),
+                ("ATTACH_BYTES", str(file_size), PARSE_MODE_NONE),
+                ("ATTACH_AUDIO", self.attachments.proxy_url, PARSE_MODE_NONE),
+                ("ATTACH_FILE", str(self.attachments.filename), PARSE_MODE_NONE),
+            ],
+            bot=self.bot,
+            timezone=self.timezone,
+        )
 
-    async def file(self):
+    async def file(self) -> None:
         """Builds a file attachment."""
         file_icon = await self.get_file_icon()
 
         file_size = self.get_file_size(self.attachments.size)
 
-        self.attachments = await fill_out(self.guild, msg_attachment, [
-            ("ATTACH_ICON", file_icon, PARSE_MODE_NONE),
-            ("ATTACH_URL", self.attachments.proxy_url, PARSE_MODE_NONE),
-            ("ATTACH_BYTES", str(file_size), PARSE_MODE_NONE),
-            ("ATTACH_FILE", str(self.attachments.filename), PARSE_MODE_NONE)
-        ], bot=self.bot, timezone=self.timezone)
+        self.attachments = await fill_out(
+            self.guild,
+            msg_attachment,
+            [
+                ("ATTACH_ICON", file_icon, PARSE_MODE_NONE),
+                ("ATTACH_URL", self.attachments.proxy_url, PARSE_MODE_NONE),
+                ("ATTACH_BYTES", str(file_size), PARSE_MODE_NONE),
+                ("ATTACH_FILE", str(self.attachments.filename), PARSE_MODE_NONE),
+            ],
+            bot=self.bot,
+            timezone=self.timezone,
+        )
 
     @staticmethod
-    def get_file_size(file_size):
+    def get_file_size(file_size) -> str:
         """Gets the file size in a human-readable format.
 
         Args:
@@ -114,10 +146,10 @@ class Attachment:
         if file_size == 0:
             return "0 bytes"
         size_name = ("bytes", "KB", "MB")
-        i = int(math.floor(math.log(file_size, 1024)))
+        i = math.floor(math.log(file_size, 1024))
         p = math.pow(1024, i)
         s = round(file_size / p, 2)
-        return "%s %s" % (s, size_name[i])
+        return f"{s} {size_name[i]}"
 
     async def get_file_icon(self) -> str:
         """Gets the file icon based on the file extension.
@@ -127,20 +159,64 @@ class Attachment:
         """
         acrobat_types = "pdf"
         webcode_types = "html", "htm", "css", "rss", "xhtml", "xml"
-        code_types = "py", "cgi", "pl", "gadget", "jar", "msi", "wsf", "bat", "php", "js"
+        code_types = (
+            "py",
+            "cgi",
+            "pl",
+            "gadget",
+            "jar",
+            "msi",
+            "wsf",
+            "bat",
+            "php",
+            "js",
+        )
         document_types = (
-            "txt", "doc", "docx", "rtf", "xls", "xlsx", "ppt", "pptx", "odt", "odp", "ods", "odg", "odf", "swx",
-            "sxi", "sxc", "sxd", "stw"
+            "txt",
+            "doc",
+            "docx",
+            "rtf",
+            "xls",
+            "xlsx",
+            "ppt",
+            "pptx",
+            "odt",
+            "odp",
+            "ods",
+            "odg",
+            "odf",
+            "swx",
+            "sxi",
+            "sxc",
+            "sxd",
+            "stw",
         )
         archive_types = (
-            "br", "rpm", "dcm", "epub", "zip", "tar", "rar", "gz", "bz2", "7x", "deb", "ar", "Z", "lzo", "lz", "lz4",
-            "arj", "pkg", "z"
+            "br",
+            "rpm",
+            "dcm",
+            "epub",
+            "zip",
+            "tar",
+            "rar",
+            "gz",
+            "bz2",
+            "7x",
+            "deb",
+            "ar",
+            "Z",
+            "lzo",
+            "lz",
+            "lz4",
+            "arj",
+            "pkg",
+            "z",
         )
 
         for tmp in [self.attachments.proxy_url, self.attachments.filename]:
             if not tmp:
                 continue
-            extension = tmp.rsplit('.', 1)[-1]
+            extension = tmp.rsplit(".", 1)[-1]
             if extension in acrobat_types:
                 return DiscordUtils.file_attachment_acrobat
             elif extension in webcode_types:
@@ -151,5 +227,5 @@ class Attachment:
                 return DiscordUtils.file_attachment_document
             elif extension in archive_types:
                 return DiscordUtils.file_attachment_archive
-        
+
         return DiscordUtils.file_attachment_unknown
