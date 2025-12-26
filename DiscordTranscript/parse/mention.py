@@ -1,14 +1,15 @@
 import datetime
-import time
-import pytz
 import re
-from typing import Optional, TYPE_CHECKING
+import time
+from typing import TYPE_CHECKING, Optional
 
-from DiscordTranscript.ext.discord_import import discord
+import pytz
+
 from DiscordTranscript.parse.markdown import ParseMarkdown
 
 if TYPE_CHECKING:
     import discord as discord_typings
+
 
 class ParseMention:
     """A class to parse mentions in a message.
@@ -18,6 +19,7 @@ class ParseMention:
         guild (discord.Guild): The guild the message is in.
         code_blocks_content (list): A list of code blocks in the content.
     """
+
     REGEX_ROLES = r"&lt;@&amp;([0-9]+)&gt;"
     REGEX_ROLES_2 = r"<@&([0-9]+)>"
     REGEX_EVERYONE = r"@(everyone)(?:[$\s\t\n\f\r\0]|$)"
@@ -36,7 +38,7 @@ class ParseMention:
         [r"&lt;t:([0-9]{1,13}):f&gt;", "%e %B %Y %H:%M"],
         [r"&lt;t:([0-9]{1,13}):F&gt;", "%A, %e %B %Y %H:%M"],
         [r"&lt;t:([0-9]{1,13}):R&gt;", "%e %B %Y %H:%M"],
-        [r"&lt;t:([0-9]{1,13})&gt;", "%e %B %Y %H:%M"]
+        [r"&lt;t:([0-9]{1,13})&gt;", "%e %B %Y %H:%M"],
     )
     REGEX_SLASH_COMMAND = r"&lt;\/([\w]+ ?[\w]*):[0-9]+&gt;"
 
@@ -44,7 +46,13 @@ class ParseMention:
     ESCAPE_GT = "______gt______"
     ESCAPE_AMP = "______amp______"
 
-    def __init__(self, content, guild, bot: Optional["discord_typings.Client"] = None, timezone: str = "UTC"):
+    def __init__(
+        self,
+        content,
+        guild,
+        bot: Optional["discord_typings.Client"] = None,
+        timezone: str = "UTC",
+    ) -> None:
         """Initializes the ParseMention class.
 
         Args:
@@ -81,16 +89,15 @@ class ParseMention:
         self.content = markdown.content
         return self.content
 
-
-    async def escape_mentions(self):
+    async def escape_mentions(self) -> None:
         """Escapes mentions to prevent them from being parsed."""
-        for match in re.finditer("(%s|%s|%s|%s|%s|%s|%s|%s)"
-                                 % (self.REGEX_ROLES, self.REGEX_MEMBERS, self.REGEX_CHANNELS, self.REGEX_EMOJIS,
-                                    self.REGEX_ROLES_2, self.REGEX_MEMBERS_2, self.REGEX_CHANNELS_2,
-                                    self.REGEX_EMOJIS_2), self.content):
-            pre_content = self.content[:match.start()]
-            post_content = self.content[match.end():]
-            match_content = self.content[match.start():match.end()]
+        for match in re.finditer(
+            f"({self.REGEX_ROLES}|{self.REGEX_MEMBERS}|{self.REGEX_CHANNELS}|{self.REGEX_EMOJIS}|{self.REGEX_ROLES_2}|{self.REGEX_MEMBERS_2}|{self.REGEX_CHANNELS_2}|{self.REGEX_EMOJIS_2})",
+            self.content,
+        ):
+            pre_content = self.content[: match.start()]
+            post_content = self.content[match.end() :]
+            match_content = self.content[match.start() : match.end()]
 
             match_content = match_content.replace("<", self.ESCAPE_LT)
             match_content = match_content.replace(">", self.ESCAPE_GT)
@@ -98,14 +105,14 @@ class ParseMention:
 
             self.content = pre_content + match_content + post_content
 
-    async def unescape_mentions(self):
+    async def unescape_mentions(self) -> None:
         """Unescapes mentions."""
         self.content = self.content.replace(self.ESCAPE_LT, "<")
         self.content = self.content.replace(self.ESCAPE_GT, ">")
         self.content = self.content.replace(self.ESCAPE_AMP, "&")
         pass
 
-    async def channel_mention(self):
+    async def channel_mention(self) -> None:
         """Parses channel mentions."""
         holder = self.REGEX_CHANNELS, self.REGEX_CHANNELS_2
         for regex in holder:
@@ -115,25 +122,29 @@ class ParseMention:
                 channel = self.guild.get_channel(channel_id)
 
                 if channel is None:
-                    replacement = '#deleted-channel'
+                    replacement = "#deleted-channel"
                 else:
-                    replacement = '<span class="mention" title="%s">#%s</span>' \
-                                  % (channel.id, channel.name)
-                self.content = self.content.replace(self.content[match.start():match.end()], replacement)
+                    replacement = f'<span class="mention" title="{channel.id}">#{channel.name}</span>'
+                self.content = self.content.replace(
+                    self.content[match.start() : match.end()], replacement
+                )
 
                 match = re.search(regex, self.content)
 
-    async def role_mention(self):
+    async def role_mention(self) -> None:
         """Parses role mentions."""
         holder = self.REGEX_EVERYONE, self.REGEX_HERE
         for regex in holder:
             match = re.search(regex, self.content)
             while match is not None:
                 role_name = match.group(1)
-                replacement = '<span class="mention" title="%s">@%s</span>' % (str(role_name), str(role_name))
+                replacement = (
+                    f'<span class="mention" title="{role_name!s}">@{role_name!s}</span>'
+                )
 
-                self.content = self.content.replace(self.content[match.start():match.end()],
-                                                    replacement)
+                self.content = self.content.replace(
+                    self.content[match.start() : match.end()], replacement
+                )
                 match = re.search(regex, self.content)
         holder = self.REGEX_ROLES, self.REGEX_ROLES_2
         for regex in holder:
@@ -143,30 +154,33 @@ class ParseMention:
                 role = self.guild.get_role(role_id)
 
                 if role is None:
-                    replacement = '@deleted-role'
+                    replacement = "@deleted-role"
                 else:
                     if role.color.r == 0 and role.color.g == 0 and role.color.b == 0:
                         colour = "#dee0fc"
                     else:
-                        colour = "#%02x%02x%02x" % (role.color.r, role.color.g, role.color.b)
-                    replacement = '<span style="color: %s;">@%s</span>' % (colour, role.name)
-                self.content = self.content.replace(self.content[match.start():match.end()], replacement)
+                        colour = (
+                            f"#{role.color.r:02x}{role.color.g:02x}{role.color.b:02x}"
+                        )
+                    replacement = f'<span style="color: {colour};">@{role.name}</span>'
+                self.content = self.content.replace(
+                    self.content[match.start() : match.end()], replacement
+                )
                 match = re.search(regex, self.content)
 
-    async def slash_command_mention(self):
+    async def slash_command_mention(self) -> None:
         """Parses slash command mentions."""
         match = re.search(self.REGEX_SLASH_COMMAND, self.content)
         while match is not None:
             slash_command_name = match.group(1)
-            replacement = (
-                    '<span class="mention" title="%s">/%s</span>'
-                    % (slash_command_name, slash_command_name)
+            replacement = f'<span class="mention" title="{slash_command_name}">/{slash_command_name}</span>'
+            self.content = self.content.replace(
+                self.content[match.start() : match.end()], replacement
             )
-            self.content = self.content.replace(self.content[match.start():match.end()], replacement)
 
             match = re.search(self.REGEX_SLASH_COMMAND, self.content)
 
-    async def member_mention(self):
+    async def member_mention(self) -> None:
         """Parses member mentions."""
         holder = self.REGEX_MEMBERS, self.REGEX_MEMBERS_2
         for regex in holder:
@@ -184,21 +198,20 @@ class ParseMention:
                     member_name = member
 
                 if member is not None:
-                    replacement = '<span class="mention" title="%s">@%s</span>' \
-                                  % (str(member_id), str(member_name))
+                    replacement = f'<span class="mention" title="{member_id!s}">@{member_name!s}</span>'
                 else:
-                    replacement = '<span class="mention" title="%s">&lt;@%s></span>' \
-                                  % (str(member_id), str(member_id))
-                self.content = self.content.replace(self.content[match.start():match.end()],
-                                                    replacement)
+                    replacement = f'<span class="mention" title="{member_id!s}">&lt;@{member_id!s}></span>'
+                self.content = self.content.replace(
+                    self.content[match.start() : match.end()], replacement
+                )
 
                 match = re.search(regex, self.content)
 
-    async def time_mention(self):
+    async def time_mention(self) -> None:
         """Parses time mentions."""
         holder = self.REGEX_TIME_HOLDER
         # Use provided timezone or fallback to UTC
-        timezone = pytz.timezone(self.timezone or "UTC")
+        pytz.timezone(self.timezone or "UTC")
 
         for p in holder:
             regex, strf = p
@@ -206,18 +219,23 @@ class ParseMention:
             while match is not None:
                 timestamp = int(match.group(1)) - 1
                 time_stamp = time.gmtime(timestamp)
-                datetime_stamp = datetime.datetime(2010, *time_stamp[1:6], tzinfo=pytz.utc)
+                datetime_stamp = datetime.datetime(
+                    2010, *time_stamp[1:6], tzinfo=pytz.utc
+                )
                 ui_time = datetime_stamp.strftime(strf)
                 ui_time = ui_time.replace(str(datetime_stamp.year), str(time_stamp[0]))
                 tooltip_time = datetime_stamp.strftime("%A, %e %B %Y at %H:%M")
-                tooltip_time = tooltip_time.replace(str(datetime_stamp.year), str(time_stamp[0]))
+                tooltip_time = tooltip_time.replace(
+                    str(datetime_stamp.year), str(time_stamp[0])
+                )
                 original = match.group().replace("&lt;", "<").replace("&gt;", ">")
                 replacement = (
                     f'<span class="unix-timestamp" data-timestamp="{tooltip_time}" raw-content="{original}">'
-                    f'{ui_time}</span>'
+                    f"{ui_time}</span>"
                 )
 
-                self.content = self.content.replace(self.content[match.start():match.end()],
-                                                    replacement)
+                self.content = self.content.replace(
+                    self.content[match.start() : match.end()], replacement
+                )
 
                 match = re.search(regex, self.content)
