@@ -10,14 +10,6 @@ from DiscordTranscript.parse.markdown import ParseMarkdown
 if TYPE_CHECKING:
     import discord as discord_typings
 
-bot: Optional["discord_typings.Client"] = None
-
-def pass_bot(_bot):
-    # Bot is used to fetch a user who is no longer inside a guild
-    # This will stop the user from appearing as 'Unknown' which some people do not want
-    global bot
-    bot = _bot
-
 class ParseMention:
     """A class to parse mentions in a message.
 
@@ -52,15 +44,19 @@ class ParseMention:
     ESCAPE_GT = "______gt______"
     ESCAPE_AMP = "______amp______"
 
-    def __init__(self, content, guild):
+    def __init__(self, content, guild, bot: Optional["discord_typings.Client"] = None, timezone: str = "UTC"):
         """Initializes the ParseMention class.
 
         Args:
             content (str): The content to parse.
             guild (discord.Guild): The guild the message is in.
+            bot (Optional[discord.Client]): The bot instance. Defaults to None.
+            timezone (str): The timezone to use. Defaults to "UTC".
         """
         self.content = content
         self.guild = guild
+        self.bot = bot
+        self.timezone = timezone
         self.code_blocks_content = []
 
     async def flow(self):
@@ -180,7 +176,9 @@ class ParseMention:
 
                 member = None
                 try:
-                    member = self.guild.get_member(member_id) or bot.get_user(member_id)
+                    member = self.guild.get_member(member_id)
+                    if not member and self.bot:
+                        member = self.bot.get_user(member_id)
                     member_name = member.display_name
                 except AttributeError:
                     member_name = member
@@ -199,10 +197,8 @@ class ParseMention:
     async def time_mention(self):
         """Parses time mentions."""
         holder = self.REGEX_TIME_HOLDER
-        timezone = pytz.timezone("UTC")
-
-        if hasattr(self.guild, "timezone"):
-            timezone = pytz.timezone(self.guild.timezone)
+        # Use provided timezone or fallback to UTC
+        timezone = pytz.timezone(self.timezone or "UTC")
 
         for p in holder:
             regex, strf = p

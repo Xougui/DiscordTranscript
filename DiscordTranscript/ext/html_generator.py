@@ -16,7 +16,7 @@ PARSE_MODE_REFERENCE = 5
 PARSE_MODE_EMOJI = 6
 PARSE_MODE_HTML_SAFE = 7
 
-async def fill_out(guild, base, replacements, placeholders: dict = None):
+async def fill_out(guild, base, replacements, placeholders: dict = None, bot = None, timezone: str = "UTC"):
     """Fills out an HTML template with the given replacements.
 
     Args:
@@ -24,6 +24,8 @@ async def fill_out(guild, base, replacements, placeholders: dict = None):
         base (str): The HTML template to fill out.
         replacements (list): A list of replacements to make.
         placeholders (dict, optional): A dictionary of placeholders to use. Defaults to None.
+        bot (Optional[discord.Client]): The bot instance. Defaults to None.
+        timezone (str): The timezone to use. Defaults to "UTC".
 
     Returns:
         str: The filled out HTML template.
@@ -36,7 +38,7 @@ async def fill_out(guild, base, replacements, placeholders: dict = None):
         k, v, mode = r
 
         if mode != PARSE_MODE_NONE:
-            v = await ParseMention(v, guild).flow()
+            v = await ParseMention(v, guild, bot=bot, timezone=timezone).flow()
         if mode == PARSE_MODE_MARKDOWN:
             v = await ParseMarkdown(v, placeholders=placeholders).standard_message_flow()
         elif mode == PARSE_MODE_EMBED:

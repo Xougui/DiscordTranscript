@@ -3,7 +3,7 @@ import html
 import json
 import re
 import aiohttp
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, TYPE_CHECKING
 from datetime import timedelta
 from pytz import timezone
 
@@ -33,6 +33,9 @@ from DiscordTranscript.ext.html_generator import (
     message_thread_remove,
     message_thread_add,
 )
+
+if TYPE_CHECKING:
+    import discord as discord_typings
 
 def _gather_user_bot(author: discord.Member):
     if author.bot and author.public_flags.verified_bot:
@@ -67,6 +70,7 @@ class MessageConstruct:
         components (str): The HTML for the message's components.
         attachments (str): The HTML for the message's attachments.
         interaction (str): The HTML for the message's interaction.
+        bot (Optional[discord.Client]): The bot instance.
     """
 
     message_html: str = ""
@@ -90,7 +94,8 @@ class MessageConstruct:
         meta_data: dict,
         message_dict: dict,
         attachment_handler: Optional[AttachmentHandler],
-        tenor_api_key: Optional[str] = None
+        tenor_api_key: Optional[str] = None,
+        bot: Optional["discord_typings.Client"] = None,
     ):
         """Initializes the MessageConstruct.
 
@@ -104,6 +109,7 @@ class MessageConstruct:
             message_dict (dict): A dictionary of all messages in the channel.
             attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
             tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs.
+            bot (Optional[discord.Client]): The bot instance.
         """
         self.message = message
         self.previous_message = previous_message
@@ -114,6 +120,7 @@ class MessageConstruct:
         self.attachment_handler = attachment_handler
         self.tenor_api_key = tenor_api_key
         self.processed_tenor_links = []
+        self.bot = bot
         self.time_format = "%A, %e %B %Y %I:%M %p"
         if self.military_time:
             self.time_format = "%A, %e %B %Y %H:%M"
@@ -228,6 +235,8 @@ class MessageConstruct:
                 ("EDIT", self.message_edited_at, PARSE_MODE_NONE),
             ],
             placeholders=placeholders,
+            bot=self.bot,
+            timezone=self.pytz_timezone,
         )
 
     async def build_reference(self):
@@ -285,7 +294,7 @@ class MessageConstruct:
             ("ICON", icon, PARSE_MODE_NONE),
             ("USER_ID", str(message.author.id), PARSE_MODE_NONE),
             ("MESSAGE_ID", str(self.message.reference.message_id), PARSE_MODE_NONE),
-        ])
+        ], bot=self.bot, timezone=self.pytz_timezone)
 
     async def build_interaction(self):
         """Builds the HTML for a message interaction."""
@@ -318,7 +327,7 @@ class MessageConstruct:
             ("FILLER", "used ", PARSE_MODE_NONE),
             ("USER_ID", str(user.id), PARSE_MODE_NONE),
             ("INTERACTION_ID", str(interaction_id), PARSE_MODE_NONE),
-        ])
+        ], bot=self.bot, timezone=self.pytz_timezone)
 
     async def build_sticker(self):
         """Builds the HTML for a message sticker."""
@@ -337,7 +346,7 @@ class MessageConstruct:
             ("SPOILER_CLASSES", "", PARSE_MODE_NONE),
             ("ATTACH_URL", str(sticker_image_url), PARSE_MODE_NONE),
             ("ATTACH_URL_THUMB", str(sticker_image_url), PARSE_MODE_NONE)
-        ])
+        ], bot=self.bot, timezone=self.pytz_timezone)
 
     async def build_assets(self):
         """Builds the HTML for the message's assets (embeds, attachments, components, reactions)."""
@@ -348,18 +357,18 @@ class MessageConstruct:
             ]
 
         for e in self.message.embeds:
-            self.embeds += await Embed(e, self.guild).flow()
+            self.embeds += await Embed(e, self.guild, bot=self.bot, timezone=self.pytz_timezone).flow()
 
         for a in self.message.attachments:
             if self.attachment_handler and isinstance(self.attachment_handler, AttachmentHandler):
                 a = await self.attachment_handler.process_asset(a)
-            self.attachments += await Attachment(a, self.guild).flow()
+            self.attachments += await Attachment(a, self.guild, bot=self.bot, timezone=self.pytz_timezone).flow()
 
         for c in self.message.components:
-            self.components += await Component(c, self.guild).flow()
+            self.components += await Component(c, self.guild, bot=self.bot, timezone=self.pytz_timezone).flow()
 
         for r in self.message.reactions:
-            self.reactions += await Reaction(r, self.guild).flow()
+            self.reactions += await Reaction(r, self.guild, bot=self.bot, timezone=self.pytz_timezone).flow()
 
         if self.reactions:
             self.reactions = f'<div class="chatlog__reactions">{self.reactions}</div>'
@@ -380,7 +389,7 @@ class MessageConstruct:
             ("EMOJI", self.reactions, PARSE_MODE_NONE),
             ("TIMESTAMP", self.message_created_at, PARSE_MODE_NONE),
             ("TIME", self.message_created_at.split(maxsplit=4)[4], PARSE_MODE_NONE),
-        ])
+        ], bot=self.bot, timezone=self.pytz_timezone)
 
         return self.message_html
 
@@ -404,7 +413,7 @@ class MessageConstruct:
         """
         if channel_audit or self._generate_message_divider_check():
             if self.previous_message is not None:
-                self.message_html += await fill_out(self.guild, end_message, [])
+                self.message_html += await fill_out(self.guild, end_message, [], bot=self.bot, timezone=self.pytz_timezone)
 
             if channel_audit:
                 self.audit = True
@@ -445,7 +454,7 @@ class MessageConstruct:
                 ("ATTACHMENTS", self.attachments, PARSE_MODE_NONE),
                 ("COMPONENTS", self.components, PARSE_MODE_NONE),
                 ("EMOJI", self.reactions, PARSE_MODE_NONE)
-            ])
+            ], bot=self.bot, timezone=self.pytz_timezone)
 
             return True
 
@@ -458,7 +467,7 @@ class MessageConstruct:
             ("NAME_TAG", await discriminator(self.message.author.name, self.message.author.discriminator), PARSE_MODE_NONE),
             ("MESSAGE_ID", str(self.message.id), PARSE_MODE_NONE),
             ("REF_MESSAGE_ID", str(self.message.reference.message_id) if self.message.reference else "", PARSE_MODE_NONE)
-        ])
+        ], bot=self.bot, timezone=self.pytz_timezone)
 
     async def build_thread_template(self):
         """Builds the HTML for a thread creation message."""
@@ -470,7 +479,7 @@ class MessageConstruct:
             ("NAME", str(html.escape(self.message.author.display_name))),
             ("NAME_TAG", await discriminator(self.message.author.name, self.message.author.discriminator), PARSE_MODE_NONE),
             ("MESSAGE_ID", str(self.message.id), PARSE_MODE_NONE),
-        ])
+        ], bot=self.bot, timezone=self.pytz_timezone)
 
     async def build_remove(self):
         """Builds the HTML for a message about a user being removed from a thread."""
@@ -487,7 +496,7 @@ class MessageConstruct:
             ("RECIPIENT_NAME_TAG", await discriminator(removed_member.name, removed_member.discriminator),
              PARSE_MODE_NONE),
             ("MESSAGE_ID", str(self.message.id), PARSE_MODE_NONE),
-        ])
+        ], bot=self.bot, timezone=self.pytz_timezone)
 
     async def build_add(self):
         """Builds the HTML for a message about a user being added to a thread."""
@@ -504,7 +513,7 @@ class MessageConstruct:
             ("RECIPIENT_NAME_TAG", await discriminator(removed_member.name, removed_member.discriminator),
              PARSE_MODE_NONE),
             ("MESSAGE_ID", str(self.message.id), PARSE_MODE_NONE),
-        ])
+        ], bot=self.bot, timezone=self.pytz_timezone)
 
     @cache()
     async def _gather_member(self, author: discord.Member):
@@ -631,6 +640,7 @@ async def gather_messages(
     military_time,
     attachment_handler: Optional[AttachmentHandler],
     tenor_api_key: Optional[str] = None,
+    bot: Optional["discord_typings.Client"] = None,
 ) -> Tuple[str, dict]:
     """Gathers all messages in a channel and returns the HTML and metadata.
 
@@ -641,6 +651,7 @@ async def gather_messages(
         military_time (bool): Whether to use military time.
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
         tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs.
+        bot (Optional[discord.Client]): The bot instance.
 
     Returns:
         Tuple[str, dict]: A tuple containing the HTML and metadata.
@@ -671,7 +682,8 @@ async def gather_messages(
             meta_data,
             message_dict,
             attachment_handler,
-            tenor_api_key=tenor_api_key
+            tenor_api_key=tenor_api_key,
+            bot=bot,
         )
         content_html, meta_data = await mc.construct_message()
 

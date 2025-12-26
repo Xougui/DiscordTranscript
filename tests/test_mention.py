@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, AsyncMock
 
-from DiscordTranscript.parse.mention import ParseMention, pass_bot
+from DiscordTranscript.parse.mention import ParseMention
 
 
 @pytest.fixture
@@ -66,31 +66,29 @@ async def test_role_mention(mock_guild):
 
 @pytest.mark.asyncio
 async def test_member_mention(mock_guild, mock_bot):
-    pass_bot(mock_bot)
     member = MagicMock()
     member.id = 112233
     member.display_name = "TestUser"
     mock_guild.get_member.return_value = member
     mock_bot.get_user.return_value = None
 
-    parser = ParseMention("<@112233>", mock_guild)
+    parser = ParseMention("<@112233>", mock_guild, bot=mock_bot)
     await parser.member_mention()
     assert parser.content == '<span class="mention" title="112233">@TestUser</span>'
 
-    parser = ParseMention("&lt;@112233&gt;", mock_guild)
+    parser = ParseMention("&lt;@112233&gt;", mock_guild, bot=mock_bot)
     await parser.member_mention()
     assert parser.content == '<span class="mention" title="112233">@TestUser</span>'
 
     mock_guild.get_member.return_value = None
-    parser = ParseMention("<@445566>", mock_guild)
+    parser = ParseMention("<@445566>", mock_guild, bot=mock_bot)
     await parser.member_mention()
     assert parser.content == '<span class="mention" title="445566">&lt;@445566></span>'
 
 
 @pytest.mark.asyncio
 async def test_time_mention(mock_guild):
-    mock_guild.timezone = "UTC"
-    parser = ParseMention("&lt;t:1622548800:f&gt;", mock_guild)
+    parser = ParseMention("&lt;t:1622548800:f&gt;", mock_guild, timezone="UTC")
     await parser.time_mention()
     assert 'June 2021 11:59' in parser.content
 
@@ -102,7 +100,6 @@ async def test_slash_command_mention(mock_guild):
 
 @pytest.mark.asyncio
 async def test_flow(mock_guild):
-    mock_guild.timezone = "UTC"
     channel = MagicMock()
     channel.id = 54321
     channel.name = "test-channel"
@@ -123,7 +120,7 @@ async def test_flow(mock_guild):
     mock_guild.get_member.return_value = member
 
     content = "Hello <@112233>, welcome to <#54321>. Please read the rules and get the <@&98765> role."
-    parser = ParseMention(content, mock_guild)
+    parser = ParseMention(content, mock_guild, timezone="UTC")
     result = await parser.flow()
 
     assert '<span class="mention" title="112233">@TestUser</span>' in result
