@@ -1,19 +1,21 @@
+from typing import TYPE_CHECKING, Optional
+
 from DiscordTranscript.ext.discord_import import discord
 from DiscordTranscript.ext.discord_utils import DiscordUtils
 from DiscordTranscript.ext.html_generator import (
-    fill_out,
+    PARSE_MODE_EMOJI,
+    PARSE_MODE_MARKDOWN,
+    PARSE_MODE_NONE,
     component_button,
     component_menu,
     component_menu_options,
     component_menu_options_emoji,
-    PARSE_MODE_NONE,
-    PARSE_MODE_EMOJI,
-    PARSE_MODE_MARKDOWN,
+    fill_out,
 )
-from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     import discord as discord_typings
+
 
 class Component:
     """A class to represent a Discord component.
@@ -27,6 +29,7 @@ class Component:
         component (discord.Component): The component to represent.
         guild (discord.Guild): The guild the component is in.
     """
+
     styles = {
         "primary": "#5865F2",
         "secondary": "#4F545C",
@@ -45,7 +48,13 @@ class Component:
     buttons: str = ""
     menu_div_id: int = 0
 
-    def __init__(self, component, guild, bot: Optional["discord_typings.Client"] = None, timezone: str = "UTC"):
+    def __init__(
+        self,
+        component,
+        guild,
+        bot: Optional["discord_typings.Client"] = None,
+        timezone: str = "UTC",
+    ) -> None:
         """Initializes the Component.
 
         Args:
@@ -59,7 +68,7 @@ class Component:
         self.bot = bot
         self.timezone = timezone
 
-    async def build_component(self, c):
+    async def build_component(self, c) -> None:
         """Builds a component.
 
         Args:
@@ -71,7 +80,7 @@ class Component:
             await self.build_menu(c)
             Component.menu_div_id += 1
 
-    async def build_button(self, c):
+    async def build_button(self, c) -> None:
         """Builds a button.
 
         Args:
@@ -85,22 +94,32 @@ class Component:
             url = "javascript:;"
             target = ""
             icon = ""
-            
+
         label = str(c.label) if c.label else ""
         style = self.styles[str(c.style).split(".")[1]]
         emoji = str(c.emoji) if c.emoji else ""
 
-        self.buttons += await fill_out(self.guild, component_button, [
-            ("DISABLED", "chatlog__component-disabled" if c.disabled else "", PARSE_MODE_NONE),
-            ("URL", url, PARSE_MODE_NONE),
-            ("LABEL", label, PARSE_MODE_MARKDOWN),
-            ("EMOJI", emoji, PARSE_MODE_EMOJI),
-            ("ICON", icon, PARSE_MODE_NONE),
-            ("TARGET", target, PARSE_MODE_NONE),
-            ("STYLE", style, PARSE_MODE_NONE)
-        ], bot=self.bot, timezone=self.timezone)
+        self.buttons += await fill_out(
+            self.guild,
+            component_button,
+            [
+                (
+                    "DISABLED",
+                    "chatlog__component-disabled" if c.disabled else "",
+                    PARSE_MODE_NONE,
+                ),
+                ("URL", url, PARSE_MODE_NONE),
+                ("LABEL", label, PARSE_MODE_MARKDOWN),
+                ("EMOJI", emoji, PARSE_MODE_EMOJI),
+                ("ICON", icon, PARSE_MODE_NONE),
+                ("TARGET", target, PARSE_MODE_NONE),
+                ("STYLE", style, PARSE_MODE_NONE),
+            ],
+            bot=self.bot,
+            timezone=self.timezone,
+        )
 
-    async def build_menu(self, c):
+    async def build_menu(self, c) -> None:
         """Builds a menu.
 
         Args:
@@ -113,13 +132,23 @@ class Component:
         if not c.disabled:
             content = await self.build_menu_options(options)
 
-        self.menus += await fill_out(self.guild, component_menu, [
-            ("DISABLED", "chatlog__component-disabled" if c.disabled else "", PARSE_MODE_NONE),
-            ("ID", str(self.menu_div_id), PARSE_MODE_NONE),
-            ("PLACEHOLDER", str(placeholder), PARSE_MODE_MARKDOWN),
-            ("CONTENT", str(content), PARSE_MODE_NONE),
-            ("ICON", DiscordUtils.interaction_dropdown_icon, PARSE_MODE_NONE),
-        ], bot=self.bot, timezone=self.timezone)
+        self.menus += await fill_out(
+            self.guild,
+            component_menu,
+            [
+                (
+                    "DISABLED",
+                    "chatlog__component-disabled" if c.disabled else "",
+                    PARSE_MODE_NONE,
+                ),
+                ("ID", str(self.menu_div_id), PARSE_MODE_NONE),
+                ("PLACEHOLDER", str(placeholder), PARSE_MODE_MARKDOWN),
+                ("CONTENT", str(content), PARSE_MODE_NONE),
+                ("ICON", DiscordUtils.interaction_dropdown_icon, PARSE_MODE_NONE),
+            ],
+            bot=self.bot,
+            timezone=self.timezone,
+        )
 
     async def build_menu_options(self, options):
         """Builds the options for a menu.
@@ -133,16 +162,40 @@ class Component:
         content = []
         for option in options:
             if option.emoji:
-                content.append(await fill_out(self.guild, component_menu_options_emoji, [
-                    ("EMOJI", str(option.emoji), PARSE_MODE_EMOJI),
-                    ("TITLE", str(option.label), PARSE_MODE_MARKDOWN),
-                    ("DESCRIPTION", str(option.description) if option.description else "", PARSE_MODE_MARKDOWN)
-                ], bot=self.bot, timezone=self.timezone))
+                content.append(
+                    await fill_out(
+                        self.guild,
+                        component_menu_options_emoji,
+                        [
+                            ("EMOJI", str(option.emoji), PARSE_MODE_EMOJI),
+                            ("TITLE", str(option.label), PARSE_MODE_MARKDOWN),
+                            (
+                                "DESCRIPTION",
+                                str(option.description) if option.description else "",
+                                PARSE_MODE_MARKDOWN,
+                            ),
+                        ],
+                        bot=self.bot,
+                        timezone=self.timezone,
+                    )
+                )
             else:
-                content.append(await fill_out(self.guild, component_menu_options, [
-                    ("TITLE", str(option.label), PARSE_MODE_MARKDOWN),
-                    ("DESCRIPTION", str(option.description) if option.description else "", PARSE_MODE_MARKDOWN)
-                ], bot=self.bot, timezone=self.timezone))
+                content.append(
+                    await fill_out(
+                        self.guild,
+                        component_menu_options,
+                        [
+                            ("TITLE", str(option.label), PARSE_MODE_MARKDOWN),
+                            (
+                                "DESCRIPTION",
+                                str(option.description) if option.description else "",
+                                PARSE_MODE_MARKDOWN,
+                            ),
+                        ],
+                        bot=self.bot,
+                        timezone=self.timezone,
+                    )
+                )
 
         if content:
             content = f'<div id="dropdownMenu{self.menu_div_id}" class="dropdownContent">{"".join(content)}</div>'
