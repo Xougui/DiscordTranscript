@@ -1,10 +1,17 @@
 import re
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+
 from DiscordTranscript.ext.emoji_convert import convert_emoji
-from DiscordTranscript.ext.html_generator import fill_out, emoji, custom_emoji, PARSE_MODE_NONE
+from DiscordTranscript.ext.html_generator import (
+    PARSE_MODE_NONE,
+    custom_emoji,
+    emoji,
+    fill_out,
+)
 
 if TYPE_CHECKING:
     import discord as discord_typings
+
 
 class Reaction:
     """A class to represent a Discord reaction.
@@ -13,7 +20,14 @@ class Reaction:
         reaction (discord.Reaction): The reaction to represent.
         guild (discord.Guild): The guild the reaction is in.
     """
-    def __init__(self, reaction, guild, bot: Optional["discord_typings.Client"] = None, timezone: str = "UTC"):
+
+    def __init__(
+        self,
+        reaction,
+        guild,
+        bot: Optional["discord_typings.Client"] = None,
+        timezone: str = "UTC",
+    ) -> None:
         """Initializes the Reaction.
 
         Args:
@@ -37,7 +51,7 @@ class Reaction:
 
         return self.reaction
 
-    async def build_reaction(self):
+    async def build_reaction(self) -> None:
         """Builds the reaction's HTML based on its type."""
         if ":" in str(self.reaction.emoji):
             emoji_animated = re.compile(r"&lt;a:.*:.*&gt;")
@@ -48,7 +62,7 @@ class Reaction:
         else:
             await self.create_standard_emoji()
 
-    async def create_discord_reaction(self, emoji_type):
+    async def create_discord_reaction(self, emoji_type) -> None:
         """Builds a custom Discord reaction.
 
         Args:
@@ -56,16 +70,28 @@ class Reaction:
         """
         pattern = r":.*:(\d*)"
         emoji_id = re.search(pattern, str(self.reaction.emoji)).group(1)
-        self.reaction = await fill_out(self.guild, custom_emoji, [
-            ("EMOJI", str(emoji_id), PARSE_MODE_NONE),
-            ("EMOJI_COUNT", str(self.reaction.count), PARSE_MODE_NONE),
-            ("EMOJI_FILE", emoji_type, PARSE_MODE_NONE)
-        ], bot=self.bot, timezone=self.timezone)
+        self.reaction = await fill_out(
+            self.guild,
+            custom_emoji,
+            [
+                ("EMOJI", str(emoji_id), PARSE_MODE_NONE),
+                ("EMOJI_COUNT", str(self.reaction.count), PARSE_MODE_NONE),
+                ("EMOJI_FILE", emoji_type, PARSE_MODE_NONE),
+            ],
+            bot=self.bot,
+            timezone=self.timezone,
+        )
 
-    async def create_standard_emoji(self):
+    async def create_standard_emoji(self) -> None:
         """Builds a standard emoji reaction."""
         react_emoji = await convert_emoji(self.reaction.emoji)
-        self.reaction = await fill_out(self.guild, emoji, [
-            ("EMOJI", str(react_emoji), PARSE_MODE_NONE),
-            ("EMOJI_COUNT", str(self.reaction.count), PARSE_MODE_NONE)
-        ], bot=self.bot, timezone=self.timezone)
+        self.reaction = await fill_out(
+            self.guild,
+            emoji,
+            [
+                ("EMOJI", str(react_emoji), PARSE_MODE_NONE),
+                ("EMOJI_COUNT", str(self.reaction.count), PARSE_MODE_NONE),
+            ],
+            bot=self.bot,
+            timezone=self.timezone,
+        )
