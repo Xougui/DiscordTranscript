@@ -92,7 +92,9 @@ class MockEmoji:
         self.name = name
         self.id = id
         self.animated = animated
-        self.url = "https://cdn.discordapp.com/emojis/1380533490474549250.png"
+        ext = "gif" if animated else "png"
+        emoji_id = id if id else 1380533490474549250
+        self.url = f"https://cdn.discordapp.com/emojis/{emoji_id}.{ext}"
 
     def __str__(self):
         if self.id:
