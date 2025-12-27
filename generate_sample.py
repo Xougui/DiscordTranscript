@@ -211,9 +211,9 @@ async def main():
     channel.guild = guild
 
     # Users with the provided images
-    user1 = MockUser(1, "Alice", "0001", "https://lyxios.xouxou-hosting.fr/images/white_black.png", color=MockColor(0xFF0000))
-    user2 = MockUser(2, "Bob", "0002", "https://lyxios.xouxou-hosting.fr/images/black_white.png", color=MockColor(0x00FF00))
-    bot_user = MockUser(3, "HelperBot", "9999", "https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp", bot=True, color=MockColor(0x5865F2))
+    user1 = MockUser(1, "Alice", "1378", "https://preview.redd.it/the-new-discord-default-profile-pictures-v0-tbhgxr7adj7f1.png?width=1024&format=png&auto=webp&s=681455786feb3bb43479cc5d684dd3a3ff664a20", color=MockColor(0xFF0000))
+    user2 = MockUser(2, "Bob", "8462", "https://i.redd.it/a4lxgg1edj7f1.png", color=MockColor(0x00FF00))
+    bot_user = MockUser(3, "Lyxios", "4628", "https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp", bot=True, color=MockColor(0x5865F2))
 
     base_time = datetime.datetime.now() - datetime.timedelta(hours=1)
 
