@@ -1,6 +1,5 @@
 from __future__ import annotations
 import html
-import json
 import re
 import aiohttp
 from typing import List, Optional, Tuple, TYPE_CHECKING
