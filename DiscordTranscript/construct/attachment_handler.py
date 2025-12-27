@@ -1,9 +1,13 @@
 from __future__ import annotations
 import base64
 import io
+from typing import TYPE_CHECKING
 
 import aiohttp
 from DiscordTranscript.ext.discord_import import discord
+
+if TYPE_CHECKING:
+    import discord as discord_typings
 
 
 class AttachmentHandler:
@@ -12,7 +16,7 @@ class AttachmentHandler:
     Subclass this to implement your own asset handler.
     """
 
-    async def process_asset(self, attachment: discord.Attachment) -> discord.Attachment:
+    async def process_asset(self, attachment: discord_typings.Attachment) -> discord_typings.Attachment:
         """Processes an asset and returns a URL to the stored attachment.
 
         Args:
@@ -27,7 +31,7 @@ class AttachmentHandler:
 class AttachmentToDataURIHandler(AttachmentHandler):
     """Saves assets to a data URI and embeds them in the transcript."""
 
-    async def process_asset(self, attachment: discord.Attachment) -> discord.Attachment:
+    async def process_asset(self, attachment: discord_typings.Attachment) -> discord_typings.Attachment:
         """Saves an asset to a data URI and returns a new attachment.
 
         Args:
@@ -58,7 +62,7 @@ class AttachmentToDiscordChannelHandler(AttachmentHandler):
         channel (discord.TextChannel): The channel to save attachments to.
     """
 
-    def __init__(self, channel: discord.TextChannel):
+    def __init__(self, channel: discord_typings.TextChannel):
         """Initializes the AttachmentToDiscordChannelHandler.
 
         Args:
@@ -66,7 +70,7 @@ class AttachmentToDiscordChannelHandler(AttachmentHandler):
         """
         self.channel = channel
 
-    async def process_asset(self, attachment: discord.Attachment) -> discord.Attachment:
+    async def process_asset(self, attachment: discord_typings.Attachment) -> discord_typings.Attachment:
         """Saves an asset to the Discord channel and returns a new attachment.
 
         Args:
