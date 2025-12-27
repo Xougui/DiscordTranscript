@@ -37,7 +37,6 @@ if TYPE_CHECKING:
     import discord as discord_typings
 
 
-def _gather_user_bot(author: discord.Member):
 def _gather_user_bot(author: discord_typings.Member):
     if author.bot and author.public_flags.verified_bot:
         return bot_tag_verified
@@ -89,13 +88,10 @@ class MessageConstruct:
 
     def __init__(
         self,
-        message: discord.Message,
-        previous_message: Optional[discord.Message],
         message: discord_typings.Message,
         previous_message: Optional[discord_typings.Message],
         pytz_timezone,
         military_time: bool,
-        guild: discord.Guild,
         guild: discord_typings.Guild,
         meta_data: dict,
         message_dict: dict,
@@ -268,16 +264,16 @@ class MessageConstruct:
             self.message.reference = ""
             return
 
-        message: discord.Message = self.message_dict.get(
         message: discord_typings.Message = self.message_dict.get(
             self.message.reference.message_id
         )
 
         if not message:
             try:
-                message: discord.Message = await self.message.channel.fetch_message(
-                message: discord_typings.Message = await self.message.channel.fetch_message(
-                    self.message.reference.message_id
+                message: discord_typings.Message = (
+                    await self.message.channel.fetch_message(
+                        self.message.reference.message_id
+                    )
                 )
             except (discord.NotFound, discord.HTTPException) as e:
                 self.message.reference = ""
@@ -637,7 +633,6 @@ class MessageConstruct:
 
     async def build_remove(self):
         """Builds the HTML for a message about a user being removed from a thread."""
-        removed_member: discord.Member = self.message.mentions[0]
         removed_member: discord_typings.Member = self.message.mentions[0]
         self.message_html += await fill_out(
             self.guild,
@@ -673,7 +668,6 @@ class MessageConstruct:
 
     async def build_add(self):
         """Builds the HTML for a message about a user being added to a thread."""
-        removed_member: discord.Member = self.message.mentions[0]
         removed_member: discord_typings.Member = self.message.mentions[0]
         self.message_html += await fill_out(
             self.guild,
@@ -708,7 +702,6 @@ class MessageConstruct:
         )
 
     @cache()
-    async def _gather_member(self, author: discord.Member):
     async def _gather_member(self, author: discord_typings.Member):
         """Gathers a member from the guild.
 
@@ -728,7 +721,6 @@ class MessageConstruct:
         except Exception:
             return None
 
-    async def _gather_user_colour(self, author: discord.Member):
     async def _gather_user_colour(self, author: discord_typings.Member):
         """Gathers a user's colour.
 
@@ -744,7 +736,6 @@ class MessageConstruct:
         )
         return f"color: {user_colour};"
 
-    async def _gather_user_icon(self, author: discord.Member):
     async def _gather_user_icon(self, author: discord_typings.Member):
         """Gathers a user's icon.
 
@@ -765,8 +756,9 @@ class MessageConstruct:
             return f"<img class='chatlog__role-icon' src='{member.top_role.icon}' alt='Role Icon'>"
         return ""
 
-    def set_time(self, message: Optional[discord.Message] = None) -> Tuple[str, str]:
-    def set_time(self, message: Optional[discord_typings.Message] = None) -> Tuple[str, str]:
+    def set_time(
+        self, message: Optional[discord_typings.Message] = None
+    ) -> Tuple[str, str]:
         """Sets the time for a message.
 
         Args:
@@ -837,8 +829,6 @@ async def _process_tenor_link(
 
 
 async def gather_messages(
-    messages: List[discord.Message],
-    guild: discord.Guild,
     messages: List[discord_typings.Message],
     guild: discord_typings.Guild,
     pytz_timezone,
@@ -863,7 +853,6 @@ async def gather_messages(
     """
     message_html: str = ""
     meta_data: dict = {}
-    previous_message: Optional[discord.Message] = None
     previous_message: Optional[discord_typings.Message] = None
 
     message_dict = {message.id: message for message in messages}
