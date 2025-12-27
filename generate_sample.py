@@ -9,12 +9,15 @@ from DiscordTranscript import raw_export
 class MockGuild:
     def __init__(self):
         self.id = 123456789
-        self.name = "Test Server"
+        self.name = "Serveur de Démonstration"
         self.icon = "https://cdn.discordapp.com/icons/123456789/icon.png"
         self.roles = []
 
     def get_member(self, id):
-        return None # Return None to simulate user not in guild (or just basic handling)
+        return None
+
+    def fetch_member(self, id):
+        return None
 
 class MockColor:
     def __init__(self, value):
@@ -33,7 +36,7 @@ class MockUser:
         self.discriminator = discriminator
         self.display_avatar = MagicMock()
         self.display_avatar.url = avatar_url
-        self.avatar = self.display_avatar # backwards compat
+        self.avatar = self.display_avatar
         self.bot = bot
         self.color = color if color else MockColor(0xFFFFFF)
         self.display_name = name
@@ -48,8 +51,8 @@ class MockUser:
 class MockChannel:
     def __init__(self):
         self.id = 987654321
-        self.name = "general"
-        self.topic = "A place to chat"
+        self.name = "général"
+        self.topic = "Un salon pour discuter de tout et de rien"
         self.created_at = datetime.datetime.now()
         self.guild = MockGuild()
         self.history = MagicMock()
@@ -72,19 +75,22 @@ class MockSticker:
         self.name = name
         self.url = url
         self.format = "png"
+        self.id = 12345
+
+    def fetch(self):
+        pass
 
 class MockEmoji:
-    def __init__(self, name, url=None):
+    def __init__(self, name, id=None, animated=False):
         self.name = name
-        self.url = url
-        self.animated = False
-        self.id = 1
+        self.id = id
+        self.animated = animated
 
     def __str__(self):
+        if self.id:
+            anim = "a" if self.animated else ""
+            return f"<{anim}:{self.name}:{self.id}>"
         return self.name
-
-    def __iter__(self):
-        return iter(self.name)
 
 class MockReaction:
     def __init__(self, emoji, count):
@@ -109,19 +115,17 @@ class MockMessage:
         self.role_mentions = []
         self.stickers = stickers
         self.type = MagicMock()
-        self.type.name = "default" # "default", "reply"
+        self.type.name = "default"
         self.webhook_id = None
         self.interaction = None
-
-        # Determine clean content
         self.clean_content = content
 
 class MockEmbed:
     def __init__(self, title=None, description=None, color=None, fields=None, author=None, footer=None, image=None, thumbnail=None):
         self.title = title
         self.description = description
-        self.color = color # int
-        self.colour = MockColor(color) if color else MockColor(0x202225) # Default embed color
+        self.color = color
+        self.colour = MockColor(color) if color else MockColor(0x202225)
         self.fields = fields if fields else []
         self.author = author
         self.footer = footer
@@ -132,9 +136,6 @@ class MockEmbed:
         self.video = None
         self.provider = None
         self.type = 'rich'
-
-    def to_dict(self):
-        return {} # Not strictly needed for the transcript unless it uses it
 
 class MockEmbedField:
     def __init__(self, name, value, inline):
@@ -154,16 +155,17 @@ class MockEmbedProxy:
 class MockButton:
     def __init__(self, label, style, url=None, emoji=None, disabled=False):
         self.label = label
-        self.style = style # ButtonStyle value
+        self.style = style
         self.url = url
         self.emoji = emoji
         self.disabled = disabled
-        self.type = 2 # ComponentType.button
+        self.type = 2
+        self.children = []
 
 class MockActionRow:
     def __init__(self, children):
         self.children = children
-        self.type = 1 # ComponentType.action_row
+        self.type = 1
 
 class MockSelectOption:
     def __init__(self, label, value, description=None, emoji=None, default=False):
@@ -181,30 +183,32 @@ class MockSelectMenu:
         self.min_values = min_values
         self.max_values = max_values
         self.disabled = disabled
-        self.type = 3 # ComponentType.string_select
+        self.type = 3
+        self.children = []
 
 class MockButtonStyle:
-    primary = 1 # blurple
-    secondary = 2 # grey
-    success = 3 # green
-    danger = 4 # red
-    link = 5 # url
+    primary = 1
+    secondary = 2
+    success = 3
+    danger = 4
+    link = 5
 
 async def main():
     guild = MockGuild()
     channel = MockChannel()
-    channel.guild = guild # Circular reference needed
+    channel.guild = guild
 
-    user1 = MockUser(1, "Alice", "0001", "https://cdn.discordapp.com/embed/avatars/0.png", color=MockColor(0xFF0000))
-    user2 = MockUser(2, "Bob", "0002", "https://cdn.discordapp.com/embed/avatars/1.png", color=MockColor(0x00FF00))
-    bot_user = MockUser(3, "HelperBot", "9999", "https://cdn.discordapp.com/embed/avatars/2.png", bot=True, color=MockColor(0x5865F2))
+    # Users with the provided images
+    user1 = MockUser(1, "Alice", "0001", "https://lyxios.xouxou-hosting.fr/images/white_black.png", color=MockColor(0xFF0000))
+    user2 = MockUser(2, "Bob", "0002", "https://lyxios.xouxou-hosting.fr/images/black_white.png", color=MockColor(0x00FF00))
+    bot_user = MockUser(3, "HelperBot", "9999", "https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp", bot=True, color=MockColor(0x5865F2))
 
     base_time = datetime.datetime.now() - datetime.timedelta(hours=1)
 
     # Message 1: Simple text
     msg1 = MockMessage(
         1001,
-        "Salut tout le monde ! Bienvenue sur le canal de test.",
+        "Salut tout le monde ! Bienvenue sur le canal de test. Voici un exemple complet de transcript.",
         user1,
         base_time,
         channel=channel
@@ -213,7 +217,7 @@ async def main():
     # Message 2: Reply
     msg2 = MockMessage(
         1002,
-        "Salut Alice ! Content d'être là.",
+        "Salut Alice ! J'adore ta photo de profil.",
         user2,
         base_time + datetime.timedelta(minutes=1),
         channel=channel,
@@ -221,12 +225,12 @@ async def main():
     )
     msg2.type.name = "reply"
 
-    # Message 3: Markdown Showcase
+    # Message 3: Markdown and Custom Emojis
+    custom_emoji_str = "<:mon_emoji:123456789>"
     markdown_content = (
-        "Voici un peu de **gras**, de l'*italique*, et du __souligné__.\n"
-        "On peut aussi faire du `code en ligne` ou des blocs :\n"
-        "```python\nprint('Hello World')\n```\n"
-        "> Et une citation !"
+        f"Voici un peu de **gras**, de l'*italique*, et du __souligné__.\n"
+        f"Et voici un emoji personnalisé : {custom_emoji_str}\n"
+        "```python\nprint('Hello World')\n```"
     )
     msg3 = MockMessage(
         1003,
@@ -236,11 +240,11 @@ async def main():
         channel=channel
     )
 
-    # Message 4: Attachment
-    attachment = MockAttachment("image_test.png", "https://via.placeholder.com/150", 1024)
+    # Message 4: Attachment (Image)
+    attachment = MockAttachment("photo_vacances.png", "https://lyxios.xouxou-hosting.fr/images/black_white.png", 1024)
     msg4 = MockMessage(
         1004,
-        "Regardez cette image :",
+        "Regardez cette image en pièce jointe :",
         user2,
         base_time + datetime.timedelta(minutes=10),
         attachments=[attachment],
@@ -250,17 +254,17 @@ async def main():
     # Message 5: Complex Embed
     embed = MockEmbed(
         title="Rapport de Statut",
-        description="Ceci est un exemple d'embed complexe.",
-        color=0x5865F2, # Blurple
+        description="Ceci est un exemple d'embed riche avec des champs.",
+        color=0x5865F2,
         fields=[
             MockEmbedField("Statut", "En ligne", True),
             MockEmbedField("Latence", "23ms", True),
-            MockEmbedField("Détails", "Tout fonctionne correctement.", False)
+            MockEmbedField("Version", "1.0.0", False)
         ],
-        author=MockEmbedProxy(name="Système", icon_url="https://cdn.discordapp.com/embed/avatars/0.png"),
-        footer=MockEmbedProxy(text="Mis à jour à l'instant", icon_url="https://cdn.discordapp.com/embed/avatars/1.png"),
-        thumbnail=MockEmbedProxy(url="https://cdn.discordapp.com/embed/avatars/2.png"),
-        image=MockEmbedProxy(url="https://via.placeholder.com/400x100")
+        author=MockEmbedProxy(name="Système", icon_url="https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp"),
+        footer=MockEmbedProxy(text="Généré automatiquement", icon_url="https://lyxios.xouxou-hosting.fr/images/white_black.png"),
+        thumbnail=MockEmbedProxy(url="https://lyxios.xouxou-hosting.fr/images/black_white.png"),
+        image=MockEmbedProxy(url="https://lyxios.xouxou-hosting.fr/images/white_black.png")
     )
     msg5 = MockMessage(
         1005,
@@ -272,15 +276,17 @@ async def main():
     )
 
     # Message 6: Components (Buttons)
-    button_blurple = MockButton("Confirmer", MockButtonStyle.primary, emoji=MockEmoji("✅"))
-    button_red = MockButton("Annuler", MockButtonStyle.danger, emoji=MockEmoji("✖️"))
-    button_link = MockButton("Documentation", MockButtonStyle.link, url="https://discord.com")
+    custom_emoji = MockEmoji("custom_check", id=987654321)
+    button_primary = MockButton("Confirmer", MockButtonStyle.primary, emoji=custom_emoji)
+    button_secondary = MockButton("Options", MockButtonStyle.secondary, emoji=MockEmoji("⚙️"))
+    button_danger = MockButton("Supprimer", MockButtonStyle.danger, emoji=MockEmoji("🗑️"))
+    button_link = MockButton("Site Web", MockButtonStyle.link, url="https://discord.com")
 
-    action_row_buttons = MockActionRow([button_blurple, button_red, button_link])
+    action_row_buttons = MockActionRow([button_primary, button_secondary, button_danger, button_link])
 
     msg6 = MockMessage(
         1006,
-        "Veuillez faire un choix :",
+        "Veuillez choisir une action :",
         bot_user,
         base_time + datetime.timedelta(minutes=20),
         components=[action_row_buttons],
@@ -289,16 +295,16 @@ async def main():
 
     # Message 7: Components (Select Menu)
     select_options = [
-        MockSelectOption("Option 1", "1", "Description 1", MockEmoji("1️⃣")),
-        MockSelectOption("Option 2", "2", "Description 2", MockEmoji("2️⃣"), default=True),
-        MockSelectOption("Option 3", "3", "Description 3", MockEmoji("3️⃣"))
+        MockSelectOption("Option 1", "1", "Ceci est la première option", MockEmoji("1️⃣")),
+        MockSelectOption("Option 2", "2", "Celle-ci est sélectionnée par défaut", MockEmoji("2️⃣"), default=True),
+        MockSelectOption("Option 3", "3", "Une autre option sympa", MockEmoji("rocket", id=11223344))
     ]
-    select_menu = MockSelectMenu("select_1", select_options, placeholder="Choisissez une option...")
+    select_menu = MockSelectMenu("select_1", select_options, placeholder="Faites votre choix...")
     action_row_select = MockActionRow([select_menu])
 
     msg7 = MockMessage(
         1007,
-        "Sélectionnez un élément dans la liste :",
+        "Quel est votre chiffre préféré ?",
         bot_user,
         base_time + datetime.timedelta(minutes=21),
         components=[action_row_select],
@@ -306,7 +312,7 @@ async def main():
     )
 
     # Message 8: Sticker
-    sticker = MockSticker("Wumpus Wave", "https://cdn.discordapp.com/stickers/1234567890.png")
+    sticker = MockSticker("Cool Sticker", "https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp")
     msg8 = MockMessage(
         1008,
         "",
@@ -317,45 +323,27 @@ async def main():
     )
 
     # Message 9: Reactions
-    reaction1 = MockReaction(MockEmoji("👍"), 5)
-    reaction2 = MockReaction(MockEmoji("🔥"), 2)
+    # Important: Pass string for unicode emoji, MockEmoji for custom (or string for custom if formatted properly, but MockEmoji handles the id)
+    reaction1 = MockReaction("👍", 10) # Pass string directly
+    reaction2 = MockReaction(MockEmoji("custom_fire", id=55555), 4)
     msg9 = MockMessage(
         1009,
-        "Ce message est très populaire !",
+        "Merci pour votre participation !",
         user2,
         base_time + datetime.timedelta(minutes=30),
         reactions=[reaction1, reaction2],
         channel=channel
     )
 
-    # Message 11: Future message (Alice)
-    msg11 = MockMessage(
-        1011,
-        "Je viens du futur !",
-        user1,
-        base_time + datetime.timedelta(minutes=35),
-        channel=channel
-    )
-
-    # Message 10: Reply to future message (Bob)
-    msg10 = MockMessage(
-        1010,
-        "Attends, tu as envoyé ça dans le futur ?",
-        user2,
-        base_time + datetime.timedelta(minutes=40),
-        channel=channel,
-        reference=MagicMock(resolved=msg11, message_id=msg11.id, guild_id=guild.id, channel_id=channel.id)
-    )
-    msg10.type.name = "reply"
-
-    messages = [msg10, msg11, msg9, msg8, msg7, msg6, msg5, msg4, msg3, msg2, msg1]
+    messages = [msg9, msg8, msg7, msg6, msg5, msg4, msg3, msg2, msg1]
+    messages.sort(key=lambda x: x.created_at)
 
     html = await raw_export(channel, messages, guild=guild)
 
     with open("test_render.html", "w", encoding="utf-8") as f:
         f.write(html)
 
-    print("Generated test_render.html")
+    print("Generated test_render.html successfully.")
 
 if __name__ == "__main__":
     asyncio.run(main())
