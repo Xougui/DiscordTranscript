@@ -36,7 +36,7 @@ async def test_channel_mention(mock_guild):
     mock_guild.get_channel.return_value = None
     parser = ParseMention("<#12345>", mock_guild)
     await parser.channel_mention()
-    assert parser.content == '#deleted-channel'
+    assert parser.content == "#deleted-channel"
 
 
 @pytest.mark.asyncio
@@ -61,7 +61,7 @@ async def test_role_mention(mock_guild):
     mock_guild.get_role.return_value = None
     parser = ParseMention("<@&12345>", mock_guild)
     await parser.role_mention()
-    assert parser.content == '@deleted-role'
+    assert parser.content == "@deleted-role"
 
 
 @pytest.mark.asyncio
@@ -90,13 +90,18 @@ async def test_member_mention(mock_guild, mock_bot):
 async def test_time_mention(mock_guild):
     parser = ParseMention("&lt;t:1622548800:f&gt;", mock_guild, timezone="UTC")
     await parser.time_mention()
-    assert 'June 2021 11:59' in parser.content
+    assert "June 2021 11:59" in parser.content
+
 
 @pytest.mark.asyncio
 async def test_slash_command_mention(mock_guild):
     parser = ParseMention("&lt;/test command:123456789&gt;", mock_guild)
     await parser.slash_command_mention()
-    assert parser.content == '<span class="mention" title="test command">/test command</span>'
+    assert (
+        parser.content
+        == '<span class="mention" title="test command">/test command</span>'
+    )
+
 
 @pytest.mark.asyncio
 async def test_flow(mock_guild):
