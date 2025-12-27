@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import MagicMock, AsyncMock, patch
 import DiscordTranscript.chat_exporter as chat_exporter
 
+
 @pytest.fixture
 def mock_channel():
     channel = AsyncMock()
@@ -9,15 +10,18 @@ def mock_channel():
     channel.guild = MagicMock()
     return channel
 
+
 @pytest.fixture
 def mock_bot():
     return MagicMock()
+
 
 @pytest.fixture
 def mock_transcript():
     transcript = MagicMock()
     transcript.html = "<html><body>Test Transcript</body></html>"
     return transcript
+
 
 @pytest.mark.asyncio
 @patch("DiscordTranscript.chat_exporter.Transcript")
@@ -43,6 +47,7 @@ async def test_export(MockTranscript, mock_channel, mock_bot, mock_transcript):
 
     MockTranscript.assert_called_once()
     assert html == mock_transcript.html
+
 
 @pytest.mark.asyncio
 @patch("DiscordTranscript.chat_exporter.Transcript")

@@ -5,10 +5,23 @@ from typing import List, Optional, TYPE_CHECKING
 
 from DiscordTranscript.construct.transcript import Transcript
 from DiscordTranscript.ext.discord_import import discord
-from DiscordTranscript.construct.attachment_handler import AttachmentHandler, AttachmentToDataURIHandler, AttachmentToDiscordChannelHandler
+from DiscordTranscript.construct.attachment_handler import (
+    AttachmentHandler,
+    AttachmentToDataURIHandler,
+    AttachmentToDiscordChannelHandler,
+)
 
 if TYPE_CHECKING:
     import discord as discord_typings
+
+__all__ = (
+    "quick_export",
+    "export",
+    "raw_export",
+    "AttachmentHandler",
+    "AttachmentToDataURIHandler",
+    "AttachmentToDiscordChannelHandler",
+)
 
 
 async def quick_export(
@@ -43,19 +56,21 @@ async def quick_export(
             before=None,
             after=None,
             bot=bot,
-            attachment_handler=None
-            ).export()
-        ).html
+            attachment_handler=None,
+        ).export()
+    ).html
 
     if not transcript:
         return
 
     transcript_embed = discord.Embed(
         description=f"**Transcript Name:** transcript-{channel.name}\n\n",
-        colour=discord.Colour.blurple()
+        colour=discord.Colour.blurple(),
     )
 
-    transcript_file = discord.File(io.BytesIO(transcript.encode()), filename=f"transcript-{channel.name}.html")
+    transcript_file = discord.File(
+        io.BytesIO(transcript.encode()), filename=f"transcript-{channel.name}.html"
+    )
     return await channel.send(embed=transcript_embed, file=transcript_file)
 
 
@@ -160,6 +175,6 @@ async def raw_export(
             after=None,
             bot=bot,
             attachment_handler=attachment_handler,
-            tenor_api_key=tenor_api_key
+            tenor_api_key=tenor_api_key,
         ).export()
     ).html

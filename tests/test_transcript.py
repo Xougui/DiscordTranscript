@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import MagicMock, AsyncMock, patch
+from unittest.mock import MagicMock, AsyncMock
 import datetime
 
 from DiscordTranscript.construct.transcript import Transcript
@@ -14,6 +14,7 @@ def mock_channel():
     channel.guild.icon = ""
     channel.guild.timezone = "UTC"
     return channel
+
 
 def create_mock_message(content, created_at, edited_at=None):
     message = MagicMock()
@@ -52,6 +53,7 @@ async def test_message_order_with_before_only(mock_channel):
     async def mock_history_generator():
         for msg in [message2, message1]:
             yield msg
+
     mock_channel.history = MagicMock(return_value=mock_history_generator())
 
     # Create a Transcript instance with a `before` date
@@ -77,6 +79,7 @@ async def test_message_order_with_before_only(mock_channel):
     assert len(exported_messages) == 2
     assert exported_messages[0].created_at < exported_messages[1].created_at
 
+
 @pytest.mark.asyncio
 async def test_message_order_with_after_only(mock_channel):
     """
@@ -89,6 +92,7 @@ async def test_message_order_with_after_only(mock_channel):
     async def mock_history_generator():
         for msg in [message1, message2]:
             yield msg
+
     mock_channel.history = MagicMock(return_value=mock_history_generator())
 
     transcript = Transcript(
@@ -111,6 +115,7 @@ async def test_message_order_with_after_only(mock_channel):
     assert len(exported_messages) == 2
     assert exported_messages[0].created_at < exported_messages[1].created_at
 
+
 @pytest.mark.asyncio
 async def test_message_order_with_before_and_after(mock_channel):
     """
@@ -123,6 +128,7 @@ async def test_message_order_with_before_and_after(mock_channel):
     async def mock_history_generator():
         for msg in [message1, message2]:
             yield msg
+
     mock_channel.history = MagicMock(return_value=mock_history_generator())
 
     transcript = Transcript(
