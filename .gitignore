@@ -128,3 +128,4 @@ dmypy.json
 .pyre/
 
 **/.vscode/
+**/.ruff_cache/
