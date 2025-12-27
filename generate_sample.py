@@ -2,6 +2,7 @@
 import os
 import asyncio
 import datetime
+import re
 from unittest.mock import MagicMock
 from DiscordTranscript import raw_export
 import discord
@@ -354,6 +355,14 @@ async def main():
     messages.sort(key=lambda x: x.created_at, reverse=True)
 
     html = await raw_export(channel, messages, guild=guild)
+
+    # Correction des avertissements "parser-blocking script"
+    # Remplace l'injection via document.write par une balise script standard avec defer
+    html = re.sub(
+        r"<script>document\.write\(['\"]<script src=['\"](.*?)['\"]><\\/script>['\"]\);?</script>",
+        r'<script src="\1" defer></script>',
+        html
+    )
 
     with open("test_render.html", "w", encoding="utf-8") as f:
         f.write(html)
