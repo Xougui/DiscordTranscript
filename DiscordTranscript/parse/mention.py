@@ -4,7 +4,6 @@ import pytz
 import re
 from typing import Optional, TYPE_CHECKING
 
-from DiscordTranscript.ext.discord_import import discord
 from DiscordTranscript.parse.markdown import ParseMarkdown
 
 if TYPE_CHECKING:
@@ -238,8 +237,6 @@ class ParseMention:
     async def time_mention(self):
         """Parses time mentions."""
         holder = self.REGEX_TIME_HOLDER
-        # Use provided timezone or fallback to UTC
-        timezone = pytz.timezone(self.timezone or "UTC")
 
         for p in holder:
             regex, strf = p
