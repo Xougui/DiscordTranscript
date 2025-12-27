@@ -362,11 +362,19 @@ async def main():
 
     # Ajout de Tailwind et Lucide pour le style et les icônes
     head_injection = """
+    <script>
+        // Suppression de l'avertissement Tailwind CDN pour la démo
+        const originalWarn = console.warn;
+        console.warn = (...args) => {
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+            originalWarn.apply(console, args);
+        };
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { corePlugins: { preflight: false } }
     </script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     """
     html = html.replace("</head>", head_injection + "</head>")
 
@@ -382,15 +390,17 @@ async def main():
 
     back_button_script = """
     <script>
-        lucide.createIcons();
-        // 6. Back Button Logic
-        const backBtn = document.getElementById('back-button');
-        document.addEventListener('mousemove', (e) => {
-            if (e.clientY < 100) {
-                backBtn.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
-            } else {
-                backBtn.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
-            }
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            // 6. Back Button Logic
+            const backBtn = document.getElementById('back-button');
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 100) {
+                    backBtn.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+                } else {
+                    backBtn.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+                }
+            });
         });
     </script>
     """
