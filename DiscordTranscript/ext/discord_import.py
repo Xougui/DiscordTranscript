@@ -29,5 +29,18 @@ if discord is None:
     )
 
 if discord_errors is None:
-    # If no specific discord error is found, fallback to generic Exception.
-    discord_errors = Exception
+    # If DiscordException or HTTPException are not found, we might need to define a generic error
+    # or raise a more specific error indicating the problem.
+    # For now, we'll try to use a generic Exception if no specific discord error is found.
+    # This might not be ideal for chat_exporter, but it will prevent the ImportError.
+    try:
+        from discord import DiscordException as discord_errors
+    except ImportError:
+        try:
+            from discord import HTTPException as discord_errors
+        except ImportError:
+
+            class GenericDiscordError(Exception):
+                pass
+
+            discord_errors = GenericDiscordError
