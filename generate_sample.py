@@ -359,9 +359,10 @@ async def main():
     # Correction des avertissements "parser-blocking script"
     # Remplace l'injection via document.write par une balise script standard avec defer
     html = re.sub(
-        r"<script>document\.write\(['\"]<script src=['\"](.*?)['\"]><\\/script>['\"]\);?</script>",
+        r"<script>\s*document\.write\s*\(\s*['\"]\s*<script\s+src=['\"]([^'\"]+)['\"]\s*>\s*<\\/script>\s*['\"]\s*\)\s*;?\s*</script>",
         r'<script src="\1" defer></script>',
-        html
+        html,
+        flags=re.IGNORECASE | re.DOTALL
     )
 
     with open("test_render.html", "w", encoding="utf-8") as f:
