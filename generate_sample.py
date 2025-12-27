@@ -3,8 +3,16 @@ import asyncio
 import datetime
 from unittest.mock import MagicMock
 from DiscordTranscript import raw_export
+import discord
 
 # Mock objects to simulate discord.py models
+
+class MockAsset:
+    def __init__(self, url):
+        self.url = url
+
+    def __str__(self):
+        return self.url
 
 class MockGuild:
     def __init__(self):
@@ -34,8 +42,7 @@ class MockUser:
         self.id = id
         self.name = name
         self.discriminator = discriminator
-        self.display_avatar = MagicMock()
-        self.display_avatar.url = avatar_url
+        self.display_avatar = MockAsset(avatar_url)
         self.avatar = self.display_avatar
         self.bot = bot
         self.color = color if color else MockColor(0xFFFFFF)
@@ -152,20 +159,22 @@ class MockEmbedProxy:
         self.proxy_icon_url = None
         self.proxy_url = url
 
-class MockButton:
+# Inherit from discord.Button/SelectMenu so isinstance checks pass
+class MockButton(discord.Button):
     def __init__(self, label, style, url=None, emoji=None, disabled=False):
+        # We don't call super().__init__ because it might require arguments or state we don't want to manage
         self.label = label
         self.style = style
         self.url = url
         self.emoji = emoji
         self.disabled = disabled
-        self.type = 2
-        self.children = []
+        # self.type is a property in discord.Button returning ComponentType.button
+        self._underlying = MagicMock() # Just in case
 
 class MockActionRow:
     def __init__(self, children):
         self.children = children
-        self.type = 1
+        self.type = discord.ComponentType.action_row
 
 class MockSelectOption:
     def __init__(self, label, value, description=None, emoji=None, default=False):
@@ -175,7 +184,7 @@ class MockSelectOption:
         self.emoji = emoji
         self.default = default
 
-class MockSelectMenu:
+class MockSelectMenu(discord.SelectMenu):
     def __init__(self, custom_id, options, placeholder=None, min_values=1, max_values=1, disabled=False):
         self.custom_id = custom_id
         self.options = options
@@ -183,15 +192,15 @@ class MockSelectMenu:
         self.min_values = min_values
         self.max_values = max_values
         self.disabled = disabled
-        self.type = 3
-        self.children = []
+        # self.type is a property
+        self._underlying = MagicMock()
 
 class MockButtonStyle:
-    primary = 1
-    secondary = 2
-    success = 3
-    danger = 4
-    link = 5
+    primary = discord.ButtonStyle.primary
+    secondary = discord.ButtonStyle.secondary
+    success = discord.ButtonStyle.success
+    danger = discord.ButtonStyle.danger
+    link = discord.ButtonStyle.link
 
 async def main():
     guild = MockGuild()
@@ -336,7 +345,9 @@ async def main():
     )
 
     messages = [msg9, msg8, msg7, msg6, msg5, msg4, msg3, msg2, msg1]
-    messages.sort(key=lambda x: x.created_at)
+    # Transcript.export reverses the list if after is None, expecting Newest->Oldest input.
+    # So we sort descending (Newest first) to get Oldest first in the output.
+    messages.sort(key=lambda x: x.created_at, reverse=True)
 
     html = await raw_export(channel, messages, guild=guild)
 
