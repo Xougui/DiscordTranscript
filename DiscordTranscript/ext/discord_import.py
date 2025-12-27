@@ -34,4 +34,8 @@ if discord_errors is None:
         try:
             from discord import HTTPException as discord_errors
         except ImportError:
-            discord_errors = Exception  # Generic fallback
+
+            class GenericDiscordError(Exception):
+                pass
+
+            discord_errors = GenericDiscordError
