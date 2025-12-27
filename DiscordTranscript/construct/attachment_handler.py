@@ -16,7 +16,9 @@ class AttachmentHandler:
     Subclass this to implement your own asset handler.
     """
 
-    async def process_asset(self, attachment: discord_typings.Attachment) -> discord_typings.Attachment:
+    async def process_asset(
+        self, attachment: discord_typings.Attachment
+    ) -> discord_typings.Attachment:
         """Processes an asset and returns a URL to the stored attachment.
 
         Args:
@@ -31,7 +33,9 @@ class AttachmentHandler:
 class AttachmentToDataURIHandler(AttachmentHandler):
     """Saves assets to a data URI and embeds them in the transcript."""
 
-    async def process_asset(self, attachment: discord_typings.Attachment) -> discord_typings.Attachment:
+    async def process_asset(
+        self, attachment: discord_typings.Attachment
+    ) -> discord_typings.Attachment:
         """Saves an asset to a data URI and returns a new attachment.
 
         Args:
@@ -70,7 +74,9 @@ class AttachmentToDiscordChannelHandler(AttachmentHandler):
         """
         self.channel = channel
 
-    async def process_asset(self, attachment: discord_typings.Attachment) -> discord_typings.Attachment:
+    async def process_asset(
+        self, attachment: discord_typings.Attachment
+    ) -> discord_typings.Attachment:
         """Saves an asset to the Discord channel and returns a new attachment.
 
         Args:
