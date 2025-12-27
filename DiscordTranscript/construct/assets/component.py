@@ -31,15 +31,15 @@ class Component:
 
     styles = {
         "primary": "#5865F2",
-        "secondary": "#4F545C",
-        "success": "#2D7D46",
-        "danger": "#D83C3E",
+        "secondary": "#4E5058",
+        "success": "#248046",
+        "danger": "#DA373C",
         "blurple": "#5865F2",
-        "grey": "#4F545C",
-        "gray": "#4F545C",
-        "green": "#2D7D46",
-        "red": "#D83C3E",
-        "link": "#4F545C",
+        "grey": "#4E5058",
+        "gray": "#4E5058",
+        "green": "#248046",
+        "red": "#DA373C",
+        "link": "#4E5058",
     }
 
     components: str = ""

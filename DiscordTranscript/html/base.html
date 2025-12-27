@@ -595,8 +595,15 @@
             display: flex;
             align-items: center;
             margin: 0.35em 0.1em 0.1em 0.1em;
-            padding: 0.2em 0.35em;
-            border-radius: 2px;
+            padding: 0.2em 16px;
+            border-radius: 3px;
+            height: 32px;
+            box-sizing: border-box;
+        }
+
+        .chatlog__component-button:hover {
+            filter: brightness(0.85);
+            cursor: pointer;
         }
 
         .chatlog__component-button--colored {
@@ -609,8 +616,6 @@
 
         .chatlog__button-label {
             min-width: 9px;
-            margin-left: 0.35em;
-            margin-right: 0.35em;
             font-size: 0.875em;
             color: white;
             font-weight: 500;
@@ -846,17 +851,11 @@
             background-color: rgba(249, 168, 37, 0.05);
         }
 
-        .chatlog__embed-color-pill--default {
-            background-color: rgba(79, 84, 92, 1);
-        }
-
-        .chatlog__embed-color-pill--colored {
-            background-color: var(--embed-color);
-        }
-
         .chatlog__embed-content-container {
             background-color: #2b2d31;
-            border-color: #1e1f22;
+            border: 1px solid #1e1f22; /* Fallback */
+            border-left: 4px solid var(--embed-color, #1e1f22);
+            border-radius: 4px;
         }
 
         .chatlog__embed-author-name {
@@ -1628,7 +1627,7 @@
             }
         });
 
-        document.querySelectorAll('.chatlog__embed-color-pill--colored').forEach(element => {
+        document.querySelectorAll('.chatlog__embed-content-container').forEach(element => {
             const embedColor = element.getAttribute('data-embed-color');
             if (embedColor) {
                 element.style.setProperty('--embed-color', embedColor);
