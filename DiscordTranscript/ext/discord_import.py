@@ -7,13 +7,18 @@ for module in discord_modules:
         discord = __import__(module)
         discord.module = module
         # Attempt to import DiscordException, which is a common base for discord errors
-        # If the specific 'discord_errors' is something else, this might need adjustment
         if hasattr(discord, "DiscordException"):
             discord_errors = discord.DiscordException
         elif hasattr(
             discord, "HTTPException"
         ):  # Fallback for older versions or specific error types
             discord_errors = discord.HTTPException
+        # Check if the module has an 'errors' submodule and if it contains the exception
+        elif hasattr(discord, "errors"):
+            if hasattr(discord.errors, "DiscordException"):
+                discord_errors = discord.errors.DiscordException
+            elif hasattr(discord.errors, "HTTPException"):
+                discord_errors = discord.errors.HTTPException
         break
     except ImportError:
         continue
