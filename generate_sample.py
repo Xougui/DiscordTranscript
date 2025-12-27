@@ -360,15 +360,41 @@ async def main():
 
     print("Generated test_render.html successfully.")
 
+    # Ajout de Tailwind et Lucide pour le style et les icônes
+    head_injection = """
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { corePlugins: { preflight: false } }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    """
+    html = html.replace("</head>", head_injection + "</head>")
+
     # Injection du bouton retour
     back_button = """
     <!-- Back Button (Visible on Top Hover) -->
-    <a href="index.html" id="back-button" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-[#0a0a0c]/90 border border-white/10 text-white px-6 py-2 rounded-full shadow-2xl backdrop-blur-md transition-all duration-300 opacity-0 -translate-y-full pointer-events-none flex items-center gap-2 font-medium hover:bg-white/10 hover:scale-105">
+    <a href="../index.html" id="back-button" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-[#0a0a0c]/90 border border-white/10 text-white px-6 py-2 rounded-full shadow-2xl backdrop-blur-md transition-all duration-300 opacity-0 -translate-y-full pointer-events-none flex items-center gap-2 font-medium hover:bg-white/10 hover:scale-105">
         <i data-lucide="arrow-left" class="w-4 h-4"></i>
         Retour
     </a>
     """
     html = html.replace("<body>", "<body>" + back_button)
+
+    back_button_script = """
+    <script>
+        lucide.createIcons();
+        // 6. Back Button Logic
+        const backBtn = document.getElementById('back-button');
+        document.addEventListener('mousemove', (e) => {
+            if (e.clientY < 100) {
+                backBtn.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+            } else {
+                backBtn.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+            }
+        });
+    </script>
+    """
+    html = html.replace("</body>", back_button_script + "</body>")
 
     output_path = r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_mocked.html"
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
