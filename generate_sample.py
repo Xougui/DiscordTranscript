@@ -18,7 +18,7 @@ class MockGuild:
     def __init__(self):
         self.id = 123456789
         self.name = "Serveur de Démonstration"
-        self.icon = "https://cdn.discordapp.com/icons/123456789/icon.png"
+        self.icon = "https://images-ext-1.discordapp.net/external/eWd-a9CcVDoj8a-UH3tcpShBjAHE9pcuAhI7lWv_u6o/%3Fsize%3D1024/https/cdn.discordapp.com/icons/1449148933732306976/c15c158e4c693ad4294f35f8253610b6.png?format=webp&quality=lossless&width=921&height=921"
         self.roles = []
 
     def get_member(self, id):
@@ -92,6 +92,7 @@ class MockEmoji:
         self.name = name
         self.id = id
         self.animated = animated
+        self.url = "https://cdn.discordapp.com/emojis/1380533490474549250.png"
 
     def __str__(self):
         if self.id:
@@ -235,7 +236,7 @@ async def main():
     msg2.type.name = "reply"
 
     # Message 3: Markdown and Custom Emojis
-    custom_emoji_str = "<:mon_emoji:123456789>"
+    custom_emoji_str = "<:mmmh_yeah:1448700603319451731>"
     markdown_content = (
         f"Voici un peu de **gras**, de l'*italique*, et du __souligné__.\n"
         f"Et voici un emoji personnalisé : {custom_emoji_str}\n"
@@ -285,7 +286,7 @@ async def main():
     )
 
     # Message 6: Components (Buttons)
-    custom_emoji = MockEmoji("custom_check", id=987654321)
+    custom_emoji = MockEmoji("custom_check", id=1350435235015426130, animated=True)
     button_primary = MockButton("Confirmer", MockButtonStyle.primary, emoji=custom_emoji)
     button_secondary = MockButton("Options", MockButtonStyle.secondary, emoji=MockEmoji("⚙️"))
     button_danger = MockButton("Supprimer", MockButtonStyle.danger, emoji=MockEmoji("🗑️"))
@@ -306,7 +307,7 @@ async def main():
     select_options = [
         MockSelectOption("Option 1", "1", "Ceci est la première option", MockEmoji("1️⃣")),
         MockSelectOption("Option 2", "2", "Celle-ci est sélectionnée par défaut", MockEmoji("2️⃣"), default=True),
-        MockSelectOption("Option 3", "3", "Une autre option sympa", MockEmoji("rocket", id=11223344))
+        MockSelectOption("Option 3", "3", "Une autre option sympa", MockEmoji("rocket", id=1380533490474549250))
     ]
     select_menu = MockSelectMenu("select_1", select_options, placeholder="Faites votre choix...")
     action_row_select = MockActionRow([select_menu])
@@ -334,7 +335,7 @@ async def main():
     # Message 9: Reactions
     # Important: Pass string for unicode emoji, MockEmoji for custom (or string for custom if formatted properly, but MockEmoji handles the id)
     reaction1 = MockReaction("👍", 10) # Pass string directly
-    reaction2 = MockReaction(MockEmoji("custom_fire", id=55555), 4)
+    reaction2 = MockReaction(MockEmoji("panda_fire", id=1323626699870441502, animated=True), 4)
     msg9 = MockMessage(
         1009,
         "Merci pour votre participation !",
