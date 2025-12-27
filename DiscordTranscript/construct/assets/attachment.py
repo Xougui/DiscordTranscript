@@ -1,6 +1,5 @@
 import math
 from typing import Optional, TYPE_CHECKING
-from DiscordTranscript.ext.discord_import import discord
 from DiscordTranscript.ext.discord_utils import DiscordUtils
 from DiscordTranscript.ext.html_generator import (
     fill_out,
