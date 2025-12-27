@@ -14,8 +14,6 @@ class AttachmentHandler:
     Subclass this to implement your own asset handler.
     """
 
-
-
     async def process_asset(self, attachment: discord.Attachment) -> discord.Attachment:
         """Processes an asset and returns a URL to the stored attachment.
 
@@ -61,8 +59,6 @@ class AttachmentToDiscordChannelHandler(AttachmentHandler):
     Attributes:
         channel (discord.TextChannel): The channel to save attachments to.
     """
-
-
 
     def __init__(self, channel: discord.TextChannel):
         """Initializes the AttachmentToDiscordChannelHandler.
