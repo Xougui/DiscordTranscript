@@ -1,8 +1,6 @@
 from __future__ import annotations
 import base64
-import datetime
 import io
-import urllib.parse
 
 import aiohttp
 from DiscordTranscript.ext.discord_import import discord
