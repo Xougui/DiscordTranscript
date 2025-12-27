@@ -3,10 +3,10 @@ import datetime
 import html
 import pytz
 import re
-from typing import List, Optional
+from typing import List, Optional, TYPE_CHECKING
 
 from DiscordTranscript.construct.attachment_handler import AttachmentHandler
-from DiscordTranscript.ext.discord_import import discord, discord_errors
+from DiscordTranscript.ext.discord_import import discord
 from DiscordTranscript.construct.message import gather_messages
 from DiscordTranscript.construct.assets.component import Component
 from DiscordTranscript.ext.cache import clear_cache
@@ -21,6 +21,9 @@ from DiscordTranscript.ext.html_generator import (
     PARSE_MODE_NONE,
     PARSE_MODE_HTML_SAFE,
 )
+
+if TYPE_CHECKING:
+    import discord as discord_typings
 
 
 class TranscriptDAO:
@@ -45,15 +48,15 @@ class TranscriptDAO:
 
     def __init__(
         self,
-        channel: discord.TextChannel,
+        channel: "discord_typings.TextChannel",
         limit: Optional[int],
-        messages: Optional[List[discord.Message]],
+        messages: Optional[List["discord_typings.Message"]],
         pytz_timezone,
         military_time: bool,
         fancy_times: bool,
         before: Optional[datetime.datetime],
         after: Optional[datetime.datetime],
-        bot: Optional["discord.Client"],
+        bot: Optional["discord_typings.Client"],
         attachment_handler: Optional[AttachmentHandler],
         tenor_api_key: Optional[str] = None,
     ):
