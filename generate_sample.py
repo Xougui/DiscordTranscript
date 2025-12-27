@@ -360,6 +360,16 @@ async def main():
 
     print("Generated test_render.html successfully.")
 
+    # Injection du bouton retour
+    back_button = """
+    <!-- Back Button (Visible on Top Hover) -->
+    <a href="index.html" id="back-button" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-[#0a0a0c]/90 border border-white/10 text-white px-6 py-2 rounded-full shadow-2xl backdrop-blur-md transition-all duration-300 opacity-0 -translate-y-full pointer-events-none flex items-center gap-2 font-medium hover:bg-white/10 hover:scale-105">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        Retour
+    </a>
+    """
+    html = html.replace("<body>", "<body>" + back_button)
+
     output_path = r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_mocked.html"
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
