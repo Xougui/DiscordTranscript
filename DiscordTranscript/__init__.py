@@ -4,7 +4,8 @@ from DiscordTranscript.chat_exporter import (
     quick_export,
     AttachmentHandler,
     AttachmentToDataURIHandler,
-    AttachmentToDiscordChannelHandler)
+    AttachmentToDiscordChannelHandler,
+)
 
 __version__ = "2.3.1"
 
