@@ -81,8 +81,8 @@ class Embed:
             bot (Optional[discord.Client]): The bot instance. Defaults to None.
             timezone (str): The timezone to use. Defaults to "UTC".
         """
-        self.embed: discord.Embed = embed
-        self.guild: discord.Guild = guild
+        self.embed: discord_typings.Embed = embed
+        self.guild: discord_typings.Guild = guild
         self.bot = bot
         self.timezone = timezone
 
