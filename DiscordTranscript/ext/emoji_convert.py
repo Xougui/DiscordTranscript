@@ -5,7 +5,10 @@ import aiohttp
 
 from DiscordTranscript.ext.cache import cache
 
-cdn_fmt = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/{codepoint}.png"
+cdn_fmt = (
+    "https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/{codepoint}.png"
+)
+
 
 @cache()
 async def valid_src(src: str) -> bool:
@@ -24,6 +27,7 @@ async def valid_src(src: str) -> bool:
     except aiohttp.ClientConnectorError:
         return False
 
+
 def valid_category(char: str) -> bool:
     """Checks if a character is a valid emoji category.
 
@@ -38,6 +42,7 @@ def valid_category(char: str) -> bool:
     except TypeError:
         return False
 
+
 async def codepoint(codes: list) -> str:
     """Converts a list of codes to a string.
 
@@ -50,6 +55,7 @@ async def codepoint(codes: list) -> str:
     if "200d" not in codes:
         return "-".join([c for c in codes if c != "fe0f"])
     return "-".join(codes)
+
 
 async def convert(char: str) -> str:
     """Converts a character to an emoji image.
@@ -67,14 +73,22 @@ async def convert(char: str) -> str:
             return char
         else:
             shortcode = emoji.demojize(char)
-            name = shortcode.replace(":", "").replace("_", " ").replace("selector", "").title()
+            name = (
+                shortcode.replace(":", "")
+                .replace("_", " ")
+                .replace("selector", "")
+                .title()
+            )
 
-    src = cdn_fmt.format(codepoint=await codepoint(["{cp:x}".format(cp=ord(c)) for c in char]))
+    src = cdn_fmt.format(
+        codepoint=await codepoint(["{cp:x}".format(cp=ord(c)) for c in char])
+    )
 
     if await valid_src(src):
         return f'<img class="emoji emoji--small" src="{src}" alt="{char}" title="{name}" aria-label="Emoji: {name}">'
     else:
         return char
+
 
 async def convert_emoji(string: str) -> str:
     """Converts a string of emojis to a string of emoji images.
