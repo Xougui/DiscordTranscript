@@ -1631,6 +1631,10 @@
 
         var summaryButton = document.getElementById('summary-button');
         summaryButton.onclick = function() {
+            if (summaryPopout.classList.contains('visible')) {
+                return;
+            }
+
             const elementX = this.offsetLeft - 110
             const elementY = this.offsetTop + 30
 
