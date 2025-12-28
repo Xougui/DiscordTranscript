@@ -86,6 +86,7 @@ async def export(
     after: Optional[datetime.datetime] = None,
     attachment_handler: Optional[AttachmentHandler] = None,
     tenor_api_key: Optional[str] = None,
+    language: str = "en",
 ):
     """Creates a customized transcript of a Discord channel.
 
@@ -103,6 +104,7 @@ async def export(
         after (Optional[datetime.datetime]): The date to fetch messages after. Defaults to None.
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use. Defaults to None.
         tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs. Defaults to None.
+        language (str): The language to use for the transcript. Defaults to "en".
 
     Returns:
         str: The transcript HTML.
@@ -125,6 +127,7 @@ async def export(
             bot=bot,
             attachment_handler=attachment_handler,
             tenor_api_key=tenor_api_key,
+            language=language,
         ).export()
     ).html
 
@@ -139,6 +142,7 @@ async def raw_export(
     fancy_times: Optional[bool] = True,
     attachment_handler: Optional[AttachmentHandler] = None,
     tenor_api_key: Optional[str] = None,
+    language: str = "en",
 ):
     """Creates a customized transcript with your own captured Discord messages.
 
@@ -154,6 +158,7 @@ async def raw_export(
         fancy_times (bool): Whether to use fancy times. Defaults to True.
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use. Defaults to None.
         tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs. Defaults to None.
+        language (str): The language to use for the transcript. Defaults to "en".
 
     Returns:
         str: The transcript HTML.
@@ -176,5 +181,6 @@ async def raw_export(
             bot=bot,
             attachment_handler=attachment_handler,
             tenor_api_key=tenor_api_key,
+            language=language,
         ).export()
     ).html
