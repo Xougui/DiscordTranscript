@@ -589,6 +589,7 @@
 
         .chatlog__components {
             display: flex;
+            flex-wrap: wrap;
         }
 
         .chatlog__component-button {
@@ -1317,6 +1318,56 @@
         .markdown-strikethrough { text-decoration: line-through; }
         .chatlog__markdown-tenor-gif { max-width: 100%; }
 
+        /* Media Query for Mobile Devices */
+        @media screen and (max-width: 768px) {
+            .chatlog__message {
+                grid-template-columns: 50px 1fr;
+            }
+            .chatlog__message-aside {
+                width: 50px;
+            }
+            .chatlog__avatar {
+                width: 35px;
+                height: 35px;
+            }
+            .chatlog__embed,
+            .chatlog__attachment-container,
+            .chatlog__attachment-audio-container {
+                max-width: 100%;
+            }
+            .chatlog__embed-image {
+                max-width: 100%;
+                height: auto;
+            }
+            .panel__channel-topic {
+                display: none;
+            }
+            .chatlog__embed-field--inline {
+                flex-basis: 100%;
+                min-width: 100%;
+            }
+            .chatlog__embed-content {
+                flex-wrap: wrap;
+            }
+            .chatlog__embed-thumbnail {
+                margin-left: 0;
+                margin-top: 10px;
+                max-width: 60px;
+                max-height: 60px;
+            }
+            .panel {
+                font-size: 16px;
+                padding: 10px;
+            }
+            .summary-popout {
+                width: 90%;
+                left: 5% !important;
+            }
+            .meta-popout {
+                width: 90%;
+                left: 5% !important;
+            }
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" defer></script>
