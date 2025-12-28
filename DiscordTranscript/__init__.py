@@ -7,7 +7,7 @@ from DiscordTranscript.chat_exporter import (
     AttachmentToDiscordChannelHandler,
 )
 
-__version__ = "1.0.3"
+__version__ = "1.1.0"
 
 __all__ = (
     export,
