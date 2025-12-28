@@ -87,7 +87,7 @@ class Component:
         """
         if c.url:
             url = str(c.url)
-            target = " target='_blank'"
+            target = ' target="_blank" rel="noopener noreferrer"'
             icon = str(DiscordUtils.button_external_link)
         else:
             url = "javascript:;"
