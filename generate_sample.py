@@ -471,6 +471,7 @@ async def main():
 
     # Correction des avertissements "parser-blocking script"
     # Remplace l'injection via document.write par une balise script standard avec defer
+    # (Regex is kept just in case, but base.html now handles defer natively)
     html = re.sub(
         r"<script>\s*document\.write\s*\(\s*['\"]\s*<script\s+src=['\"]([^'\"]+)['\"]\s*>\s*<\\/script>\s*['\"]\s*\)\s*;?\s*</script>",
         r'<script src="\1" defer></script>',
@@ -490,9 +491,9 @@ async def main():
             originalWarn.apply(console, args);
         };
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com" defer></script>
     <script>
-        tailwind.config = { corePlugins: { preflight: false } }
+        window.tailwind = { config: { corePlugins: { preflight: false } } }
     </script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
     """
