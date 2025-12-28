@@ -10,6 +10,7 @@ from DiscordTranscript.ext.discord_import import discord
 from DiscordTranscript.construct.message import gather_messages
 from DiscordTranscript.construct.assets.component import Component
 from DiscordTranscript.ext.cache import clear_cache
+from DiscordTranscript.i18n import TRANSLATIONS
 from DiscordTranscript.ext.discord_utils import DiscordUtils
 from DiscordTranscript.ext.html_generator import (
     fill_out,
@@ -59,6 +60,7 @@ class TranscriptDAO:
         bot: Optional["discord_typings.Client"],
         attachment_handler: Optional[AttachmentHandler],
         tenor_api_key: Optional[str] = None,
+        language: str = "en",
     ):
         """Initializes the TranscriptDAO.
 
@@ -74,6 +76,7 @@ class TranscriptDAO:
             bot (Optional['discord.Client']): The bot to use for fetching members.
             attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
             tenor_api_key (Optional[str]): The Tenor API key to use.
+            language (str): The language to use for the transcript. Defaults to "en".
         """
         self.channel = channel
         self.messages = messages
@@ -86,6 +89,7 @@ class TranscriptDAO:
         self.attachment_handler = attachment_handler
         self.tenor_api_key = tenor_api_key
         self.bot = bot
+        self.language = language
 
     async def build_transcript(self) -> "TranscriptDAO":
         """Builds the transcript.
@@ -93,6 +97,7 @@ class TranscriptDAO:
         Returns:
             TranscriptDAO: The TranscriptDAO object.
         """
+        translations = TRANSLATIONS.get(self.language, TRANSLATIONS["en"])
         message_html, meta_data = await gather_messages(
             self.messages,
             self.channel.guild,
@@ -101,6 +106,7 @@ class TranscriptDAO:
             self.attachment_handler,
             self.tenor_api_key,
             bot=self.bot,
+            translations=translations,
         )
         await self.export_transcript(message_html, meta_data)
         clear_cache()
@@ -114,6 +120,8 @@ class TranscriptDAO:
             message_html (str): The HTML of the messages.
             meta_data (str): The metadata of the transcript.
         """
+        translations = TRANSLATIONS.get(self.language, TRANSLATIONS["en"])
+
         guild_icon = (
             self.channel.guild.icon
             if (self.channel.guild.icon and len(self.channel.guild.icon) > 2)
@@ -167,6 +175,11 @@ class TranscriptDAO:
                     ("USER_AVATAR", str(meta_data[int(data)][3]), PARSE_MODE_NONE),
                     ("DISPLAY", str(meta_data[int(data)][6]), PARSE_MODE_NONE),
                     ("MESSAGE_COUNT", str(meta_data[int(data)][4])),
+                    ("GUILD_ID", translations["GUILD_ID"], PARSE_MODE_NONE),
+                    ("CHANNEL_ID", translations["CHANNEL_ID"], PARSE_MODE_NONE),
+                    ("CHANNEL_CREATED_AT", translations["CHANNEL_CREATED_AT"], PARSE_MODE_NONE),
+                    ("MESSAGE_COUNT_LABEL", translations["MESSAGE_COUNT"], PARSE_MODE_NONE),
+                    ("MESSAGE_PARTICIPANTS_LABEL", translations["MESSAGE_PARTICIPANTS"], PARSE_MODE_NONE),
                 ],
                 bot=self.bot,
                 timezone=self.pytz_timezone,
@@ -197,9 +210,9 @@ class TranscriptDAO:
                 timezone=self.pytz_timezone,
             )
 
-        limit = "start"
+        limit = translations["START_OF_TRANSCRIPT"]
         if self.limit:
-            limit = f"latest {self.limit} messages"
+            limit = translations["LATEST_MESSAGES"].format(limit=self.limit)
 
         subject = await fill_out(
             self.channel.guild,
@@ -208,6 +221,7 @@ class TranscriptDAO:
                 ("LIMIT", limit, PARSE_MODE_NONE),
                 ("CHANNEL_NAME", self.channel.name),
                 ("RAW_CHANNEL_TOPIC", str(raw_channel_topic)),
+                ("SUBJECT_INTRO", translations["SUBJECT_INTRO"].format(limit=limit, channel=self.channel.name), PARSE_MODE_NONE),
             ],
             bot=self.bot,
             timezone=self.pytz_timezone,
@@ -256,6 +270,19 @@ class TranscriptDAO:
                     f"{html.escape(self.channel.name)}",
                     PARSE_MODE_HTML_SAFE,
                 ),
+                ("TRANSCRIPT_OF_CHANNEL", translations["TRANSCRIPT_OF_CHANNEL"], PARSE_MODE_NONE),
+                ("FROM_SERVER", translations["FROM_SERVER"], PARSE_MODE_NONE),
+                ("WITH", translations["WITH"], PARSE_MODE_NONE),
+                ("MESSAGES_LABEL", translations["MESSAGES"], PARSE_MODE_NONE),
+                ("GENERATED_ON", translations["GENERATED_ON"], PARSE_MODE_NONE),
+                ("SUMMARY", translations["SUMMARY"], PARSE_MODE_NONE),
+                ("WELCOME_TO", translations["WELCOME_TO"], PARSE_MODE_NONE),
+                ("COPY_MESSAGE_ID", translations["COPY_MESSAGE_ID"], PARSE_MODE_NONE),
+                ("GUILD_ID_LABEL", translations["GUILD_ID"], PARSE_MODE_NONE),
+                ("CHANNEL_ID_LABEL", translations["CHANNEL_ID"], PARSE_MODE_NONE),
+                ("CHANNEL_CREATED_AT_LABEL", translations["CHANNEL_CREATED_AT"], PARSE_MODE_NONE),
+                ("MESSAGE_COUNT_LABEL", translations["MESSAGE_COUNT"], PARSE_MODE_NONE),
+                ("MESSAGE_PARTICIPANTS_LABEL", translations["MESSAGE_PARTICIPANTS"], PARSE_MODE_NONE),
             ],
             bot=self.bot,
             timezone=self.pytz_timezone,

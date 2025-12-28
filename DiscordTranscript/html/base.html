@@ -6,18 +6,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width" />
     <meta name="title" content="{{SERVER_NAME_SAFE}} - {{CHANNEL_NAME_SAFE}}">
-    <meta name="description" content="Transcript of channel {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) from {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) with {{MESSAGE_COUNT}} messages. This transcript was generated on {{DATE_TIME}}.">
+    <meta name="description" content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}.">
     
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="{{SERVER_NAME_SAFE}} - {{CHANNEL_NAME_SAFE}}" />
-    <meta property="og:description" content="Transcript of channel {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) from {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) with {{MESSAGE_COUNT}} messages. This transcript was generated on {{DATE_TIME}}." />
+    <meta property="og:description" content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}." />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary" />
     <meta name='twitter:title' content="{{SERVER_NAME_SAFE}} - {{CHANNEL_NAME_SAFE}}" />
-    <meta name='twitter:description' content="Transcript of channel {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) from {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) with {{MESSAGE_COUNT}} messages. This transcript was generated on {{DATE_TIME}}." />
+    <meta name='twitter:description' content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}." />
 
     <style>
         @font-face {
@@ -932,7 +932,6 @@
 
         .summary-popout.visible {
             transform: scale(1);
-            transition: transform 200ms ease-in-out;
         }
 
         .summary-popout {
@@ -947,6 +946,7 @@
             overflow: hidden;
             transform: scale(0);
             transform-origin: top right;
+            transition: transform 200ms ease-in-out;
         }
 
         .main {
@@ -1435,7 +1435,7 @@
     {{CHANNEL_TOPIC}}
 
     <div class="panel__summary-button" id="summary-button">
-        <span>Summary</span>
+        <span>{{SUMMARY}}</span>
     </div>
 </div>
 
@@ -1445,7 +1445,7 @@
     </div>
 
     <div class="info">
-        <span class="info__title">Welcome to #{{CHANNEL_NAME}}!</span>
+        <span class="info__title">{{WELCOME_TO}} #{{CHANNEL_NAME}}!</span>
         {{SUBJECT}}
     </div>
 
@@ -1455,11 +1455,11 @@
 </div>
 
 <div class="footer">
-    <span class="footer__text">This transcript was generated on {{DATE_TIME}}</span>
+    <span class="footer__text">{{GENERATED_ON}} {{DATE_TIME}}</span>
 </div>
 
 <div id="context-menu">
-    <div class="item">Copy Message ID</div>
+    <div class="item">{{COPY_MESSAGE_ID}}</div>
 </div>
 
 <div id="summary-popout" class="summary-popout">
@@ -1471,23 +1471,23 @@
             <div class="meta__user">{{SERVER_NAME}}</div>
         </div>
         <div class="meta__field">
-            <div class="meta__title">Guild ID</div>
+            <div class="meta__title">{{GUILD_ID_LABEL}}</div>
             <div class="meta__value">{{GUILD_ID}}</div>
         </div>
         <div class="meta__field">
-            <div class="meta__title">Channel ID</div>
+            <div class="meta__title">{{CHANNEL_ID_LABEL}}</div>
             <div class="meta__value">{{CHANNEL_ID}}</div>
         </div>
         <div class="meta__field">
-            <div class="meta__title">Channel Creation Date</div>
+            <div class="meta__title">{{CHANNEL_CREATED_AT_LABEL}}</div>
             <div class="meta__value">{{CHANNEL_CREATED_AT}}</div>
         </div>
         <div class="meta__field">
-            <div class="meta__title">Total Message Count</div>
+            <div class="meta__title">{{MESSAGE_COUNT_LABEL}}</div>
             <div class="meta__value">{{MESSAGE_COUNT}}</div>
         </div>
         <div class="meta__field">
-            <div class="meta__title">Total Message Participants</div>
+            <div class="meta__title">{{MESSAGE_PARTICIPANTS_LABEL}}</div>
             <div class="meta__value">{{MESSAGE_PARTICIPANTS}}</div>
         </div>
     </div>
@@ -1631,6 +1631,10 @@
 
         var summaryButton = document.getElementById('summary-button');
         summaryButton.onclick = function() {
+            if (summaryPopout.classList.contains('visible')) {
+                return;
+            }
+
             const elementX = this.offsetLeft - 110
             const elementY = this.offsetTop + 30
 

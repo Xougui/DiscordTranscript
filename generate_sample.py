@@ -483,6 +483,7 @@ async def main():
 
     # Ajout de Tailwind et Lucide pour le style et les icônes
     head_injection = """
+    <link rel="icon" type="image/svg+xml" href="../assets/img/logo.svg?v=2" sizes="any">
     <script>
         // Suppression de l'avertissement Tailwind CDN pour la démo
         const originalWarn = console.warn;

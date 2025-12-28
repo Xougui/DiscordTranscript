@@ -98,6 +98,7 @@ class MessageConstruct:
         attachment_handler: Optional[AttachmentHandler],
         tenor_api_key: Optional[str] = None,
         bot: Optional["discord_typings.Client"] = None,
+        translations: dict = None,
     ):
         """Initializes the MessageConstruct.
 
@@ -112,6 +113,7 @@ class MessageConstruct:
             attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
             tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs.
             bot (Optional[discord.Client]): The bot instance.
+            translations (dict): A dictionary of translations.
         """
         self.message = message
         self.previous_message = previous_message
@@ -123,6 +125,7 @@ class MessageConstruct:
         self.tenor_api_key = tenor_api_key
         self.processed_tenor_links = []
         self.bot = bot
+        self.translations = translations or {}
         self.time_format = "%A, %e %B %Y %I:%M %p"
         if self.military_time:
             self.time_format = "%A, %e %B %Y %H:%M"
@@ -836,6 +839,7 @@ async def gather_messages(
     attachment_handler: Optional[AttachmentHandler],
     tenor_api_key: Optional[str] = None,
     bot: Optional["discord_typings.Client"] = None,
+    translations: dict = None,
 ) -> Tuple[str, dict]:
     """Gathers all messages in a channel and returns the HTML and metadata.
 
@@ -847,6 +851,7 @@ async def gather_messages(
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
         tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs.
         bot (Optional[discord.Client]): The bot instance.
+        translations (dict): A dictionary of translations.
 
     Returns:
         Tuple[str, dict]: A tuple containing the HTML and metadata.
@@ -879,6 +884,7 @@ async def gather_messages(
             attachment_handler,
             tenor_api_key=tenor_api_key,
             bot=bot,
+            translations=translations,
         )
         content_html, meta_data = await mc.construct_message()
 
