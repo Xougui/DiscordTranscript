@@ -530,6 +530,23 @@ async def main():
     with open("test_render.html", "w", encoding="utf-8") as f:
         f.write(html)
 
+    # Write to specific path as requested, catching errors if path invalid on this OS
+    try:
+        output_path = r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_mocked.html"
+        # Handle drive letter for non-Windows envs if needed or just let it fail gracefully
+        if os.name != 'nt':
+             # Just for safety in linux envs, we skip or print warning,
+             # but user specifically asked for this code back.
+             # We will try to execute it but catch exception.
+             pass
+
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(html)
+        print(f"Generated {output_path} successfully.")
+    except Exception as e:
+        print(f"Could not write to {output_path}: {e}")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
