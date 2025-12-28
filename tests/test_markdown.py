@@ -15,7 +15,7 @@ async def test_underline_markdown():
     await parser.standard_message_flow()
     assert (
         parser.content.strip()
-        == '<span style="text-decoration: underline">hello world</span>'
+        == '<span class="markdown-underline">hello world</span>'
     )
 
 
@@ -39,7 +39,7 @@ async def test_strike_through_markdown():
     await parser.standard_message_flow()
     assert (
         parser.content.strip()
-        == '<span style="text-decoration: line-through">hello world</span>'
+        == '<span class="markdown-strikethrough">hello world</span>'
     )
 
 

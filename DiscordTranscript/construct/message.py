@@ -734,7 +734,7 @@ class MessageConstruct:
         user_colour = (
             member.colour if member and str(member.colour) != "#000000" else "#FFFFFF"
         )
-        return f"color: {user_colour};"
+        return str(user_colour)
 
     async def _gather_user_icon(self, author: discord_typings.Member):
         """Gathers a user's icon.

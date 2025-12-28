@@ -108,19 +108,19 @@ class ParseMarkdown:
         holder = (
             [
                 r"&lt;:.*?:(\d*)&gt;",
-                '<img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/%s.png">',
+                '<img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/%s.png" alt="Emoji">',
             ],
             [
                 r"&lt;a:.*?:(\d*)&gt;",
-                '<img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/%s.gif">',
+                '<img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/%s.gif" alt="Emoji">',
             ],
             [
                 r"<:.*?:(\d*)>",
-                '<img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/%s.png">',
+                '<img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/%s.png" alt="Emoji">',
             ],
             [
                 r"<a:.*?:(\d*)>",
-                '<img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/%s.gif">',
+                '<img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/%s.gif" alt="Emoji">',
             ],
         )
 
@@ -202,10 +202,10 @@ class ParseMarkdown:
         self.order_list_markdown_to_html()
         holder = (
             [r"\*\*(.*?)\*\*", "<strong>%s</strong>"],
-            [r"__(.*?)__", '<span style="text-decoration: underline">%s</span>'],
+            [r"__(.*?)__", '<span class="markdown-underline">%s</span>'],
             [r"\*(.*?)\*", "<em><span>%s</span></em>"],
             [r"_(.*?)_", "<em><span>%s</span></em>"],
-            [r"~~(.*?)~~", '<span style="text-decoration: line-through">%s</span>'],
+            [r"~~(.*?)~~", '<span class="markdown-strikethrough">%s</span>'],
             [r"^###\s(.*?)$", "<h3>%s</h3>"],
             [r"^##\s(.*?)$", "<h2>%s</h2>"],
             [r"^#\s(.*?)$", "<h1>%s</h1>"],

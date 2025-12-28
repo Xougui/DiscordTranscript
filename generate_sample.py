@@ -529,12 +529,6 @@ async def main():
 
     with open("test_render.html", "w", encoding="utf-8") as f:
         f.write(html)
-    output_path = r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_mocked.html"
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(html)
-
-    print(f"Generated {output_path} successfully.")
 
 
 if __name__ == "__main__":
