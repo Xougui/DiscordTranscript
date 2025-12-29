@@ -64,7 +64,7 @@
 
         .chatlog__markdown {
             max-width: 100%;
-            line-height: 1.3;
+            line-height: 1.375;
             overflow-wrap: break-word;
         }
 
@@ -203,8 +203,8 @@
         /* Chatlog */
 
         .chatlog {
-            padding: 1rem 5px 0.125rem 28px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0 0.125rem 24px;
+            border-top: none;
         }
 
         .chatlog__followup-symbol {
@@ -228,7 +228,7 @@
 
         .chatlog__message-aside {
             grid-column: 1;
-            width: 72px;
+            width: 60px;
             padding: 0.15rem 0.15rem 0 0.15rem;
             text-align: center;
         }
@@ -637,9 +637,16 @@
             display: flex;
             align-items: center;
             margin: 0.35em 0.1em 0.1em 0.1em;
-            padding: 0.2em 0.35em;
+            padding: 0.15em 0.35em;
             border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: #2b2d31;
+            border: 1px solid #1e1f22;
+        }
+
+        .chatlog__reaction:hover {
+            background-color: #373a40;
+            border-color: #373a40;
+            cursor: pointer;
         }
 
         .chatlog__reaction-count {
@@ -725,7 +732,7 @@
             height: 100%;
             width: 100%;
             background-color: #313338;
-            font-family: "gg sans", Helvetica, Arial, sans-serif;
+            font-family: "gg sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 16px;
             color: #dbdee1;
             margin: 0;
@@ -763,11 +770,11 @@
         }
 
         .pre {
-            background-color: #1E1F22 !important;
+            background-color: #2b2d31 !important;
         }
 
         .pre--multiline {
-            border-color: #2b2d31 !important;
+            border-color: #1e1f22 !important;
             color: #949ba4 !important;
         }
 
@@ -785,7 +792,7 @@
 
         .chatlog__message-group {
             margin-bottom: 1rem;
-            border-color: rgba(255, 255, 255, 0.1);
+            border-color: transparent;
         }
 
         .chatlog__message-container {
