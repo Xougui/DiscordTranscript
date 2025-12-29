@@ -20,6 +20,19 @@
     <meta name='twitter:description' content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}." />
 
     <style>
+        :root {
+            --discord-blurple: #5865F2;
+            --discord-blurple-hover: #4752C4;
+            --discord-green: #23A559;
+            --discord-green-hover: #1A7F42;
+            --discord-red: #DA373C;
+            --discord-red-hover: #A1282C;
+            --discord-grey: #4E5058;
+            --discord-grey-hover: #6D6F78;
+            --text-white: #FFFFFF;
+            --font-stack: "gg sans", "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
         @font-face {
           font-family: gg sans;
           font-weight: 400;
@@ -595,32 +608,72 @@
         }
 
         .chatlog__component-button {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            margin: 0.35em 0.1em 0.1em 0.1em;
-            padding: 0.2em 16px;
-            border-radius: 3px;
-            height: 32px;
+            justify-content: center;
+            margin: 4px 8px 4px 0;
+            padding: 2px 16px;
+            border-radius: 7px;
+            height: 38px;
+            min-width: 96px;
             box-sizing: border-box;
+            transition: background-color 0.17s ease, color 0.17s ease, transform 0.1s ease-out;
+            -webkit-user-select: none;
+            user-select: none;
+            font-family: var(--font-stack);
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 24px;
+            color: var(--text-white);
+            border: none;
+            outline: none;
+            cursor: pointer;
         }
 
         .chatlog__component-button:hover {
-            filter: brightness(0.85);
             cursor: pointer;
+        }
+
+        .chatlog__component-button:active {
+            transform: scale(0.96);
+        }
+
+        .chatlog__component-button:focus-visible {
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2), 0 0 0 4px var(--discord-blurple);
         }
 
         .chatlog__component-button--colored {
             background-color: var(--button-color);
         }
 
+        .chatlog__component-button[data-button-color="#5865F2"] { background-color: var(--discord-blurple); }
+        .chatlog__component-button[data-button-color="#5865F2"]:hover { background-color: var(--discord-blurple-hover); }
+
+        .chatlog__component-button[data-button-color="#4E5058"] { background-color: var(--discord-grey); }
+        .chatlog__component-button[data-button-color="#4E5058"]:hover { background-color: var(--discord-grey-hover); }
+
+        .chatlog__component-button[data-button-color="#DA373C"] { background-color: var(--discord-red); }
+        .chatlog__component-button[data-button-color="#DA373C"]:hover { background-color: var(--discord-red-hover); }
+
+        .chatlog__component-button[data-button-color="#23A559"] { background-color: var(--discord-green); }
+        .chatlog__component-button[data-button-color="#23A559"]:hover { background-color: var(--discord-green-hover); }
+
+        .chatlog__component-button:not([data-button-color="#5865F2"]):not([data-button-color="#4E5058"]):not([data-button-color="#DA373C"]):not([data-button-color="#23A559"]):hover {
+            filter: brightness(0.85);
+        }
+
         .chatlog__component-button-link--styled {
             text-decoration: var(--link-style);
         }
 
+        .chatlog__component-button-link--styled:hover {
+            text-decoration: var(--link-style);
+        }
+
         .chatlog__button-label {
-            min-width: 9px;
-            font-size: 0.875em;
-            color: white;
+            margin: 0 auto;
+            font-size: 14px;
+            color: inherit;
             font-weight: 500;
             display: flex;
             align-items: center;
@@ -983,7 +1036,7 @@
         }
 
         .info {
-            margin: 0 16px;
+            margin: 16px 24px 0 24px;
             padding-bottom: 12px;
             display: flex;
             flex-direction: column;
@@ -1199,13 +1252,21 @@
         .dropdownButton {
           width: 100%;
           color: #dbdee1;
-          padding: 11.5px;
-          font-size: 15px;
+          padding: 8px 12px;
+          font-size: 14px;
+          font-weight: 500;
           cursor: pointer;
           text-align: left;
-          border-radius: 5px;
+          border-radius: 4px;
           background-color: #2b2d31;
           border: 1px solid #1e1f22;
+          min-height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          box-sizing: border-box;
+          transition: border-color 0.17s ease;
+          position: relative;
         }
 
         .chatlog__component-disabled {
@@ -1254,15 +1315,20 @@
         }
 
         .dropdownContent {
-          z-index: 1;
+          z-index: 100;
           display: none;
-          width: 99.5%;
+          width: 100%;
           font-size: 14px;
           position: absolute;
-          margin-top: -0.7px;
+          top: 100%;
+          margin-top: 4px;
           background-color: #2b2d31;
           border: 1px solid #1e1f22;
-          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          box-shadow: 0 8px 16px rgba(0,0,0,0.24);
+          box-sizing: border-box;
+          border-radius: 4px;
+          max-height: 250px;
+          overflow-y: auto;
         }
 
         .dropdownContentEmoji {
@@ -1277,21 +1343,28 @@
 
         .dropdownContent a {
           display: block;
-          padding: 12px 16px;
+          padding: 8px 12px;
           text-decoration: none;
+          margin: 2px;
+          border-radius: 2px;
+          transition: background-color 0.1s;
         }
 
         .chatlog__dropdown-icon {
-          right: 0px;
-          width: 25px;
-          margin-top: -12px;
-          position: absolute;
-          padding-right: 4px;
+          width: 24px;
+          height: 24px;
+          flex-shrink: 0;
         }
 
-        .chatlog__component-dropdown-border {
-          border-bottom-left-radius: 0px;
-          border-bottom-right-radius: 0px;
+        .dropdownContent::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+            background-color: rgba(0,0,0,0);
+        }
+
+        .dropdownContent::-webkit-scrollbar-thumb {
+            background-color: #1e1f22;
+            border-radius: 4px;
         }
 
         .tippy-box[data-theme~='disc'] {
@@ -1317,9 +1390,12 @@
         }
 
         .dropdownContentDesc { color: #949ba4; }
-        .dropdownButton:hover { border: 1px solid #040405; }
+        .dropdownButton:hover { border-color: #040405; background-color: #2e3035; }
         .chatlog__component-dropdown-show { display: block; }
-        .chatlog__component-dropdown a:hover { background-color: #383a40; }
+        .chatlog__component-dropdown a:hover { 
+            background-color: #404249;
+            color: #f2f3f5;
+        }
 
         .cursor_pointer { cursor: pointer; }
 
@@ -1422,7 +1498,6 @@
         //  Menu Dropdown (Selectmenu)
         function showDropdown(dropdownID) {
           
-          document.getElementById("dropdownButton" + dropdownID).classList.toggle("chatlog__component-dropdown-border");
           document.getElementById("dropdownMenuContent" + dropdownID).classList.toggle("chatlog__component-dropdown-show");
           document.getElementById("dropdownMenu" + dropdownID).classList.toggle("chatlog__component-dropdown-show");
         }
