@@ -266,14 +266,14 @@ async def main():
         1,
         "Alice",
         "1378",
-        "https://preview.redd.it/the-new-discord-default-profile-pictures-v0-tbhgxr7adj7f1.png?width=1024&format=png&auto=webp&s=681455786feb3bb43479cc5d684dd3a3ff664a20",
+        "https://preview.redd.it/the-new-discord-default-profile-pictures-v0-dd62486xej7f1.png?width=1024&format=png&auto=webp&s=834060ca1b6be81c4d32adfbfc7dcdbb7018cf32",
         color=MockColor(0xFF0000),
     )
     user2 = MockUser(
         2,
         "Bob",
         "8462",
-        "https://i.redd.it/a4lxgg1edj7f1.png",
+        "https://preview.redd.it/the-new-discord-default-profile-pictures-v0-4zgagzeyej7f1.png?width=1024&format=png&auto=webp&s=36a85f787f4826665e26be46c3b509281551a043",
         color=MockColor(0x00FF00),
     )
     bot_user = MockUser(
