@@ -597,11 +597,12 @@
         .chatlog__component-button {
             display: flex;
             align-items: center;
-            margin: 0.35em 0.1em 0.1em 0.1em;
-            padding: 0.2em 16px;
-            border-radius: 3px;
+            margin: 4px 8px 4px 0;
+            padding: 0 16px;
+            border-radius: 4px;
             height: 32px;
             box-sizing: border-box;
+            transition: background-color 0.17s ease, color 0.17s ease;
         }
 
         .chatlog__component-button:hover {
@@ -1199,13 +1200,20 @@
         .dropdownButton {
           width: 100%;
           color: #dbdee1;
-          padding: 11.5px;
-          font-size: 15px;
+          padding: 8px 12px;
+          font-size: 14px;
+          font-weight: 500;
           cursor: pointer;
           text-align: left;
-          border-radius: 5px;
+          border-radius: 4px;
           background-color: #2b2d31;
           border: 1px solid #1e1f22;
+          min-height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          box-sizing: border-box;
+          transition: border-color 0.17s ease;
         }
 
         .chatlog__component-disabled {
@@ -1256,13 +1264,15 @@
         .dropdownContent {
           z-index: 1;
           display: none;
-          width: 99.5%;
+          width: 100%;
           font-size: 14px;
           position: absolute;
-          margin-top: -0.7px;
+          margin-top: -1px;
           background-color: #2b2d31;
           border: 1px solid #1e1f22;
           box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          box-sizing: border-box;
+          border-radius: 0 0 4px 4px;
         }
 
         .dropdownContentEmoji {
@@ -1282,11 +1292,9 @@
         }
 
         .chatlog__dropdown-icon {
-          right: 0px;
-          width: 25px;
-          margin-top: -12px;
-          position: absolute;
-          padding-right: 4px;
+          width: 24px;
+          height: 24px;
+          flex-shrink: 0;
         }
 
         .chatlog__component-dropdown-border {
