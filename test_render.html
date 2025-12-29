@@ -6,20 +6,33 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width" />
     <meta name="title" content="Serveur de Démonstration - général">
-    <meta name="description" content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 9 messages. Ce transcript a été généré le 29 December 2025 at 11:44:04 AM (UTC).">
+    <meta name="description" content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 9 messages. Ce transcript a été généré le 29 December 2025 at 12:49:53 PM (UTC).">
     
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Serveur de Démonstration - général" />
-    <meta property="og:description" content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 9 messages. Ce transcript a été généré le 29 December 2025 at 11:44:04 AM (UTC)." />
+    <meta property="og:description" content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 9 messages. Ce transcript a été généré le 29 December 2025 at 12:49:53 PM (UTC)." />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary" />
     <meta name='twitter:title' content="Serveur de Démonstration - général" />
-    <meta name='twitter:description' content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 9 messages. Ce transcript a été généré le 29 December 2025 at 11:44:04 AM (UTC)." />
+    <meta name='twitter:description' content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 9 messages. Ce transcript a été généré le 29 December 2025 at 12:49:53 PM (UTC)." />
 
     <style>
+        :root {
+            --discord-blurple: #5865F2;
+            --discord-blurple-hover: #4752C4;
+            --discord-green: #23A559;
+            --discord-green-hover: #1A7F42;
+            --discord-red: #DA373C;
+            --discord-red-hover: #A1282C;
+            --discord-grey: #4E5058;
+            --discord-grey-hover: #6D6F78;
+            --text-white: #FFFFFF;
+            --font-stack: "gg sans", "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
         @font-face {
           font-family: gg sans;
           font-weight: 400;
@@ -595,25 +608,58 @@
         }
 
         .chatlog__component-button {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             margin: 4px 8px 4px 0;
-            padding: 0 16px;
-            border-radius: 3px;
-            height: 32px;
-            min-width: 60px;
+            padding: 2px 16px;
+            border-radius: 7px;
+            height: 38px;
+            min-width: 96px;
             box-sizing: border-box;
-            transition: background-color 0.17s ease, color 0.17s ease;
+            transition: background-color 0.17s ease, color 0.17s ease, transform 0.1s ease-out;
+            -webkit-user-select: none;
+            user-select: none;
+            font-family: var(--font-stack);
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 24px;
+            color: var(--text-white);
+            border: none;
+            outline: none;
+            cursor: pointer;
         }
 
         .chatlog__component-button:hover {
-            filter: brightness(0.85);
             cursor: pointer;
+        }
+
+        .chatlog__component-button:active {
+            transform: scale(0.96);
+        }
+
+        .chatlog__component-button:focus-visible {
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2), 0 0 0 4px var(--discord-blurple);
         }
 
         .chatlog__component-button--colored {
             background-color: var(--button-color);
+        }
+
+        .chatlog__component-button[data-button-color="#5865F2"] { background-color: var(--discord-blurple); }
+        .chatlog__component-button[data-button-color="#5865F2"]:hover { background-color: var(--discord-blurple-hover); }
+
+        .chatlog__component-button[data-button-color="#4E5058"] { background-color: var(--discord-grey); }
+        .chatlog__component-button[data-button-color="#4E5058"]:hover { background-color: var(--discord-grey-hover); }
+
+        .chatlog__component-button[data-button-color="#DA373C"] { background-color: var(--discord-red); }
+        .chatlog__component-button[data-button-color="#DA373C"]:hover { background-color: var(--discord-red-hover); }
+
+        .chatlog__component-button[data-button-color="#23A559"] { background-color: var(--discord-green); }
+        .chatlog__component-button[data-button-color="#23A559"]:hover { background-color: var(--discord-green-hover); }
+
+        .chatlog__component-button:not([data-button-color="#5865F2"]):not([data-button-color="#4E5058"]):not([data-button-color="#DA373C"]):not([data-button-color="#23A559"]):hover {
+            filter: brightness(0.85);
         }
 
         .chatlog__component-button-link--styled {
@@ -626,8 +672,8 @@
 
         .chatlog__button-label {
             margin: 0 auto;
-            font-size: 0.875em;
-            color: white;
+            font-size: 14px;
+            color: inherit;
             font-weight: 500;
             display: flex;
             align-items: center;
@@ -1521,7 +1567,7 @@
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice#1378" data-user-id="1" data-user-color="#FFFFFF">Alice</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 11:44 AM">29-12-2025 11:44 AM</span>
+                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 12:49 PM">29-12-2025 12:49 PM</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1001" id="message-1001">
@@ -1560,7 +1606,7 @@
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 11:45 AM">29-12-2025 11:45 AM</span>
+                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 12:50 PM">29-12-2025 12:50 PM</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1002" id="message-1002">
@@ -1589,7 +1635,7 @@
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice#1378" data-user-id="1" data-user-color="#FFFFFF">Alice</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 11:49 AM">29-12-2025 11:49 AM</span>
+                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 12:54 PM">29-12-2025 12:54 PM</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1003" id="message-1003">
@@ -1620,7 +1666,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 11:54 AM">29-12-2025 11:54 AM</span>
+                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 12:59 PM">29-12-2025 12:59 PM</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1004" id="message-1004">
@@ -1653,7 +1699,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Lyxios#4628" data-user-id="3" data-user-color="#FFFFFF">Lyxios</span>
                     <span class="chatlog__bot-tag">APP</span>
-                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 11:59 AM">29-12-2025 11:59 AM</span>
+                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 01:04 PM">29-12-2025 01:04 PM</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1005" id="message-1005">
@@ -1734,7 +1780,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Lyxios#4628" data-user-id="3" data-user-color="#FFFFFF">Lyxios</span>
                     <span class="chatlog__bot-tag">APP</span>
-                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 12:04 PM">29-12-2025 12:04 PM</span>
+                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 01:09 PM">29-12-2025 01:09 PM</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1006" id="message-1006">
@@ -1779,7 +1825,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Lyxios#4628" data-user-id="3" data-user-color="#FFFFFF">Lyxios</span>
                     <span class="chatlog__bot-tag">APP</span>
-                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 12:05 PM">29-12-2025 12:05 PM</span>
+                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 01:10 PM">29-12-2025 01:10 PM</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1007" id="message-1007">
@@ -1846,7 +1892,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice#1378" data-user-id="1" data-user-color="#FFFFFF">Alice</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 12:09 PM">29-12-2025 12:09 PM</span>
+                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 01:14 PM">29-12-2025 01:14 PM</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1008" id="message-1008">
@@ -1879,7 +1925,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 12:14 PM">29-12-2025 12:14 PM</span>
+                    <span class="chatlog__timestamp" data-timestamp="Monday, 29 December 2025 01:19 PM">29-12-2025 01:19 PM</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1009" id="message-1009">
@@ -1908,7 +1954,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
 </div>
 
 <div class="footer">
-    <span class="footer__text">Ce transcript a été généré le 29 December 2025 at 11:44:04 AM (UTC)</span>
+    <span class="footer__text">Ce transcript a été généré le 29 December 2025 at 12:49:53 PM (UTC)</span>
 </div>
 
 <div id="context-menu">
@@ -1933,7 +1979,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
         </div>
         <div class="meta__field">
             <div class="meta__title">Date de création du salon</div>
-            <div class="meta__value">Dec 29, 2025 (11:44:03 AM)</div>
+            <div class="meta__value">Dec 29, 2025 (12:49:52 PM)</div>
         </div>
         <div class="meta__field">
             <div class="meta__title">Nombre total de messages</div>
