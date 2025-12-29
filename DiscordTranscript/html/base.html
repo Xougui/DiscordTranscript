@@ -597,10 +597,12 @@
         .chatlog__component-button {
             display: flex;
             align-items: center;
+            justify-content: center;
             margin: 4px 8px 4px 0;
             padding: 0 16px;
-            border-radius: 4px;
+            border-radius: 3px;
             height: 32px;
+            min-width: 60px;
             box-sizing: border-box;
             transition: background-color 0.17s ease, color 0.17s ease;
         }
@@ -619,7 +621,7 @@
         }
 
         .chatlog__button-label {
-            min-width: 9px;
+            margin: 0 auto;
             font-size: 0.875em;
             color: white;
             font-weight: 500;
@@ -1214,6 +1216,7 @@
           justify-content: space-between;
           box-sizing: border-box;
           transition: border-color 0.17s ease;
+          position: relative;
         }
 
         .chatlog__component-disabled {
@@ -1262,17 +1265,20 @@
         }
 
         .dropdownContent {
-          z-index: 1;
+          z-index: 100;
           display: none;
           width: 100%;
           font-size: 14px;
           position: absolute;
-          margin-top: -1px;
+          top: 100%;
+          margin-top: 4px;
           background-color: #2b2d31;
           border: 1px solid #1e1f22;
-          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          box-shadow: 0 8px 16px rgba(0,0,0,0.24);
           box-sizing: border-box;
-          border-radius: 0 0 4px 4px;
+          border-radius: 4px;
+          max-height: 250px;
+          overflow-y: auto;
         }
 
         .dropdownContentEmoji {
@@ -1287,8 +1293,11 @@
 
         .dropdownContent a {
           display: block;
-          padding: 12px 16px;
+          padding: 8px 12px;
           text-decoration: none;
+          margin: 2px;
+          border-radius: 2px;
+          transition: background-color 0.1s;
         }
 
         .chatlog__dropdown-icon {
@@ -1297,9 +1306,15 @@
           flex-shrink: 0;
         }
 
-        .chatlog__component-dropdown-border {
-          border-bottom-left-radius: 0px;
-          border-bottom-right-radius: 0px;
+        .dropdownContent::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+            background-color: rgba(0,0,0,0);
+        }
+
+        .dropdownContent::-webkit-scrollbar-thumb {
+            background-color: #1e1f22;
+            border-radius: 4px;
         }
 
         .tippy-box[data-theme~='disc'] {
@@ -1325,9 +1340,12 @@
         }
 
         .dropdownContentDesc { color: #949ba4; }
-        .dropdownButton:hover { border: 1px solid #040405; }
+        .dropdownButton:hover { border-color: #040405; background-color: #2e3035; }
         .chatlog__component-dropdown-show { display: block; }
-        .chatlog__component-dropdown a:hover { background-color: #383a40; }
+        .chatlog__component-dropdown a:hover { 
+            background-color: #404249;
+            color: #f2f3f5;
+        }
 
         .cursor_pointer { cursor: pointer; }
 
@@ -1430,7 +1448,6 @@
         //  Menu Dropdown (Selectmenu)
         function showDropdown(dropdownID) {
           
-          document.getElementById("dropdownButton" + dropdownID).classList.toggle("chatlog__component-dropdown-border");
           document.getElementById("dropdownMenuContent" + dropdownID).classList.toggle("chatlog__component-dropdown-show");
           document.getElementById("dropdownMenu" + dropdownID).classList.toggle("chatlog__component-dropdown-show");
         }
