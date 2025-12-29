@@ -467,7 +467,7 @@ async def main():
     # So we sort descending (Newest first) to get Oldest first in the output.
     messages.sort(key=lambda x: x.created_at, reverse=True)
 
-    html = await raw_export(channel, messages, guild=guild)
+    html = await raw_export(channel, messages, guild=guild, language="fr")
 
     # Correction des avertissements "parser-blocking script"
     # Remplace l'injection via document.write par une balise script standard avec defer
@@ -483,7 +483,7 @@ async def main():
 
     # Ajout de Tailwind et Lucide pour le style et les icônes
     head_injection = """
-    <link rel="icon" type="image/svg+xml" href="../assets/img/logo.svg?v=2" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="../assets/img/clair/logo.svg?v=2" sizes="any">
     <script>
         // Suppression de l'avertissement Tailwind CDN pour la démo
         const originalWarn = console.warn;
