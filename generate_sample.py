@@ -478,6 +478,9 @@ async def main():
         html,
         flags=re.IGNORECASE | re.DOTALL,
     )
+    
+    with open("test_render.html", "w", encoding="utf-8") as f:
+        f.write(html)
 
     print("Generated test_render.html successfully.")
 
@@ -491,18 +494,16 @@ async def main():
             originalWarn.apply(console, args);
         };
     </script>
-    <script src="https://cdn.tailwindcss.com" defer></script>
     <script>
         window.tailwind = { config: { corePlugins: { preflight: false } } }
     </script>
-    <script src="https://unpkg.com/lucide@latest" defer></script>
     """
     html = html.replace("</head>", head_injection + "</head>")
 
     # Injection du bouton retour
     back_button = """
     <!-- Back Button (Visible on Top Hover) -->
-    <a href="../index.html" id="back-button" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-[#0a0a0c]/90 border border-white/10 text-white px-6 py-2 rounded-full shadow-2xl backdrop-blur-md transition-all duration-300 opacity-0 -translate-y-full pointer-events-none flex items-center gap-2 font-medium hover:bg-white/10 hover:scale-105">
+    <a href="javascript:history.back()" id="back-button" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-[#0a0a0c]/90 border border-white/10 text-white px-6 py-2 rounded-full shadow-2xl backdrop-blur-md transition-all duration-300 opacity-0 -translate-y-full pointer-events-none flex items-center gap-2 font-medium hover:bg-white/10 hover:scale-105">
         <i data-lucide="arrow-left" class="w-4 h-4"></i>
         Retour
     </a>
@@ -526,9 +527,6 @@ async def main():
     </script>
     """
     html = html.replace("</body>", back_button_script + "</body>")
-
-    with open("test_render.html", "w", encoding="utf-8") as f:
-        f.write(html)
 
     # Write to specific path as requested, catching errors if path invalid on this OS
     try:
