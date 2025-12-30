@@ -1892,11 +1892,13 @@
 
                     if (clickX < xOffset || clickX > xOffset + renderWidth || clickY < yOffset || clickY > yOffset + renderHeight) {
                         e.preventDefault();
+                        e.stopPropagation();
                         return;
                     }
                 }
 
                 e.preventDefault();
+                e.stopPropagation();
                 modal.style.display = "flex";
                 modalImg.src = this.src;
                 captionText.href = this.src;
