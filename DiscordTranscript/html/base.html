@@ -798,7 +798,9 @@
             color: #dbdee1;
             margin: 0;
             padding: 0;
-            overflow: auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         h1, h2, h3 {
@@ -1020,7 +1022,8 @@
         .main {
             display: flex;
             overflow-y: auto;
-            height: calc(100% - 126px);
+            height: auto;
+            flex: 1;
             flex-direction: column;
         }
 
@@ -1463,6 +1466,22 @@
             .meta-popout {
                 width: 90%;
                 left: 5% !important;
+            }
+            body {
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+            .main {
+                height: auto;
+                flex: 1;
+            }
+            .footer {
+                height: auto;
+                flex-shrink: 0;
+            }
+            .footer__text {
+                white-space: normal;
             }
         }
 
