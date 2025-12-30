@@ -32,6 +32,11 @@
             --discord-grey-hover: #6D6F78;
             --text-white: #FFFFFF;
             --font-stack: "gg sans", "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --discord-component-bg: #2B2D31;
+            --discord-component-hover: #404249;
+            --discord-border-color: #1E1F22;
+            --discord-text-placeholder: #dbdee1;
+            --discord-icon-color: #dbdee1;
         }
 
         @font-face {
@@ -1251,22 +1256,24 @@
         }
 
         .dropdownButton {
-          width: 100%;
-          color: #dbdee1;
-          padding: 8px 12px;
-          font-size: 14px;
-          font-weight: 500;
-          cursor: pointer;
-          text-align: left;
-          border-radius: 4px;
-          background-color: #2b2d31;
-          border: 1px solid #1e1f22;
-          min-height: 40px;
           display: flex;
-          align-items: center;
           justify-content: space-between;
+          align-items: center;
+          background-color: var(--discord-component-bg);
+          border: 1px solid var(--discord-border-color);
+          border-radius: 4px;
+          padding: 8px 12px;
+          cursor: pointer;
+          transition: background-color 0.2s ease, border-color 0.2s ease;
+          -webkit-user-select: none;
+          user-select: none;
           box-sizing: border-box;
-          transition: border-color 0.17s ease;
+          min-height: 38px;
+          width: 100%;
+          color: var(--discord-text-placeholder);
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 1.3;
           position: relative;
         }
 
@@ -1284,7 +1291,8 @@
         }
 
         .chatlog__component-dropdown {
-          width: 400px;
+          width: 100%;
+          max-width: 400px;
           margin-top: 5px;
           position: relative;
           display: inline-block;
@@ -1352,9 +1360,12 @@
         }
 
         .chatlog__dropdown-icon {
-          width: 24px;
-          height: 24px;
+          color: var(--discord-icon-color);
           flex-shrink: 0;
+          width: 18px;
+          height: 18px;
+          margin-left: 8px;
+          opacity: 0.8;
         }
 
         .dropdownContent::-webkit-scrollbar {
@@ -1391,7 +1402,7 @@
         }
 
         .dropdownContentDesc { color: #949ba4; }
-        .dropdownButton:hover { border-color: #040405; background-color: #2e3035; }
+        .dropdownButton:hover { background-color: var(--discord-component-hover); }
         .chatlog__component-dropdown-show { display: block; }
         .chatlog__component-dropdown a:hover { 
             background-color: #404249;
