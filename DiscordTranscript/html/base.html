@@ -988,16 +988,24 @@
         .panel__summary-button {
             display: flex;
             align-items: center;
-            padding: 0.2em 0.35em;
-            border-radius: 2px;
+            padding: 4px 8px;
+            border-radius: 4px;
             margin-left: auto;
             margin-right: 50px;
             color: #949ba4;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
 
         .panel__summary-button:hover {
-            color: #fff;
+            color: #dbdee1;
+            background-color: rgba(79, 84, 92, 0.32);
             cursor: pointer;
+        }
+
+        .panel__summary-icon {
+            margin-right: 6px;
+            width: 20px;
+            height: 20px;
         }
 
         .summary-popout.visible {
@@ -1011,12 +1019,79 @@
             box-shadow:
                 0 2px 10px 0 rgb(0 0 0 / 20%),
                 0 0 0 1px rgb(32 34 37 / 60%);
-            width: 250px;
+            width: 320px;
             border-radius: 5px;
             overflow: hidden;
             transform: scale(0);
             transform-origin: top right;
             transition: transform 200ms ease-in-out;
+        }
+
+        .summary-popout .meta__header {
+            background-color: #2b2d31;
+            height: 100px;
+            position: relative;
+            margin-bottom: 40px;
+            padding: 0;
+            border-bottom: none;
+            display: block;
+        }
+
+        .summary-popout .meta__header img {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            border: 6px solid #313338;
+            border-radius: 50%;
+            background-color: #313338;
+            margin-bottom: 0;
+        }
+
+        .summary-popout .meta__description {
+            background-color: transparent;
+            margin: 0;
+            padding: 0 16px 16px 16px;
+            border-radius: 0;
+        }
+
+        .summary-popout .meta__details {
+            justify-content: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #2b2d31;
+            padding-bottom: 16px;
+        }
+
+        .summary-popout .meta__user {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f2f3f5;
+            text-align: center;
+        }
+
+        .summary-popout .meta__field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2b2d31;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+
+        .summary-popout .meta__title {
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #b5bac1;
+        }
+
+        .summary-popout .meta__value {
+            font-size: 14px;
+            color: #f2f3f5;
+            text-align: right;
         }
 
         .main {
@@ -1600,6 +1675,7 @@
     {{CHANNEL_TOPIC}}
 
     <div class="panel__summary-button" id="summary-button">
+        <svg class="panel__summary-icon" aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></svg>
         <span>{{SUMMARY}}</span>
     </div>
 </div>
@@ -1805,8 +1881,8 @@
                 return;
             }
 
-            const elementX = this.offsetLeft - 110
-            const elementY = this.offsetTop + 30
+            const elementX = this.offsetLeft - 135
+            const elementY = this.offsetTop + 55
 
             summaryPopout.style.left = `${elementX}px`;
             summaryPopout.style.top = `${elementY}px`;
