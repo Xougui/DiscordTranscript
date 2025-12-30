@@ -1865,6 +1865,7 @@
         document.querySelectorAll('.chatlog__attachment-thumbnail, .chatlog__embed-image, .chatlog__embed-thumbnail').forEach(img => {
             const parentLink = img.closest('a');
             if (parentLink) {
+                parentLink.style.cursor = 'default';
                 parentLink.addEventListener('click', function(e) {
                     e.preventDefault();
                 });
