@@ -1168,6 +1168,35 @@
             text-overflow: ellipsis;
         }
 
+        .footer__powered {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            font-size: 14px;
+            color: #949ba4;
+        }
+
+        .footer__powered-link {
+            display: flex;
+            align-items: center;
+            margin-left: 6px;
+            color: #dbdee1;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .footer__powered-link:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .footer__logo {
+            height: 20px;
+            width: 20px;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
         #context-menu {
             position: absolute;
             width: 188px;
@@ -1554,9 +1583,15 @@
             .footer {
                 height: auto;
                 flex-shrink: 0;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
             }
             .footer__text {
                 white-space: normal;
+            }
+            .footer__powered {
+                margin-left: 0;
             }
         }
 
@@ -1697,6 +1732,13 @@
 
 <div class="footer">
     <span class="footer__text">{{GENERATED_ON}} {{DATE_TIME}}</span>
+    <div class="footer__powered">
+        <span>{{POWERED_BY}}</span>
+        <a href="https://discord-transcript.xouxou-hosting.fr/index" class="footer__powered-link" target="_blank">
+            <img class="footer__logo" src="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg" alt="DiscordTranscript">
+            DiscordTranscript
+        </a>
+    </div>
 </div>
 
 <div id="context-menu">
