@@ -798,7 +798,9 @@
             color: #dbdee1;
             margin: 0;
             padding: 0;
-            overflow: auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         h1, h2, h3 {
@@ -1020,7 +1022,8 @@
         .main {
             display: flex;
             overflow-y: auto;
-            height: calc(100% - 126px);
+            height: auto;
+            flex: 1;
             flex-direction: column;
         }
 
@@ -1464,6 +1467,72 @@
                 width: 90%;
                 left: 5% !important;
             }
+            body {
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+            .main {
+                height: auto;
+                flex: 1;
+            }
+            .footer {
+                height: auto;
+                flex-shrink: 0;
+            }
+            .footer__text {
+                white-space: normal;
+            }
+        }
+
+        /* Image Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 7000;
+            padding-top: 0;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 85vh;
+            object-fit: contain;
+        }
+
+        #modal-caption {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            background-color: var(--discord-blurple);
+            padding: 8px 24px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        #modal-caption:hover {
+            background-color: var(--discord-blurple-hover);
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .chatlog__attachment-thumbnail,
+        .chatlog__embed-image,
+        .chatlog__embed-thumbnail {
+            cursor: pointer;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
@@ -1589,6 +1658,11 @@
     </div>
 </div>
 {{META_DATA}}
+
+<div id="image-modal" class="modal">
+    <img class="modal-content" id="modal-image">
+    <a id="modal-caption" href="#" target="_blank">Ouvrir l'original</a>
+</div>
 
 <script>
     // Right Click - Copy ID
@@ -1805,6 +1879,82 @@
             const linkStyle = element.getAttribute('data-link-style');
             if (linkStyle) {
                 element.style.setProperty('--link-style', linkStyle);
+            }
+        });
+
+        // Image Modal Logic
+        const modal = document.getElementById("image-modal");
+        const modalImg = document.getElementById("modal-image");
+        const captionText = document.getElementById("modal-caption");
+
+        document.querySelectorAll('.chatlog__attachment-thumbnail, .chatlog__embed-image, .chatlog__embed-thumbnail').forEach(img => {
+            const parentLink = img.closest('a');
+            if (parentLink) {
+                parentLink.style.cursor = 'default';
+                parentLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                });
+            }
+            img.onclick = function(e) {
+                // If inside a hidden spoiler, do not open
+                if (this.closest('.spoiler--hidden')) return;
+                
+                // If image is not loaded, do not open
+                if (this.naturalHeight === 0) return;
+                
+                // Check if click is on the image content (handling object-fit: contain)
+                if (this.naturalHeight > 0) {
+                    const ratio = this.naturalWidth / this.naturalHeight;
+                    const domRatio = this.clientWidth / this.clientHeight;
+                    
+                    let renderHeight, renderWidth, xOffset, yOffset;
+
+                    if (ratio < domRatio) {
+                        renderHeight = this.clientHeight;
+                        renderWidth = renderHeight * ratio;
+                        xOffset = (this.clientWidth - renderWidth) / 2;
+                        yOffset = 0;
+                    } else {
+                        renderWidth = this.clientWidth;
+                        renderHeight = renderWidth / ratio;
+                        xOffset = 0;
+                        yOffset = (this.clientHeight - renderHeight) / 2;
+                    }
+                    
+                    const rect = this.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left - this.clientLeft;
+                    const clickY = e.clientY - rect.top - this.clientTop;
+
+                    if (clickX < xOffset || clickX > xOffset + renderWidth || clickY < yOffset || clickY > yOffset + renderHeight) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return;
+                    }
+                }
+
+                e.preventDefault();
+                e.stopPropagation();
+                modal.style.display = "flex";
+
+                const parentLink = this.closest('a');
+                if (parentLink && !this.classList.contains('chatlog__embed-thumbnail')) {
+                    modalImg.src = parentLink.href;
+                } else {
+                    modalImg.src = this.src;
+                }
+                captionText.href = parentLink ? parentLink.href : this.src;
+            }
+        });
+
+        modal.onclick = function(e) {
+            if (e.target !== modalImg && e.target !== captionText) {
+                modal.style.display = "none";
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape" && modal.style.display === "flex") {
+                modal.style.display = "none";
             }
         });
     });
