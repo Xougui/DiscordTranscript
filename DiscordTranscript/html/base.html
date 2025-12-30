@@ -1863,9 +1863,18 @@
         const captionText = document.getElementById("modal-caption");
 
         document.querySelectorAll('.chatlog__attachment-thumbnail, .chatlog__embed-image, .chatlog__embed-thumbnail').forEach(img => {
+            const parentLink = img.closest('a');
+            if (parentLink) {
+                parentLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                });
+            }
             img.onclick = function(e) {
                 // If inside a hidden spoiler, do not open
                 if (this.closest('.spoiler--hidden')) return;
+                
+                // If image is not loaded, do not open
+                if (this.naturalHeight === 0) return;
                 
                 // Check if click is on the image content (handling object-fit: contain)
                 if (this.naturalHeight > 0) {
@@ -1887,8 +1896,8 @@
                     }
                     
                     const rect = this.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
-                    const clickY = e.clientY - rect.top;
+                    const clickX = e.clientX - rect.left - this.clientLeft;
+                    const clickY = e.clientY - rect.top - this.clientTop;
 
                     if (clickX < xOffset || clickX > xOffset + renderWidth || clickY < yOffset || clickY > yOffset + renderHeight) {
                         e.preventDefault();
@@ -1900,8 +1909,14 @@
                 e.preventDefault();
                 e.stopPropagation();
                 modal.style.display = "flex";
-                modalImg.src = this.src;
-                captionText.href = this.src;
+
+                const parentLink = this.closest('a');
+                if (parentLink && !this.classList.contains('chatlog__embed-thumbnail')) {
+                    modalImg.src = parentLink.href;
+                } else {
+                    modalImg.src = this.src;
+                }
+                captionText.href = parentLink ? parentLink.href : this.src;
             }
         });
 
