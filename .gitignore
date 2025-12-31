@@ -131,4 +131,3 @@ dmypy.json
 **/.ruff_cache/
 
 test_render.html
-generate_sample.py
