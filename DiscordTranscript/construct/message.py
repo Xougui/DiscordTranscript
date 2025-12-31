@@ -31,6 +31,7 @@ from DiscordTranscript.ext.html_generator import (
     PARSE_MODE_REFERENCE,
     message_thread_remove,
     message_thread_add,
+    system_notification,
 )
 
 if TYPE_CHECKING:
@@ -149,6 +150,10 @@ class MessageConstruct:
             await self.build_thread_remove()
         elif discord.MessageType.recipient_add == self.message.type:
             await self.build_thread_add()
+        elif discord.MessageType.new_member == self.message.type:
+            await self.build_join()
+        elif discord.MessageType.premium_guild_subscription == self.message.type:
+            await self.build_boost()
         else:
             await self.build_message()
         return self.message_html, self.meta_data
@@ -351,7 +356,13 @@ class MessageConstruct:
             if not self.message.interaction_metadata:
                 self.interaction = ""
                 return
-            command = "a slash command"
+            if (
+                hasattr(self.message.interaction_metadata, "name")
+                and self.message.interaction_metadata.name
+            ):
+                command = f"/{self.message.interaction_metadata.name}"
+            else:
+                command = "a slash command"
             user = self.message.interaction_metadata.user
             interaction_id = self.message.interaction_metadata.id
         elif self.message.interaction:
@@ -385,6 +396,41 @@ class MessageConstruct:
                 ("FILLER", "used ", PARSE_MODE_NONE),
                 ("USER_ID", str(user.id), PARSE_MODE_NONE),
                 ("INTERACTION_ID", str(interaction_id), PARSE_MODE_NONE),
+            ],
+            bot=self.bot,
+            timezone=self.pytz_timezone,
+        )
+
+    async def build_join(self):
+        """Builds the HTML for a join message."""
+        await self.generate_message_divider(channel_audit=True)
+        content = (
+            f'<span style="color: {await self._gather_user_colour(self.message.author)}; cursor: pointer;" '
+            f'title="{await discriminator(self.message.author.name, self.message.author.discriminator)}">'
+            f"{html.escape(self.message.author.display_name)}</span> joined the server."
+        )
+        await self.build_system_notification(content, DiscordUtils.system_join_icon)
+
+    async def build_boost(self):
+        """Builds the HTML for a boost message."""
+        await self.generate_message_divider(channel_audit=True)
+        content = (
+            f'<span style="color: {await self._gather_user_colour(self.message.author)}; cursor: pointer;" '
+            f'title="{await discriminator(self.message.author.name, self.message.author.discriminator)}">'
+            f"{html.escape(self.message.author.display_name)}</span> boosted the server!"
+        )
+        if self.message.content:
+            content = self.message.content
+        await self.build_system_notification(content, DiscordUtils.system_boost_icon)
+
+    async def build_system_notification(self, content: str, icon_url: str):
+        """Builds the HTML for a system notification."""
+        self.message_html += await fill_out(
+            self.guild,
+            system_notification,
+            [
+                ("ICON_URL", icon_url, PARSE_MODE_NONE),
+                ("SYSTEM_MESSAGE", content, PARSE_MODE_NONE),
             ],
             bot=self.bot,
             timezone=self.pytz_timezone,
@@ -499,13 +545,22 @@ class MessageConstruct:
         """
         if channel_audit or self._generate_message_divider_check():
             if self.previous_message is not None:
-                self.message_html += await fill_out(
-                    self.guild,
-                    end_message,
-                    [],
-                    bot=self.bot,
-                    timezone=self.pytz_timezone,
-                )
+                self_closing_types = [
+                    discord.MessageType.new_member,
+                    discord.MessageType.premium_guild_subscription,
+                    discord.MessageType.thread_created,
+                    discord.MessageType.recipient_remove,
+                    discord.MessageType.recipient_add,
+                ]
+
+                if self.previous_message.type not in self_closing_types:
+                    self.message_html += await fill_out(
+                        self.guild,
+                        end_message,
+                        [],
+                        bot=self.bot,
+                        timezone=self.pytz_timezone,
+                    )
 
             if channel_audit:
                 self.audit = True

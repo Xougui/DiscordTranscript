@@ -21,6 +21,7 @@ from DiscordTranscript.ext.html_generator import (
     PARSE_MODE_MARKDOWN,
     PARSE_MODE_SPECIAL_EMBED,
 )
+from pytz import timezone
 
 if TYPE_CHECKING:
     import discord as discord_typings
@@ -85,6 +86,7 @@ class Embed:
         self.guild: discord_typings.Guild = guild
         self.bot = bot
         self.timezone = timezone
+        self.timestamp = ""
 
     async def flow(self):
         """Builds the embed and returns the HTML.
@@ -100,6 +102,7 @@ class Embed:
         await self.build_author()
         await self.build_image()
         await self.build_thumbnail()
+        await self.build_timestamp()
         await self.build_footer()
         await self.build_embed()
 
@@ -250,6 +253,20 @@ class Embed:
             else ""
         )
 
+    async def build_timestamp(self):
+        """Builds the timestamp of the embed."""
+        if not self.embed.timestamp or self.embed.timestamp == self.check_against:
+            self.timestamp = ""
+            return
+
+        time = self.embed.timestamp
+        if not time.tzinfo:
+            time = timezone("UTC").localize(time)
+
+        # Format similar to Discord client
+        local_time = time.astimezone(timezone(self.timezone))
+        self.timestamp = local_time.strftime("%d/%m/%Y %H:%M")
+
     async def build_footer(self):
         """Builds the footer of the embed."""
         self.footer = (
@@ -263,6 +280,13 @@ class Embed:
             if (self.embed.footer and self.embed.footer.icon_url != self.check_against)
             else None
         )
+
+        # Append timestamp if available
+        if self.timestamp:
+            if self.footer:
+                self.footer += f" • {self.timestamp}"
+            else:
+                self.footer = self.timestamp
 
         if not self.footer:
             return

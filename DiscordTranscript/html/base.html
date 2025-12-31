@@ -371,6 +371,30 @@
             width: 25px;
         }
 
+        .chatlog__message--system {
+            align-items: center;
+            min-height: 54px;
+        }
+
+        .chatlog__message--system .chatlog__message-aside {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-right: 14px;
+            padding-top: 0;
+        }
+
+        .chatlog__system-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .chatlog__message--system .chatlog__content {
+            color: #949ba4;
+            font-size: 14px;
+        }
+
         .chatlog__thread-name {
             color: white;
             font-weight: 600;
@@ -884,7 +908,7 @@
 
         .chatlog__followup-symbol {
             height: 14px;
-            margin: 6px 4px 2px calc(50% - 8.5px);
+            margin: 6px 4px 2px calc(50% - 6px);
             border-left: 2px solid #383a40;
             border-top: 2px solid #383a40;
             border-radius: 8px 0 0 0;
@@ -936,7 +960,7 @@
         }
 
         .chatlog__message--pinned {
-            background-color: rgba(249, 168, 37, 0.05);
+            background-color: transparent;
         }
 
         .chatlog__embed-content-container {
@@ -1837,6 +1861,7 @@
 {{META_DATA}}
 
 <div id="image-modal" class="modal">
+    <span class="modal-close">&times;</span>
     <img class="modal-content" id="modal-image">
     <a id="modal-caption" href="#" target="_blank" rel="noopener">Ouvrir l'original</a>
 </div>
@@ -1894,8 +1919,8 @@
         const { normalizedX, normalizedY } = normalisePosition(mouseX, mouseY, "context")
 
         contextMenu.classList.remove("visible")
-        contextMenu.style.left = `${normalizedX}px`;
-        contextMenu.style.top = `${normalizedY}px`
+        contextMenu.style.setProperty('left', `${normalizedX}px`);
+        contextMenu.style.setProperty('top', `${normalizedY}px`);
 
         setTimeout(() => {
             contextMenu.classList.add("visible");
@@ -1967,8 +1992,8 @@
 
                 const { normalizedX, normalizedY } = normalisePosition(elementX, elementY, "user")
 
-                metaPopout.style.left = `${normalizedX}px`;
-                metaPopout.style.top = `${normalizedY}px`;
+                metaPopout.style.setProperty('left', `${normalizedX}px`);
+                metaPopout.style.setProperty('top', `${normalizedY}px`);
 
                 setTimeout(() => {
                     metaPopout.classList.add("mounted")
@@ -1985,8 +2010,8 @@
             const elementX = this.offsetLeft - 135
             const elementY = this.offsetTop + 55
 
-            summaryPopout.style.left = `${elementX}px`;
-            summaryPopout.style.top = `${elementY}px`;
+            summaryPopout.style.setProperty('left', `${elementX}px`);
+            summaryPopout.style.setProperty('top', `${elementY}px`);
 
             setTimeout(() => {
                 summaryPopout.classList.add("visible")
@@ -2123,8 +2148,14 @@
             }
         });
 
+        // Close button logic
+        const closeBtn = document.querySelector('.modal-close');
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
         modal.onclick = function(e) {
-            if (e.target !== modalImg && e.target !== captionText) {
+            if (e.target !== modalImg && e.target !== captionText && e.target !== closeBtn) {
                 modal.style.display = "none";
             }
         }
