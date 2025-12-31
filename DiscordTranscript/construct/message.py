@@ -545,13 +545,22 @@ class MessageConstruct:
         """
         if channel_audit or self._generate_message_divider_check():
             if self.previous_message is not None:
-                self.message_html += await fill_out(
-                    self.guild,
-                    end_message,
-                    [],
-                    bot=self.bot,
-                    timezone=self.pytz_timezone,
-                )
+                self_closing_types = [
+                    discord.MessageType.new_member,
+                    discord.MessageType.premium_guild_subscription,
+                    discord.MessageType.thread_created,
+                    discord.MessageType.recipient_remove,
+                    discord.MessageType.recipient_add,
+                ]
+
+                if self.previous_message.type not in self_closing_types:
+                    self.message_html += await fill_out(
+                        self.guild,
+                        end_message,
+                        [],
+                        bot=self.bot,
+                        timezone=self.pytz_timezone,
+                    )
 
             if channel_audit:
                 self.audit = True
