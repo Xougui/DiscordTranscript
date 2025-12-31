@@ -207,6 +207,7 @@
             height: 1.5em;
             margin: 0 0.06em;
             vertical-align: -0.4em;
+            display: inline-block;
         }
 
         .emoji--small {
@@ -954,7 +955,8 @@
             display: flex;
             flex-shrink: 0;
             align-items: center;
-            padding: 6px 0 6px 0;
+            padding: 0 16px;
+            height: 48px;
             -webkit-user-select: none; user-select: none;
             font-weight: 700;
             font-size: 20px;
@@ -964,7 +966,6 @@
         .panel__hashtag-icon {
             width: 24px;
             height: 24px;
-            margin-left: 16px;
             margin-right: 8px;
             margin-top: 1px;
         }
@@ -985,13 +986,19 @@
             font-weight: 500;
         }
 
+        .panel__channel-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .panel__summary-button {
             display: flex;
             align-items: center;
             padding: 4px 8px;
             border-radius: 4px;
             margin-left: auto;
-            margin-right: 50px;
+            margin-right: 16px;
             color: #949ba4;
             transition: background-color 0.2s ease, color 0.2s ease;
         }
@@ -1006,6 +1013,11 @@
             margin-right: 6px;
             width: 20px;
             height: 20px;
+        }
+
+        .panel__logo {
+            width: 24px;
+            height: 24px;
         }
 
         .summary-popout.visible {
@@ -1166,6 +1178,35 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        .footer__powered {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            font-size: 14px;
+            color: #949ba4;
+        }
+
+        .footer__powered-link {
+            display: flex;
+            align-items: center;
+            margin-left: 6px;
+            color: #dbdee1;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .footer__powered-link:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .footer__logo {
+            height: 20px;
+            width: 20px;
+            margin-right: 6px;
+            vertical-align: middle;
         }
 
         #context-menu {
@@ -1532,7 +1573,13 @@
             }
             .panel {
                 font-size: 16px;
-                padding: 10px;
+                padding: 0 10px;
+            }
+            .panel__summary-button > span {
+                display: none;
+            }
+            .panel__summary-icon {
+                margin-right: 0;
             }
             .summary-popout {
                 width: 90%;
@@ -1554,9 +1601,19 @@
             .footer {
                 height: auto;
                 flex-shrink: 0;
+                flex-direction: column;
+                align-items: center;
+                gap: 2px;
+                padding: 8px;
             }
             .footer__text {
                 white-space: normal;
+                text-align: center;
+                font-size: 12px;
+            }
+            .footer__powered {
+                margin-left: 0;
+                font-size: 12px;
             }
         }
 
@@ -1622,6 +1679,26 @@
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.5/plugin/isTomorrow.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.5/plugin/isBetween.js" defer></script>
 
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script>
+        // Suppression de l'avertissement Tailwind CDN pour la démo
+        const originalWarn = console.warn;
+        console.warn = (...args) => {
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+            originalWarn.apply(console, args);
+        };
+    </script>
+    <script>
+        window.tailwind = {
+            config: {
+                corePlugins: {
+                    preflight: false
+                }
+            }
+        }
+    </script>
+
     <script>
         //  Scroll to Message (References)
         function scrollToMessage(event, id) {
@@ -1670,7 +1747,7 @@
 
 <div class="panel">
     <img class="panel__hashtag-icon" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-hashtag.svg" alt="Hashtag icon"/>
-    <span>{{CHANNEL_NAME}}</span>
+    <span class="panel__channel-name">{{CHANNEL_NAME}}</span>
 
     {{CHANNEL_TOPIC}}
 
@@ -1678,6 +1755,10 @@
         <svg class="panel__summary-icon" aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></svg>
         <span>{{SUMMARY}}</span>
     </div>
+
+    <a href="https://discord-transcript.xouxou-hosting.fr/index" target="_blank" rel="noopener">
+        <img class="panel__logo" src="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg" alt="DiscordTranscript"/>
+    </a>
 </div>
 
 <div class="main">
@@ -1697,6 +1778,13 @@
 
 <div class="footer">
     <span class="footer__text">{{GENERATED_ON}} {{DATE_TIME}}</span>
+    <div class="footer__powered">
+        <span>{{POWERED_BY}}</span>
+        <a href="https://discord-transcript.xouxou-hosting.fr/index" class="footer__powered-link" target="_blank" rel="noopener">
+            <img class="footer__logo" src="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg" alt="DiscordTranscript">
+            DiscordTranscript
+        </a>
+    </div>
 </div>
 
 <div id="context-menu">
@@ -1737,7 +1825,7 @@
 
 <div id="image-modal" class="modal">
     <img class="modal-content" id="modal-image">
-    <a id="modal-caption" href="#" target="_blank">Ouvrir l'original</a>
+    <a id="modal-caption" href="#" target="_blank" rel="noopener">Ouvrir l'original</a>
 </div>
 
 <script>

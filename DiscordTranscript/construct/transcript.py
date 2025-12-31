@@ -283,6 +283,7 @@ class TranscriptDAO:
                 ("CHANNEL_CREATED_AT_LABEL", translations["CHANNEL_CREATED_AT"], PARSE_MODE_NONE),
                 ("MESSAGE_COUNT_LABEL", translations["MESSAGE_COUNT"], PARSE_MODE_NONE),
                 ("MESSAGE_PARTICIPANTS_LABEL", translations["MESSAGE_PARTICIPANTS"], PARSE_MODE_NONE),
+                ("POWERED_BY", translations["POWERED_BY"], PARSE_MODE_NONE),
             ],
             bot=self.bot,
             timezone=self.pytz_timezone,

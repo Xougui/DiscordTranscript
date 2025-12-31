@@ -31,6 +31,7 @@ TRANSLATIONS = {
         'USED': 'used',
         'SLASH_COMMAND': 'a slash command',
         'EDITED': '(edited)',
+        'POWERED_BY': 'Powered by',
     },
     'fr': {
         'TRANSCRIPT_OF_CHANNEL': 'Transcript du salon',
@@ -64,6 +65,7 @@ TRANSLATIONS = {
         'USED': 'a utilisé',
         'SLASH_COMMAND': 'une commande slash',
         'EDITED': '(modifié)',
+        'POWERED_BY': 'Propulsé par',
     },
     'es': {
         'TRANSCRIPT_OF_CHANNEL': 'Transcripción del canal',
@@ -97,5 +99,6 @@ TRANSLATIONS = {
         'USED': 'usó',
         'SLASH_COMMAND': 'un comando de barra',
         'EDITED': '(editado)',
+        'POWERED_BY': 'Impulsado por',
     }
 }
