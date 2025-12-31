@@ -1,11 +1,11 @@
 <div class="chatlog__message-group">
-    <div class="chatlog__message chatlog__message--pinned">
-        <div class="chatlog__pin-avatar-container">
-            <img class="chatlog__pin-avatar" src="{{ICON_URL}}" alt="System Icon">
+    <div class="chatlog__message chatlog__message--system">
+        <div class="chatlog__message-aside">
+            <img class="chatlog__system-icon" src="{{ICON_URL}}" alt="System Icon">
         </div>
         <div class="chatlog__message-primary">
-            <div class="chatlog__header">
-                <span class="chatlog__timestamp">{{SYSTEM_MESSAGE}}</span>
+            <div class="chatlog__content chatlog__markdown">
+                {{SYSTEM_MESSAGE}}
             </div>
         </div>
     </div>
