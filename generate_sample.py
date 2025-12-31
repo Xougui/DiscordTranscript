@@ -500,7 +500,7 @@ async def main():
     )
 
     # Message 11: Slash Command
-    interaction_meta = MockInteractionMetadata(user1, "ban")
+    interaction_meta = MockInteractionMetadata(user1, "exemple")
     msg11 = MockMessage(
         1011,
         "",
