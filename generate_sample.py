@@ -141,13 +141,13 @@ class MockMessage:
         content,
         author,
         timestamp,
-        attachments=[],
-        embeds=[],
-        components=[],
-        reactions=[],
+        attachments=None,
+        embeds=None,
+        components=None,
+        reactions=None,
         reference=None,
         channel=None,
-        stickers=[],
+        stickers=None,
         interaction_metadata=None,
         type_name="default",
     ):
@@ -156,16 +156,16 @@ class MockMessage:
         self.author = author
         self.created_at = timestamp
         self.edited_at = None
-        self.attachments = attachments
-        self.embeds = embeds
-        self.components = components
-        self.reactions = reactions
+        self.attachments = attachments or []
+        self.embeds = embeds or []
+        self.components = components or []
+        self.reactions = reactions or []
         self.reference = reference
         self.channel = channel
         self.mentions = []
         self.channel_mentions = []
         self.role_mentions = []
-        self.stickers = stickers
+        self.stickers = stickers or []
         self.type = MagicMock()
         self.type.name = type_name
         self.webhook_id = None
