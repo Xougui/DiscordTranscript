@@ -171,15 +171,26 @@ class ParseMention:
                 else:
                     if role.color.r == 0 and role.color.g == 0 and role.color.b == 0:
                         colour = "#dee0fc"
+                        bg_colour = "rgba(88, 101, 242, 0.3)"  # Default blurple with opacity
                     else:
                         colour = "#%02x%02x%02x" % (
                             role.color.r,
                             role.color.g,
                             role.color.b,
                         )
-                    replacement = '<span style="color: %s;">@%s</span>' % (
-                        colour,
-                        role.name,
+                        bg_colour = "rgba(%s, %s, %s, 0.1)" % (
+                            role.color.r,
+                            role.color.g,
+                            role.color.b,
+                        )
+                    replacement = (
+                        '<span class="mention" style="color: %s; background-color: %s;" title="%s">@%s</span>'
+                        % (
+                            colour,
+                            bg_colour,
+                            role.id,
+                            role.name,
+                        )
                     )
                 self.content = self.content.replace(
                     self.content[match.start() : match.end()], replacement

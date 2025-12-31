@@ -1837,6 +1837,7 @@
 {{META_DATA}}
 
 <div id="image-modal" class="modal">
+    <span class="modal-close">&times;</span>
     <img class="modal-content" id="modal-image">
     <a id="modal-caption" href="#" target="_blank" rel="noopener">Ouvrir l'original</a>
 </div>
@@ -2123,8 +2124,14 @@
             }
         });
 
+        // Close button logic
+        const closeBtn = document.querySelector('.modal-close');
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
         modal.onclick = function(e) {
-            if (e.target !== modalImg && e.target !== captionText) {
+            if (e.target !== modalImg && e.target !== captionText && e.target !== closeBtn) {
                 modal.style.display = "none";
             }
         }

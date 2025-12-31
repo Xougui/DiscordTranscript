@@ -22,7 +22,16 @@ class MockGuild:
         self.id = 123456789
         self.name = "Serveur de Démonstration"
         self.icon = "https://images-ext-1.discordapp.net/external/eWd-a9CcVDoj8a-UH3tcpShBjAHE9pcuAhI7lWv_u6o/%3Fsize%3D1024/https/cdn.discordapp.com/icons/1449148933732306976/c15c158e4c693ad4294f35f8253610b6.png?format=webp&quality=lossless&width=921&height=921"
-        self.roles = []
+        self.roles = [
+            MockRole(999, "Admin", MockColor(0xE91E63)),
+            MockRole(888, "Modérateur", MockColor(0x9B59B6))
+        ]
+
+    def get_role(self, id):
+        for role in self.roles:
+            if role.id == id:
+                return role
+        return None
 
     def get_member(self, id):
         return None
@@ -40,6 +49,12 @@ class MockColor:
 
     def __str__(self):
         return f"#{self.value:06x}"
+
+class MockRole:
+    def __init__(self, id, name, color=None):
+        self.id = id
+        self.name = name
+        self.color = color if color else MockColor(0xFFFFFF)
 
 
 class MockUser:
@@ -132,6 +147,8 @@ class MockMessage:
         reference=None,
         channel=None,
         stickers=[],
+        interaction_metadata=None,
+        type_name="default"
     ):
         self.id = id
         self.content = content
@@ -149,9 +166,10 @@ class MockMessage:
         self.role_mentions = []
         self.stickers = stickers
         self.type = MagicMock()
-        self.type.name = "default"
+        self.type.name = type_name
         self.webhook_id = None
         self.interaction = None
+        self.interaction_metadata = interaction_metadata
         self.clean_content = content
 
 
@@ -166,6 +184,7 @@ class MockEmbed:
         footer=None,
         image=None,
         thumbnail=None,
+        timestamp=None
     ):
         self.title = title
         self.description = description
@@ -176,7 +195,7 @@ class MockEmbed:
         self.footer = footer
         self.image = image
         self.thumbnail = thumbnail
-        self.timestamp = None
+        self.timestamp = timestamp
         self.url = None
         self.video = None
         self.provider = None
@@ -254,6 +273,12 @@ class MockButtonStyle:
     success = discord.ButtonStyle.success
     danger = discord.ButtonStyle.danger
     link = discord.ButtonStyle.link
+
+class MockInteractionMetadata:
+    def __init__(self, user, name=None):
+        self.user = user
+        self.name = name
+        self.id = 1234567890
 
 
 async def main():
@@ -352,6 +377,7 @@ async def main():
         author=MockEmbedProxy(
             name="Système",
             icon_url="https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp",
+            url="https://github.com/Xougui/DiscordTranscript" # Link Added
         ),
         footer=MockEmbedProxy(
             text="Généré automatiquement",
@@ -462,7 +488,54 @@ async def main():
         channel=channel,
     )
 
-    messages = [msg9, msg8, msg7, msg6, msg5, msg4, msg3, msg2, msg1]
+    # Message 10: Role Mention
+    msg10 = MockMessage(
+        1010,
+        "Voici une mention de rôle : <@&999>",
+        user1,
+        base_time + datetime.timedelta(minutes=35),
+        channel=channel,
+    )
+
+    # Message 11: Slash Command
+    interaction_meta = MockInteractionMetadata(user1, "ban")
+    msg11 = MockMessage(
+        1011,
+        "",
+        bot_user,
+        base_time + datetime.timedelta(minutes=40),
+        channel=channel,
+        interaction_metadata=interaction_meta,
+    )
+
+    # Message 12: System Join
+    msg12 = MockMessage(
+        1012,
+        "",
+        user2,
+        base_time + datetime.timedelta(minutes=45),
+        channel=channel,
+        type_name="new_member"
+    )
+    # Mapping fake type enum
+    msg12.type = discord.MessageType.new_member
+
+    # Message 13: System Boost
+    msg13 = MockMessage(
+        1013,
+        "",
+        user1,
+        base_time + datetime.timedelta(minutes=50),
+        channel=channel,
+        type_name="premium_guild_subscription"
+    )
+    # Mapping fake type enum
+    msg13.type = discord.MessageType.premium_guild_subscription
+
+    # Update msg5 with timestamp
+    msg5.embeds[0].timestamp = base_time
+
+    messages = [msg13, msg12, msg11, msg10, msg9, msg8, msg7, msg6, msg5, msg4, msg3, msg2, msg1]
     # Transcript.export reverses the list if after is None, expecting Newest->Oldest input.
     # So we sort descending (Newest first) to get Oldest first in the output.
     messages.sort(key=lambda x: x.created_at, reverse=True)

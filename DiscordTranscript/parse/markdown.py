@@ -302,7 +302,7 @@ class ParseMarkdown:
                 affected_text = re.sub(r"^<br>|<br>$", "", affected_text)
                 second_match = re.search(second_pattern, affected_text)
             affected_text = re.sub("  ", "&nbsp;&nbsp;", affected_text)
-            affected_text = html.escape(affected_text)
+            # affected_text = html.escape(affected_text)
             self.code_blocks_content.append(affected_text)
             if not reference:
                 self.content = self.content.replace(
@@ -324,7 +324,7 @@ class ParseMarkdown:
         match = re.search(pattern, self.content)
         while match is not None:
             affected_text = match.group(1)
-            affected_text = html.escape(affected_text)
+            # affected_text = html.escape(affected_text)
             self.code_blocks_content.append(affected_text)
             self.content = self.content.replace(
                 self.content[match.start() : match.end()],
@@ -337,7 +337,7 @@ class ParseMarkdown:
         match = re.search(pattern, self.content)
         while match is not None:
             affected_text = match.group(1)
-            affected_text = html.escape(affected_text)
+            # affected_text = html.escape(affected_text)
             self.code_blocks_content.append(affected_text)
             self.content = self.content.replace(
                 self.content[match.start() : match.end()],

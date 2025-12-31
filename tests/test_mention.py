@@ -52,11 +52,11 @@ async def test_role_mention(mock_guild):
 
     parser = ParseMention("<@&98765>", mock_guild)
     await parser.role_mention()
-    assert parser.content == '<span style="color: #ff0000;">@Test Role</span>'
+    assert parser.content == '<span class="mention" style="color: #ff0000; background-color: rgba(255, 0, 0, 0.1);" title="98765">@Test Role</span>'
 
     parser = ParseMention("&lt;@&amp;98765&gt;", mock_guild)
     await parser.role_mention()
-    assert parser.content == '<span style="color: #ff0000;">@Test Role</span>'
+    assert parser.content == '<span class="mention" style="color: #ff0000; background-color: rgba(255, 0, 0, 0.1);" title="98765">@Test Role</span>'
 
     mock_guild.get_role.return_value = None
     parser = ParseMention("<@&12345>", mock_guild)
@@ -130,4 +130,4 @@ async def test_flow(mock_guild):
 
     assert '<span class="mention" title="112233">@TestUser</span>' in result
     assert '<span class="mention" title="54321">#test-channel</span>' in result
-    assert '<span style="color: #ff0000;">@Test Role</span>' in result
+    assert '<span class="mention" style="color: #ff0000; background-color: rgba(255, 0, 0, 0.1);" title="98765">@Test Role</span>' in result
