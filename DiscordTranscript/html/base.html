@@ -207,6 +207,7 @@
             height: 1.5em;
             margin: 0 0.06em;
             vertical-align: -0.4em;
+            display: inline-block;
         }
 
         .emoji--small {
@@ -1667,8 +1668,6 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
-    <script src="https://cdn.tailwindcss.com" defer></script>
-    <script src="https://unpkg.com/lucide@latest" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" defer></script>
     <script src="https://unpkg.com/@popperjs/core@2.11.5/dist/umd/popper.min.js" defer></script>
     <script src="https://unpkg.com/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js" defer></script>
@@ -1679,6 +1678,26 @@
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.5/plugin/isToday.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.5/plugin/isTomorrow.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.5/plugin/isBetween.js" defer></script>
+
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script>
+        // Suppression de l'avertissement Tailwind CDN pour la démo
+        const originalWarn = console.warn;
+        console.warn = (...args) => {
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+            originalWarn.apply(console, args);
+        };
+    </script>
+    <script>
+        window.tailwind = {
+            config: {
+                corePlugins: {
+                    preflight: false
+                }
+            }
+        }
+    </script>
 
     <script>
         //  Scroll to Message (References)
