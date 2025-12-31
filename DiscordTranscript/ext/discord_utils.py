@@ -62,5 +62,5 @@ class DiscordUtils:
     interaction_dropdown_icon: str = '<img class="chatlog__dropdown-icon" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-dropdown.svg" alt="Dropdown icon">'
     system_join_icon: str = "https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-thread-add-recipient.svg"
     system_boost_icon: str = (
-        "https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-logo.svg"
+        "https://raw.githubusercontent.com/Debuggingss/discord-badges/refs/heads/master/svgs/5a24b20b84fb3eafc138916729386e76.svg"
     )
