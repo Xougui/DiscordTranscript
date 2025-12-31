@@ -14,8 +14,7 @@ async def test_underline_markdown():
     parser = ParseMarkdown("__hello world__")
     await parser.standard_message_flow()
     assert (
-        parser.content.strip()
-        == '<span class="markdown-underline">hello world</span>'
+        parser.content.strip() == '<span class="markdown-underline">hello world</span>'
     )
 
 
