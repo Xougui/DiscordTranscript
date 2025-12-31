@@ -503,7 +503,7 @@ async def main():
     interaction_meta = MockInteractionMetadata(user1, "exemple")
     msg11 = MockMessage(
         1011,
-        "",
+        "Ceci est une commande slash d'exemple.",
         bot_user,
         base_time + datetime.timedelta(minutes=40),
         channel=channel,
