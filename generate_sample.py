@@ -24,7 +24,7 @@ class MockGuild:
         self.icon = "https://images-ext-1.discordapp.net/external/eWd-a9CcVDoj8a-UH3tcpShBjAHE9pcuAhI7lWv_u6o/%3Fsize%3D1024/https/cdn.discordapp.com/icons/1449148933732306976/c15c158e4c693ad4294f35f8253610b6.png?format=webp&quality=lossless&width=921&height=921"
         self.roles = [
             MockRole(999, "Admin", MockColor(0xE91E63)),
-            MockRole(888, "Modérateur", MockColor(0x9B59B6))
+            MockRole(888, "Modérateur", MockColor(0x9B59B6)),
         ]
 
     def get_role(self, id):
@@ -49,6 +49,7 @@ class MockColor:
 
     def __str__(self):
         return f"#{self.value:06x}"
+
 
 class MockRole:
     def __init__(self, id, name, color=None):
@@ -148,7 +149,7 @@ class MockMessage:
         channel=None,
         stickers=[],
         interaction_metadata=None,
-        type_name="default"
+        type_name="default",
     ):
         self.id = id
         self.content = content
@@ -184,7 +185,7 @@ class MockEmbed:
         footer=None,
         image=None,
         thumbnail=None,
-        timestamp=None
+        timestamp=None,
     ):
         self.title = title
         self.description = description
@@ -273,6 +274,7 @@ class MockButtonStyle:
     success = discord.ButtonStyle.success
     danger = discord.ButtonStyle.danger
     link = discord.ButtonStyle.link
+
 
 class MockInteractionMetadata:
     def __init__(self, user, name=None):
@@ -377,7 +379,7 @@ async def main():
         author=MockEmbedProxy(
             name="Système",
             icon_url="https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp",
-            url="https://github.com/Xougui/DiscordTranscript" # Link Added
+            url="https://github.com/Xougui/DiscordTranscript",  # Link Added
         ),
         footer=MockEmbedProxy(
             text="Généré automatiquement",
@@ -515,7 +517,7 @@ async def main():
         user2,
         base_time + datetime.timedelta(minutes=45),
         channel=channel,
-        type_name="new_member"
+        type_name="new_member",
     )
     # Mapping fake type enum
     msg12.type = discord.MessageType.new_member
@@ -527,7 +529,7 @@ async def main():
         user1,
         base_time + datetime.timedelta(minutes=50),
         channel=channel,
-        type_name="premium_guild_subscription"
+        type_name="premium_guild_subscription",
     )
     # Mapping fake type enum
     msg13.type = discord.MessageType.premium_guild_subscription
@@ -535,7 +537,21 @@ async def main():
     # Update msg5 with timestamp
     msg5.embeds[0].timestamp = base_time
 
-    messages = [msg13, msg12, msg11, msg10, msg9, msg8, msg7, msg6, msg5, msg4, msg3, msg2, msg1]
+    messages = [
+        msg13,
+        msg12,
+        msg11,
+        msg10,
+        msg9,
+        msg8,
+        msg7,
+        msg6,
+        msg5,
+        msg4,
+        msg3,
+        msg2,
+        msg1,
+    ]
     # Transcript.export reverses the list if after is None, expecting Newest->Oldest input.
     # So we sort descending (Newest first) to get Oldest first in the output.
     messages.sort(key=lambda x: x.created_at, reverse=True)
@@ -553,7 +569,6 @@ async def main():
     )
 
     print("Generated test_render.html successfully.")
-
 
     # Injection du bouton retour
     back_button = """
@@ -588,13 +603,15 @@ async def main():
 
     # Write to specific path as requested, catching errors if path invalid on this OS
     try:
-        output_path = r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_preview.html"
+        output_path = (
+            r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_preview.html"
+        )
         # Handle drive letter for non-Windows envs if needed or just let it fail gracefully
-        if os.name != 'nt':
-             # Just for safety in linux envs, we skip or print warning,
-             # but user specifically asked for this code back.
-             # We will try to execute it but catch exception.
-             pass
+        if os.name != "nt":
+            # Just for safety in linux envs, we skip or print warning,
+            # but user specifically asked for this code back.
+            # We will try to execute it but catch exception.
+            pass
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         with open(output_path, "w", encoding="utf-8") as f:
