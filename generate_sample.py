@@ -319,7 +319,7 @@ async def main():
         1001,
         "Salut tout le monde ! Bienvenue sur le canal de test. Voici un exemple complet de transcript.",
         user1,
-        base_time + datetime.timedelta(seconds=30),
+        base_time + datetime.timedelta(seconds=0),
         channel=channel,
     )
 
@@ -515,7 +515,7 @@ async def main():
         1012,
         "",
         user2,
-        base_time + datetime.timedelta(minutes=0),
+        base_time + datetime.timedelta(minutes=45),
         channel=channel,
         type_name="new_member",
     )
