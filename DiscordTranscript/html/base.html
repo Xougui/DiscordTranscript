@@ -255,6 +255,7 @@
 
         .chatlog__message:hover {
             background-color: #2e3035;
+            border-radius: 4px;
         }
 
         .chatlog__message:hover .chatlog__short-timestamp {
@@ -412,14 +413,16 @@
             padding-right: 1rem;
             font-size: 1rem;
             word-wrap: break-word;
+            line-height: 1.5;
         }
 
         .chatlog__message {
             display: grid;
             grid-template-columns: auto 1fr;
-            padding: 0.15rem 0;
+            padding: 0.45rem 0.5rem;
             direction: ltr;
             unicode-bidi: bidi-override;
+            transition: background-color 0.1s ease;
         }
 
         .chatlog__avatar {
