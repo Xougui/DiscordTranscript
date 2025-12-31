@@ -1895,8 +1895,8 @@
         const { normalizedX, normalizedY } = normalisePosition(mouseX, mouseY, "context")
 
         contextMenu.classList.remove("visible")
-        contextMenu.style.left = `${normalizedX}px`;
-        contextMenu.style.top = `${normalizedY}px`
+        contextMenu.style.setProperty('left', `${normalizedX}px`);
+        contextMenu.style.setProperty('top', `${normalizedY}px`);
 
         setTimeout(() => {
             contextMenu.classList.add("visible");
@@ -1968,8 +1968,8 @@
 
                 const { normalizedX, normalizedY } = normalisePosition(elementX, elementY, "user")
 
-                metaPopout.style.left = `${normalizedX}px`;
-                metaPopout.style.top = `${normalizedY}px`;
+                metaPopout.style.setProperty('left', `${normalizedX}px`);
+                metaPopout.style.setProperty('top', `${normalizedY}px`);
 
                 setTimeout(() => {
                     metaPopout.classList.add("mounted")
@@ -1986,8 +1986,8 @@
             const elementX = this.offsetLeft - 135
             const elementY = this.offsetTop + 55
 
-            summaryPopout.style.left = `${elementX}px`;
-            summaryPopout.style.top = `${elementY}px`;
+            summaryPopout.style.setProperty('left', `${elementX}px`);
+            summaryPopout.style.setProperty('top', `${elementY}px`);
 
             setTimeout(() => {
                 summaryPopout.classList.add("visible")
