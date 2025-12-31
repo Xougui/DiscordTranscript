@@ -255,10 +255,7 @@ class Embed:
 
     async def build_timestamp(self):
         """Builds the timestamp of the embed."""
-        if (
-            not self.embed.timestamp
-            or self.embed.timestamp == self.check_against
-        ):
+        if not self.embed.timestamp or self.embed.timestamp == self.check_against:
             self.timestamp = ""
             return
 
