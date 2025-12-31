@@ -61,4 +61,6 @@ class DiscordUtils:
     interaction_command_icon: str = '<img class="chatlog__interaction-icon" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-command.svg" alt="Slash Command">'
     interaction_dropdown_icon: str = '<img class="chatlog__dropdown-icon" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-dropdown.svg" alt="Dropdown icon">'
     system_join_icon: str = "https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-thread-add-recipient.svg"
-    system_boost_icon: str = "https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-logo.svg"
+    system_boost_icon: str = (
+        "https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-logo.svg"
+    )
