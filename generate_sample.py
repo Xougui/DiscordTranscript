@@ -319,7 +319,7 @@ async def main():
         1001,
         "Salut tout le monde ! Bienvenue sur le canal de test. Voici un exemple complet de transcript.",
         user1,
-        base_time + datetime.timedelta(seconds=0),
+        base_time + datetime.timedelta(seconds=30),
         channel=channel,
     )
 
@@ -485,7 +485,7 @@ async def main():
         1009,
         "Merci pour votre participation !",
         user2,
-        base_time + datetime.timedelta(minutes=30),
+        base_time + datetime.timedelta(minutes=60),
         reactions=[reaction1, reaction2],
         channel=channel,
     )
@@ -515,7 +515,7 @@ async def main():
         1012,
         "",
         user2,
-        base_time + datetime.timedelta(minutes=45),
+        base_time + datetime.timedelta(minutes=0),
         channel=channel,
         type_name="new_member",
     )
@@ -527,7 +527,7 @@ async def main():
         1013,
         "",
         user1,
-        base_time + datetime.timedelta(minutes=50),
+        base_time + datetime.timedelta(minutes=30),
         channel=channel,
         type_name="premium_guild_subscription",
     )
