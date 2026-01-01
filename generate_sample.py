@@ -10,6 +10,18 @@ import discord
 
 from DiscordTranscript import raw_export
 
+# Monkey-patch discord pour supporter les composants V2 pour le mocking
+for cls_name in [
+    "SectionComponent",
+    "TextDisplay",
+    "ThumbnailComponent",
+    "SeparatorComponent",
+    "Container",
+]:
+    if not hasattr(discord, cls_name):
+        setattr(discord, cls_name, type(cls_name, (), {}))
+
+
 # Mock objects to simulate discord.py models
 
 
@@ -254,10 +266,9 @@ class MockButton(discord.Button):
         self._underlying = MagicMock()  # Just in case
 
 
-class MockActionRow:
+class MockActionRow(discord.ActionRow):
     def __init__(self, children):
         self.children = children
-        self.type = discord.ComponentType.action_row
 
 
 class MockSelectOption:
@@ -287,6 +298,38 @@ class MockSelectMenu(discord.SelectMenu):
         self.disabled = disabled
         # self.type is a property
         self._underlying = MagicMock()
+
+
+class MockContainer(discord.Container):
+    def __init__(self, children, accent_color=None):
+        self.children = children
+        self._accent_color = accent_color
+
+    @property
+    def accent_color(self):
+        return self._accent_color
+
+
+class MockSection(discord.SectionComponent):
+    def __init__(self, children, accessory=None):
+        self.children = children
+        self.accessory = accessory
+
+
+class MockTextDisplay(discord.TextDisplay):
+    def __init__(self, content):
+        self.content = content
+
+
+class MockThumbnail(discord.ThumbnailComponent):
+    def __init__(self, url):
+        self.media = MagicMock()
+        self.media.url = url
+
+
+class MockSeparator(discord.SeparatorComponent):
+    def __init__(self):
+        pass
 
 
 class MockButtonStyle:
@@ -680,6 +723,92 @@ async def main():
         channel=channel,
     )
 
+    # Message 21: Composants V2 (Container, Section, TextDisplay)
+    # Imitation d'une vue type Embed comme demandé
+
+    # Section 1: En-tête avec Titre et Miniature
+    text_header = MockTextDisplay(
+        "**Panel de Configuration**\n"
+        "Gérez vos paramètres utilisateur et vos préférences directement depuis ce message interactif."
+    )
+    thumb = MockThumbnail("https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp")
+    section_header = MockSection([text_header], accessory=thumb)
+
+    # Séparateur
+    separator = MockSeparator()
+
+    # Section 2: Informations supplémentaires (Texte seul)
+    text_info = MockTextDisplay(
+        "**Statut du compte :** ✅ Vérifié\n"
+        "**Niveau d'accès :** ⭐ Premium\n"
+        "**Dernière connexion :** Il y a 2 heures"
+    )
+    # Ajout d'un bouton comme accessoire dans la section
+    btn_refresh = MockButton("Actualiser", MockButtonStyle.secondary, emoji=MockEmoji("🔄"))
+    section_info = MockSection([text_info], accessory=btn_refresh)
+
+    # Section 3: Menu de sélection
+    select_v2 = MockSelectMenu(
+        "select_v2",
+        [
+            MockSelectOption(
+                "Notifications", "notif", "Gérer les alertes", MockEmoji("🔔")
+            ),
+            MockSelectOption(
+                "Confidentialité",
+                "privacy",
+                "Paramètres de vie privée",
+                MockEmoji("🔒"),
+            ),
+            MockSelectOption("Thème", "theme", "Changer l'apparence", MockEmoji("🎨")),
+        ],
+        placeholder="Que souhaitez-vous configurer ?",
+    )
+    action_row_select = MockActionRow([select_v2])
+
+    # Section 3b: Second Menu de sélection (Langue)
+    select_lang = MockSelectMenu(
+        "select_lang",
+        [
+            MockSelectOption("Français", "fr", emoji=MockEmoji("🇫🇷"), default=True),
+            MockSelectOption("English", "en", emoji=MockEmoji("🇬🇧")),
+            MockSelectOption("Deutsch", "de", emoji=MockEmoji("🇩🇪")),
+        ],
+        placeholder="Langue / Language",
+    )
+    action_row_lang = MockActionRow([select_lang])
+
+    # Section 4: Boutons d'action
+    btn_save = MockButton("Sauvegarder", MockButtonStyle.success, emoji=MockEmoji("💾"))
+    btn_cancel = MockButton("Annuler", MockButtonStyle.secondary)
+    btn_help = MockButton(
+        "Aide", MockButtonStyle.link, url="https://support.discord.com"
+    )
+    action_row_buttons = MockActionRow([btn_save, btn_cancel, btn_help])
+
+    # Container contenant tout
+    container = MockContainer(
+        children=[
+            section_header,
+            separator,
+            section_info,
+            separator,
+            action_row_select,
+            action_row_lang,
+            action_row_buttons,
+        ],
+        accent_color=MockColor(0x5865F2),
+    )
+
+    msg21 = MockMessage(
+        1021,
+        "Voici un exemple avancé utilisant les composants V2 (Containers) :",
+        bot_user,
+        base_time + datetime.timedelta(minutes=59),
+        components=[container],
+        channel=channel,
+    )
+
     # Update msg5 with timestamp
     msg5.embeds[0].timestamp = base_time
 
@@ -704,6 +833,7 @@ async def main():
         msg18,
         msg19,
         msg20,
+        msg21,
     ]
     # Transcript.export reverses the list if after is None, expecting Newest->Oldest input.
     # So we sort descending (Newest first) to get Oldest first in the output.
