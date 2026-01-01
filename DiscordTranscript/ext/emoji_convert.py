@@ -1,7 +1,8 @@
 import unicodedata
-from grapheme import graphemes
-import emoji
+
 import aiohttp
+import emoji
+from grapheme import graphemes
 
 from DiscordTranscript.ext.cache import cache
 
@@ -21,9 +22,8 @@ async def valid_src(src: str) -> bool:
         bool: Whether the URL is valid.
     """
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(src) as resp:
-                return resp.status == 200
+        async with aiohttp.ClientSession() as session, session.get(src) as resp:
+            return resp.status == 200
     except aiohttp.ClientConnectorError:
         return False
 
@@ -80,9 +80,7 @@ async def convert(char: str) -> str:
                 .title()
             )
 
-    src = cdn_fmt.format(
-        codepoint=await codepoint(["{cp:x}".format(cp=ord(c)) for c in char])
-    )
+    src = cdn_fmt.format(codepoint=await codepoint([f"{ord(c):x}" for c in char]))
 
     if await valid_src(src):
         return f'<img class="emoji emoji--small" src="{src}" alt="{char}" title="{name}" aria-label="Emoji: {name}">'
