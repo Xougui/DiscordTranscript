@@ -2,6 +2,7 @@ import asyncio
 from dataclasses import dataclass, field
 import datetime
 from pathlib import Path
+import platform
 import re
 from unittest.mock import MagicMock
 
@@ -462,9 +463,7 @@ async def main():
     button_link = MockButton(
         "Site Web", MockButtonStyle.link, url="https://discord.com"
     )
-    button_disabled = MockButton(
-        "Désactivé", MockButtonStyle.secondary, disabled=True
-    )
+    button_disabled = MockButton("Désactivé", MockButtonStyle.secondary, disabled=True)
 
     action_row_buttons = MockActionRow(
         [button_primary, button_secondary, button_danger, button_link, button_disabled]
@@ -514,7 +513,8 @@ async def main():
 
     # Message 8: Sticker
     sticker = MockSticker(
-        "Cool Sticker", "https://images.freeimages.com/images/large-previews/003/sushi-roll-1321056.jpg?fmt=webp&h=350"
+        "Cool Sticker",
+        "https://images.freeimages.com/images/large-previews/003/sushi-roll-1321056.jpg?fmt=webp&h=350",
     )
     msg8 = MockMessage(
         1008,
@@ -727,6 +727,10 @@ async def main():
     html = html.replace("<body>", "<body>" + BACK_BUTTON_HTML)
     html = html.replace("</body>", BACK_BUTTON_SCRIPT + "</body>")
 
+    hostname = platform.node()
+
+    print(f"Hostname détecté : {hostname}")
+
     # Gestion des chemins de sortie avec pathlib
     output_filename = "test_render.html"
     local_path = Path(output_filename)
@@ -736,18 +740,21 @@ async def main():
     print(f"Generated local file: {local_path.absolute()}")
 
     # 2. Écriture vers le chemin spécifique (si le dossier parent existe)
-    dev_path = Path(
-        r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_preview.html"
-    )
+    if hostname == "PC_Xougui":
+        dev_path = Path(
+            r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_preview.html"
+        )
 
-    try:
-        if dev_path.parent.exists():
-            dev_path.write_text(html, encoding="utf-8")
-            print(f"Generated dev path: {dev_path}")
-        else:
-            print(f"Dev path skipped (directory not found): {dev_path.parent}")
-    except Exception as e:
-        print(f"Could not write to dev path: {e}")
+        try:
+            if dev_path.parent.exists():
+                dev_path.write_text(html, encoding="utf-8")
+                print(f"Generated dev path: {dev_path}")
+            else:
+                print(f"Dev path skipped (directory not found): {dev_path.parent}")
+        except Exception as e:
+            print(f"Could not write to dev path: {e}")
+    else:
+        print("Dev path skipped (hostname does not match).")
 
 
 if __name__ == "__main__":
