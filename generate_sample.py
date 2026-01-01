@@ -1,10 +1,12 @@
-import os
 import asyncio
 import datetime
+import os
 import re
 from unittest.mock import MagicMock
-from DiscordTranscript import raw_export
+
 import discord
+
+from DiscordTranscript import raw_export
 
 # Mock objects to simulate discord.py models
 
