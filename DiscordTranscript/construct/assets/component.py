@@ -7,14 +7,14 @@ from DiscordTranscript.ext.html_generator import (
     PARSE_MODE_MARKDOWN,
     PARSE_MODE_NONE,
     component_button,
+    component_container,
     component_menu,
     component_menu_options,
     component_menu_options_emoji,
-    component_container,
     component_section,
+    component_separator,
     component_text_display,
     component_thumbnail,
-    component_separator,
     fill_out,
 )
 
@@ -95,46 +95,50 @@ class Component:
         elif isinstance(c, discord.Container):
             self.components += await self.build_container(c)
         elif isinstance(c, discord.ActionRow):
-             # Recursively handle nested ActionRows if any (though usually they are top level)
-             # But here we are processing children of a top level component.
-             # If an ActionRow is nested inside a Container, we need to handle it.
-             # But ActionRow logic in `flow` separates buttons and menus.
-             # Here we want to append them to `self.components` instead of separating them
-             # if we are inside a structured layout.
+            # Recursively handle nested ActionRows if any (though usually they are top level)
+            # But here we are processing children of a top level component.
+            # If an ActionRow is nested inside a Container, we need to handle it.
+            # But ActionRow logic in `flow` separates buttons and menus.
+            # Here we want to append them to `self.components` instead of separating them
+            # if we are inside a structured layout.
 
-             # Create a new Component instance to handle this ActionRow's children
-             sub_component = Component(c, self.guild, self.bot, self.timezone)
-             self.components += await sub_component.flow()
+            # Create a new Component instance to handle this ActionRow's children
+            sub_component = Component(c, self.guild, self.bot, self.timezone)
+            self.components += await sub_component.flow()
 
     async def build_container(self, c):
         children_html = ""
         # Access c.children or c.components if children not available (discord.py internals)
-        children = getattr(c, 'children', [])
+        children = getattr(c, "children", [])
 
         for child in children:
-             if isinstance(child, discord.ActionRow):
-                 sub_comp = Component(child, self.guild, self.bot, self.timezone)
-                 children_html += await sub_comp.flow()
-             else:
-                 # It's a Section or other component
-                 # We can use a temporary component instance to build it
-                 # But `build_component` adds to `self.components` etc.
-                 # Using a dummy ActionRow might fail if we need to pass a valid component
-                 # But we can pass None if we don't use it, but __init__ stores it.
-                 # Let's pass the child itself as the component
-                 temp = Component(child, self.guild, self.bot, self.timezone)
-                 # Wait, Component flow expects children.
-                 # We want to call build_component directly on the child.
-                 # But build_component is an instance method that updates self.components
+            if isinstance(child, discord.ActionRow):
+                sub_comp = Component(child, self.guild, self.bot, self.timezone)
+                children_html += await sub_comp.flow()
+            else:
+                # It's a Section or other component
+                # We can use a temporary component instance to build it
+                # But `build_component` adds to `self.components` etc.
+                # Using a dummy ActionRow might fail if we need to pass a valid component
+                # But we can pass None if we don't use it, but __init__ stores it.
+                # Let's pass the child itself as the component
+                temp = Component(child, self.guild, self.bot, self.timezone)
+                # Wait, Component flow expects children.
+                # We want to call build_component directly on the child.
+                # But build_component is an instance method that updates self.components
 
-                 # So:
-                 await temp.build_component(child)
-                 # Merge results
-                 children_html += temp.components
-                 if temp.menus:
-                     children_html += f'<div class="chatlog__components">{temp.menus}</div>'
-                 if temp.buttons:
-                     children_html += f'<div class="chatlog__components">{temp.buttons}</div>'
+                # So:
+                await temp.build_component(child)
+                # Merge results
+                children_html += temp.components
+                if temp.menus:
+                    children_html += (
+                        f'<div class="chatlog__components">{temp.menus}</div>'
+                    )
+                if temp.buttons:
+                    children_html += (
+                        f'<div class="chatlog__components">{temp.buttons}</div>'
+                    )
 
         accent_color = str(c.accent_color) if c.accent_color else "#1e1f22"
 
@@ -151,21 +155,23 @@ class Component:
 
     async def build_section(self, c):
         children_html = ""
-        children = getattr(c, 'children', [])
+        children = getattr(c, "children", [])
         for child in children:
-             temp = Component(child, self.guild, self.bot, self.timezone)
-             await temp.build_component(child)
-             children_html += temp.components
+            temp = Component(child, self.guild, self.bot, self.timezone)
+            await temp.build_component(child)
+            children_html += temp.components
 
         accessory_html = ""
         if c.accessory:
-             temp = Component(c.accessory, self.guild, self.bot, self.timezone)
-             await temp.build_component(c.accessory)
-             accessory_html += temp.components
-             # Accessories like Buttons need to be wrapped if they are buttons?
-             # `build_button` adds to `self.buttons`.
-             if temp.buttons:
-                 accessory_html += f'<div class="chatlog__components">{temp.buttons}</div>'
+            temp = Component(c.accessory, self.guild, self.bot, self.timezone)
+            await temp.build_component(c.accessory)
+            accessory_html += temp.components
+            # Accessories like Buttons need to be wrapped if they are buttons?
+            # `build_button` adds to `self.buttons`.
+            if temp.buttons:
+                accessory_html += (
+                    f'<div class="chatlog__components">{temp.buttons}</div>'
+                )
 
         return await fill_out(
             self.guild,
@@ -338,16 +344,20 @@ class Component:
             str: The HTML for the components.
         """
         if isinstance(self.component, discord.Container):
-             self.components += await self.build_container(self.component)
+            self.components += await self.build_container(self.component)
         else:
-            children = getattr(self.component, 'children', [])
+            children = getattr(self.component, "children", [])
             for c in children:
                 await self.build_component(c)
 
             if self.menus:
-                self.components += f'<div class="chatlog__components">{self.menus}</div>'
+                self.components += (
+                    f'<div class="chatlog__components">{self.menus}</div>'
+                )
 
             if self.buttons:
-                self.components += f'<div class="chatlog__components">{self.buttons}</div>'
+                self.components += (
+                    f'<div class="chatlog__components">{self.buttons}</div>'
+                )
 
         return self.components
