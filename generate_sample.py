@@ -1,6 +1,7 @@
 import asyncio
+from dataclasses import dataclass, field
 import datetime
-import os
+from pathlib import Path
 import re
 from unittest.mock import MagicMock
 
@@ -11,9 +12,9 @@ from DiscordTranscript import raw_export
 # Mock objects to simulate discord.py models
 
 
+@dataclass
 class MockAsset:
-    def __init__(self, url):
-        self.url = url
+    url: str
 
     def __str__(self):
         return self.url
@@ -42,12 +43,17 @@ class MockGuild:
         return None
 
 
+@dataclass
 class MockColor:
-    def __init__(self, value):
-        self.value = value
-        self.r = (value >> 16) & 255
-        self.g = (value >> 8) & 255
-        self.b = value & 255
+    value: int
+    r: int = field(init=False)
+    g: int = field(init=False)
+    b: int = field(init=False)
+
+    def __post_init__(self):
+        self.r = (self.value >> 16) & 255
+        self.g = (self.value >> 8) & 255
+        self.b = self.value & 255
 
     def __str__(self):
         return f"#{self.value:06x}"
@@ -295,6 +301,32 @@ class MockInteractionMetadata:
         self.user = user
         self.name = name
         self.id = 1234567890
+
+
+BACK_BUTTON_HTML = """
+    <!-- Back Button (Visible on Top Hover) -->
+    <a href="javascript:history.back()" id="back-button" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-[#0a0a0c]/90 border border-white/10 text-white px-6 py-2 rounded-full shadow-2xl backdrop-blur-md transition-all duration-300 opacity-0 -translate-y-full pointer-events-none flex items-center gap-2 font-medium hover:bg-white/10 hover:scale-105">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        Retour
+    </a>
+    """
+
+BACK_BUTTON_SCRIPT = """
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            // 6. Back Button Logic
+            const backBtn = document.getElementById('back-button');
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 100) {
+                    backBtn.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+                } else {
+                    backBtn.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+                }
+            });
+        });
+    </script>
+    """
 
 
 async def main():
@@ -673,54 +705,30 @@ async def main():
     print("Generated test_render.html successfully.")
 
     # Injection du bouton retour
-    back_button = """
-    <!-- Back Button (Visible on Top Hover) -->
-    <a href="../index.html" id="back-button" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-[#0a0a0c]/90 border border-white/10 text-white px-6 py-2 rounded-full shadow-2xl backdrop-blur-md transition-all duration-300 opacity-0 -translate-y-full pointer-events-none flex items-center gap-2 font-medium hover:bg-white/10 hover:scale-105">
-        <i data-lucide="arrow-left" class="w-4 h-4"></i>
-        Retour
-    </a>
-    """
-    html = html.replace("<body>", "<body>" + back_button)
+    html = html.replace("<body>", "<body>" + BACK_BUTTON_HTML)
+    html = html.replace("</body>", BACK_BUTTON_SCRIPT + "</body>")
 
-    back_button_script = """
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            lucide.createIcons();
-            // 6. Back Button Logic
-            const backBtn = document.getElementById('back-button');
-            document.addEventListener('mousemove', (e) => {
-                if (e.clientY < 100) {
-                    backBtn.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
-                } else {
-                    backBtn.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
-                }
-            });
-        });
-    </script>
-    """
-    html = html.replace("</body>", back_button_script + "</body>")
+    # Gestion des chemins de sortie avec pathlib
+    output_filename = "test_render.html"
+    local_path = Path(output_filename)
 
-    with open("test_render.html", "w", encoding="utf-8") as f:
-        f.write(html)
+    # 1. Écriture locale (toujours effectuée)
+    local_path.write_text(html, encoding="utf-8")
+    print(f"Generated local file: {local_path.absolute()}")
 
-    # Write to specific path as requested, catching errors if path invalid on this OS
+    # 2. Écriture vers le chemin spécifique (si le dossier parent existe)
+    dev_path = Path(
+        r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_preview.html"
+    )
+
     try:
-        output_path = (
-            r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_preview.html"
-        )
-        # Handle drive letter for non-Windows envs if needed or just let it fail gracefully
-        if os.name != "nt":
-            # Just for safety in linux envs, we skip or print warning,
-            # but user specifically asked for this code back.
-            # We will try to execute it but catch exception.
-            pass
-
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        with open(output_path, "w", encoding="utf-8") as f:
-            f.write(html)
-        print(f"Generated {output_path} successfully.")
+        if dev_path.parent.exists():
+            dev_path.write_text(html, encoding="utf-8")
+            print(f"Generated dev path: {dev_path}")
+        else:
+            print(f"Dev path skipped (directory not found): {dev_path.parent}")
     except Exception as e:
-        print(f"Could not write to {output_path}: {e}")
+        print(f"Could not write to dev path: {e}")
 
 
 if __name__ == "__main__":
