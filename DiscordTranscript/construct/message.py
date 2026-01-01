@@ -1,36 +1,38 @@
 from __future__ import annotations
+
+from datetime import timedelta
 import html
 import re
+from typing import TYPE_CHECKING
+
 import aiohttp
-from typing import List, Optional, Tuple, TYPE_CHECKING
-from datetime import timedelta
 from pytz import timezone
 
-from DiscordTranscript.construct.attachment_handler import AttachmentHandler
-from DiscordTranscript.ext.discord_import import discord
 from DiscordTranscript.construct.assets import Attachment, Component, Embed, Reaction
+from DiscordTranscript.construct.attachment_handler import AttachmentHandler
+from DiscordTranscript.ext.cache import cache
+from DiscordTranscript.ext.discord_import import discord
 from DiscordTranscript.ext.discord_utils import DiscordUtils
 from DiscordTranscript.ext.discriminator import discriminator
-from DiscordTranscript.ext.cache import cache
 from DiscordTranscript.ext.html_generator import (
-    fill_out,
+    PARSE_MODE_MARKDOWN,
+    PARSE_MODE_NONE,
+    PARSE_MODE_REFERENCE,
     bot_tag,
     bot_tag_verified,
+    end_message,
+    fill_out,
+    img_attachment,
     message_body,
-    message_pin,
-    message_thread,
     message_content,
+    message_interaction,
+    message_pin,
     message_reference,
     message_reference_unknown,
-    message_interaction,
-    img_attachment,
-    start_message,
-    end_message,
-    PARSE_MODE_NONE,
-    PARSE_MODE_MARKDOWN,
-    PARSE_MODE_REFERENCE,
-    message_thread_remove,
+    message_thread,
     message_thread_add,
+    message_thread_remove,
+    start_message,
     system_notification,
 )
 
@@ -90,15 +92,15 @@ class MessageConstruct:
     def __init__(
         self,
         message: discord_typings.Message,
-        previous_message: Optional[discord_typings.Message],
+        previous_message: discord_typings.Message | None,
         pytz_timezone,
         military_time: bool,
         guild: discord_typings.Guild,
         meta_data: dict,
         message_dict: dict,
-        attachment_handler: Optional[AttachmentHandler],
-        tenor_api_key: Optional[str] = None,
-        bot: Optional["discord_typings.Client"] = None,
+        attachment_handler: AttachmentHandler | None,
+        tenor_api_key: str | None = None,
+        bot: discord_typings.Client | None = None,
         translations: dict = None,
     ):
         """Initializes the MessageConstruct.
@@ -136,7 +138,7 @@ class MessageConstruct:
 
     async def construct_message(
         self,
-    ) -> Tuple[str, dict]:
+    ) -> tuple[str, dict]:
         """Constructs the HTML for the message.
 
         Returns:
@@ -815,8 +817,8 @@ class MessageConstruct:
         return ""
 
     def set_time(
-        self, message: Optional[discord_typings.Message] = None
-    ) -> Tuple[str, str]:
+        self, message: discord_typings.Message | None = None
+    ) -> tuple[str, str]:
         """Sets the time for a message.
 
         Args:
@@ -852,7 +854,7 @@ class MessageConstruct:
 
 async def _process_tenor_link(
     session: aiohttp.ClientSession, tenor_api_key: str, link: str
-) -> Optional[str]:
+) -> str | None:
     """Processes a Tenor link and returns the direct GIF URL.
 
     Args:
@@ -887,15 +889,15 @@ async def _process_tenor_link(
 
 
 async def gather_messages(
-    messages: List[discord_typings.Message],
+    messages: list[discord_typings.Message],
     guild: discord_typings.Guild,
     pytz_timezone,
     military_time,
-    attachment_handler: Optional[AttachmentHandler],
-    tenor_api_key: Optional[str] = None,
-    bot: Optional["discord_typings.Client"] = None,
+    attachment_handler: AttachmentHandler | None,
+    tenor_api_key: str | None = None,
+    bot: discord_typings.Client | None = None,
     translations: dict = None,
-) -> Tuple[str, dict]:
+) -> tuple[str, dict]:
     """Gathers all messages in a channel and returns the HTML and metadata.
 
     Args:
@@ -913,7 +915,7 @@ async def gather_messages(
     """
     message_html: str = ""
     meta_data: dict = {}
-    previous_message: Optional[discord_typings.Message] = None
+    previous_message: discord_typings.Message | None = None
 
     message_dict = {message.id: message for message in messages}
 
