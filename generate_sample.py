@@ -10,6 +10,18 @@ import discord
 
 from DiscordTranscript import raw_export
 
+# Monkey-patch discord pour supporter les composants V2 pour le mocking
+for cls_name in [
+    "SectionComponent",
+    "TextDisplay",
+    "ThumbnailComponent",
+    "SeparatorComponent",
+    "Container",
+]:
+    if not hasattr(discord, cls_name):
+        setattr(discord, cls_name, type(cls_name, (), {}))
+
+
 # Mock objects to simulate discord.py models
 
 
@@ -287,6 +299,38 @@ class MockSelectMenu(discord.SelectMenu):
         self.disabled = disabled
         # self.type is a property
         self._underlying = MagicMock()
+
+
+class MockContainer(discord.Container):
+    def __init__(self, children, accent_color=None):
+        self.children = children
+        self._accent_color = accent_color
+
+    @property
+    def accent_color(self):
+        return self._accent_color
+
+
+class MockSection(discord.SectionComponent):
+    def __init__(self, children, accessory=None):
+        self.children = children
+        self.accessory = accessory
+
+
+class MockTextDisplay(discord.TextDisplay):
+    def __init__(self, content):
+        self.content = content
+
+
+class MockThumbnail(discord.ThumbnailComponent):
+    def __init__(self, url):
+        self.media = MagicMock()
+        self.media.url = url
+
+
+class MockSeparator(discord.SeparatorComponent):
+    def __init__(self):
+        pass
 
 
 class MockButtonStyle:
@@ -680,6 +724,54 @@ async def main():
         channel=channel,
     )
 
+    # Message 21: Composants V2 (Container, Section, TextDisplay)
+    # Imitation d'une vue type Embed comme demandé
+
+    # Titre
+    text_title = MockTextDisplay(
+        "**Embed-Like View**\nCeci est un exemple de composants V2."
+    )
+
+    # Miniature
+    thumb = MockThumbnail("https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp")
+
+    # Section avec texte et miniature en accessoire
+    section_main = MockSection([text_title], accessory=thumb)
+
+    # Séparateur
+    separator = MockSeparator()
+
+    # Section avec Menu de sélection (enveloppé dans ActionRow pour Container)
+    select_v2 = MockSelectMenu(
+        "select_v2",
+        [
+            MockSelectOption("Option A", "A", "Description A", MockEmoji("🅰️")),
+            MockSelectOption("Option B", "B", "Description B", MockEmoji("🅱️")),
+        ],
+        placeholder="Choisissez une option",
+    )
+    action_row_select = MockActionRow([select_v2])
+
+    # Section avec boutons (enveloppé dans ActionRow pour Container)
+    btn_v2_1 = MockButton("Confirmer", MockButtonStyle.success)
+    btn_v2_2 = MockButton("Annuler", MockButtonStyle.danger)
+    action_row_buttons = MockActionRow([btn_v2_1, btn_v2_2])
+
+    # Container contenant tout
+    container = MockContainer(
+        children=[section_main, separator, action_row_select, action_row_buttons],
+        accent_color=MockColor(0x5865F2),
+    )
+
+    msg21 = MockMessage(
+        1021,
+        "Voici un message utilisant les nouveaux composants (V2) :",
+        bot_user,
+        base_time + datetime.timedelta(minutes=65),
+        components=[container],
+        channel=channel,
+    )
+
     # Update msg5 with timestamp
     msg5.embeds[0].timestamp = base_time
 
@@ -704,6 +796,7 @@ async def main():
         msg18,
         msg19,
         msg20,
+        msg21,
     ]
     # Transcript.export reverses the list if after is None, expecting Newest->Oldest input.
     # So we sort descending (Newest first) to get Oldest first in the output.
