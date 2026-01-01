@@ -462,9 +462,12 @@ async def main():
     button_link = MockButton(
         "Site Web", MockButtonStyle.link, url="https://discord.com"
     )
+    button_disabled = MockButton(
+        "Désactivé", MockButtonStyle.secondary, disabled=True
+    )
 
     action_row_buttons = MockActionRow(
-        [button_primary, button_secondary, button_danger, button_link]
+        [button_primary, button_secondary, button_danger, button_link, button_disabled]
     )
 
     msg6 = MockMessage(
