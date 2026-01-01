@@ -662,6 +662,21 @@ async def main():
         ),
     )
 
+    # Message 20: Spoiler Image
+    spoiler_att = MockAttachment(
+        "SPOILER_secret.png",
+        "https://lyxios.xouxou-hosting.fr/images/black_white.png",
+        1024,
+    )
+    msg20 = MockMessage(
+        1020,
+        "Attention, image spoiler ci-dessous :",
+        user1,
+        base_time + datetime.timedelta(minutes=58),
+        attachments=[spoiler_att],
+        channel=channel,
+    )
+
     # Update msg5 with timestamp
     msg5.embeds[0].timestamp = base_time
 
@@ -685,6 +700,7 @@ async def main():
         msg17,
         msg18,
         msg19,
+        msg20,
     ]
     # Transcript.export reverses the list if after is None, expecting Newest->Oldest input.
     # So we sort descending (Newest first) to get Oldest first in the output.
