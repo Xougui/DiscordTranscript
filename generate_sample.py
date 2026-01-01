@@ -266,10 +266,9 @@ class MockButton(discord.Button):
         self._underlying = MagicMock()  # Just in case
 
 
-class MockActionRow:
+class MockActionRow(discord.ActionRow):
     def __init__(self, children):
         self.children = children
-        self.type = discord.ComponentType.action_row
 
 
 class MockSelectOption:
