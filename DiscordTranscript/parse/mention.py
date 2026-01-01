@@ -1,8 +1,9 @@
 import datetime
-import time
-import pytz
 import re
-from typing import Optional, TYPE_CHECKING
+import time
+from typing import TYPE_CHECKING, Optional
+
+import pytz
 
 from DiscordTranscript.parse.markdown import ParseMarkdown
 
