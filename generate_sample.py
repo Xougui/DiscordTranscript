@@ -804,7 +804,7 @@ async def main():
         1021,
         "Voici un exemple avancé utilisant les composants V2 (Containers) :",
         bot_user,
-        base_time + datetime.timedelta(minutes=65),
+        base_time + datetime.timedelta(minutes=55),
         components=[container],
         channel=channel,
     )
