@@ -59,7 +59,7 @@ class MockRole:
 
 
 class MockUser:
-    def __init__(self, id, name, discriminator, avatar_url, bot=False, color=None):
+    def __init__(self, id, name, discriminator, avatar_url, bot=False, verified_bot=False, color=None):
         self.id = id
         self.name = name
         self.discriminator = discriminator
@@ -71,7 +71,7 @@ class MockUser:
         self.created_at = datetime.datetime.now()
         self.joined_at = datetime.datetime.now()
         self.public_flags = MagicMock()
-        self.public_flags.verified_bot = False
+        self.public_flags.verified_bot = verified_bot
 
     def __str__(self):
         return f"{self.name}#{self.discriminator}"
@@ -88,14 +88,17 @@ class MockChannel:
         self.type = MagicMock()
         self.type.name = "text"
 
+    async def fetch_message(self, id):
+        raise discord.NotFound(MagicMock(), "Not Found")
+
 
 class MockAttachment:
-    def __init__(self, filename, url, size):
+    def __init__(self, filename, url, size, content_type="image/png"):
         self.filename = filename
         self.url = url
         self.proxy_url = url
         self.size = size
-        self.content_type = "image/png"
+        self.content_type = content_type
         self.height = 100
         self.width = 100
         self.is_spoiler = lambda: False
@@ -309,6 +312,7 @@ async def main():
         "4628",
         "https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp",
         bot=True,
+        verified_bot=True,
         color=MockColor(0x5865F2),
     )
 
@@ -534,6 +538,85 @@ async def main():
     # Mapping fake type enum
     msg13.type = discord.MessageType.premium_guild_subscription
 
+    # Message 14: Edited Message
+    msg14 = MockMessage(
+        1014,
+        "Ce message a été modifié.",
+        user1,
+        base_time + datetime.timedelta(minutes=45),
+        channel=channel,
+    )
+    msg14.edited_at = base_time + datetime.timedelta(minutes=46)
+
+    # Message 15: Pinned Message (System)
+    msg15 = MockMessage(
+        1015,
+        "",
+        user2,
+        base_time + datetime.timedelta(minutes=47),
+        channel=channel,
+        type_name="pins_add"
+    )
+    msg15.type = discord.MessageType.pins_add
+    msg15.reference = MagicMock(message_id=msg14.id, guild_id=guild.id, channel_id=channel.id)
+
+    # Message 16: Thread Created (System)
+    msg16 = MockMessage(
+        1016,
+        "Nouveau fil de discussion important",
+        user1,
+        base_time + datetime.timedelta(minutes=48),
+        channel=channel,
+        type_name="thread_created"
+    )
+    msg16.type = discord.MessageType.thread_created
+
+    # Message 17: Audio Attachment
+    audio_att = MockAttachment(
+        "musique.mp3",
+        "https://data.freetouse.com/music/tracks/15baf58e-2e84-43b0-a30a-b147308c8088/file/mp3",
+        1024 * 1024,
+        content_type="audio/mpeg"
+    )
+    msg17 = MockMessage(
+        1017,
+        "Écoutez ce fichier audio :",
+        user2,
+        base_time + datetime.timedelta(minutes=50),
+        attachments=[audio_att],
+        channel=channel
+    )
+
+    # Message 18: Video Attachment
+    video_att = MockAttachment(
+        "video.mp4",
+        "https://www.w3schools.com/html/mov_bbb.mp4",
+        1024 * 1024 * 5,
+        content_type="video/mp4"
+    )
+    msg18 = MockMessage(
+        1018,
+        "Regardez cette vidéo :",
+        user1,
+        base_time + datetime.timedelta(minutes=52),
+        attachments=[video_att],
+        channel=channel
+    )
+
+    # Message 19: Reply to deleted message
+    msg19 = MockMessage(
+        1019,
+        "Je réponds à un message qui n'existe plus.",
+        user2,
+        base_time + datetime.timedelta(minutes=55),
+        channel=channel,
+        reference=MagicMock(
+            message_id=999999, # ID inexistant
+            guild_id=guild.id,
+            channel_id=channel.id
+        )
+    )
+
     # Update msg5 with timestamp
     msg5.embeds[0].timestamp = base_time
 
@@ -551,6 +634,12 @@ async def main():
         msg3,
         msg2,
         msg1,
+        msg14,
+        msg15,
+        msg16,
+        msg17,
+        msg18,
+        msg19,
     ]
     # Transcript.export reverses the list if after is None, expecting Newest->Oldest input.
     # So we sort descending (Newest first) to get Oldest first in the output.
