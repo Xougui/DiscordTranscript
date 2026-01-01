@@ -727,45 +727,68 @@ async def main():
     # Message 21: Composants V2 (Container, Section, TextDisplay)
     # Imitation d'une vue type Embed comme demandé
 
-    # Titre
-    text_title = MockTextDisplay(
-        "**Embed-Like View**\nCeci est un exemple de composants V2."
+    # Section 1: En-tête avec Titre et Miniature
+    text_header = MockTextDisplay(
+        "**Panel de Configuration**\n"
+        "Gérez vos paramètres utilisateur et vos préférences directement depuis ce message interactif."
     )
-
-    # Miniature
     thumb = MockThumbnail("https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp")
-
-    # Section avec texte et miniature en accessoire
-    section_main = MockSection([text_title], accessory=thumb)
+    section_header = MockSection([text_header], accessory=thumb)
 
     # Séparateur
     separator = MockSeparator()
 
-    # Section avec Menu de sélection (enveloppé dans ActionRow pour Container)
+    # Section 2: Informations supplémentaires (Texte seul)
+    text_info = MockTextDisplay(
+        "**Statut du compte :** ✅ Vérifié\n"
+        "**Niveau d'accès :** ⭐ Premium\n"
+        "**Dernière connexion :** Il y a 2 heures"
+    )
+    section_info = MockSection([text_info])
+
+    # Section 3: Menu de sélection
     select_v2 = MockSelectMenu(
         "select_v2",
         [
-            MockSelectOption("Option A", "A", "Description A", MockEmoji("🅰️")),
-            MockSelectOption("Option B", "B", "Description B", MockEmoji("🅱️")),
+            MockSelectOption(
+                "Notifications", "notif", "Gérer les alertes", MockEmoji("🔔")
+            ),
+            MockSelectOption(
+                "Confidentialité",
+                "privacy",
+                "Paramètres de vie privée",
+                MockEmoji("🔒"),
+            ),
+            MockSelectOption("Thème", "theme", "Changer l'apparence", MockEmoji("🎨")),
         ],
-        placeholder="Choisissez une option",
+        placeholder="Que souhaitez-vous configurer ?",
     )
     action_row_select = MockActionRow([select_v2])
 
-    # Section avec boutons (enveloppé dans ActionRow pour Container)
-    btn_v2_1 = MockButton("Confirmer", MockButtonStyle.success)
-    btn_v2_2 = MockButton("Annuler", MockButtonStyle.danger)
-    action_row_buttons = MockActionRow([btn_v2_1, btn_v2_2])
+    # Section 4: Boutons d'action
+    btn_save = MockButton("Sauvegarder", MockButtonStyle.success, emoji=MockEmoji("💾"))
+    btn_cancel = MockButton("Annuler", MockButtonStyle.secondary)
+    btn_help = MockButton(
+        "Aide", MockButtonStyle.link, url="https://support.discord.com"
+    )
+    action_row_buttons = MockActionRow([btn_save, btn_cancel, btn_help])
 
     # Container contenant tout
     container = MockContainer(
-        children=[section_main, separator, action_row_select, action_row_buttons],
+        children=[
+            section_header,
+            separator,
+            section_info,
+            separator,
+            action_row_select,
+            action_row_buttons,
+        ],
         accent_color=MockColor(0x5865F2),
     )
 
     msg21 = MockMessage(
         1021,
-        "Voici un message utilisant les nouveaux composants (V2) :",
+        "Voici un exemple avancé utilisant les composants V2 (Containers) :",
         bot_user,
         base_time + datetime.timedelta(minutes=65),
         components=[container],
