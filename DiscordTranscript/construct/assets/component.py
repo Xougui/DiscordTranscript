@@ -1,16 +1,17 @@
+from typing import TYPE_CHECKING, Optional
+
 from DiscordTranscript.ext.discord_import import discord
 from DiscordTranscript.ext.discord_utils import DiscordUtils
 from DiscordTranscript.ext.html_generator import (
-    fill_out,
+    PARSE_MODE_EMOJI,
+    PARSE_MODE_MARKDOWN,
+    PARSE_MODE_NONE,
     component_button,
     component_menu,
     component_menu_options,
     component_menu_options_emoji,
-    PARSE_MODE_NONE,
-    PARSE_MODE_EMOJI,
-    PARSE_MODE_MARKDOWN,
+    fill_out,
 )
-from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     import discord as discord_typings
