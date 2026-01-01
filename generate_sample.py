@@ -59,7 +59,16 @@ class MockRole:
 
 
 class MockUser:
-    def __init__(self, id, name, discriminator, avatar_url, bot=False, verified_bot=False, color=None):
+    def __init__(
+        self,
+        id,
+        name,
+        discriminator,
+        avatar_url,
+        bot=False,
+        verified_bot=False,
+        color=None,
+    ):
         self.id = id
         self.name = name
         self.discriminator = discriminator
@@ -555,10 +564,12 @@ async def main():
         user2,
         base_time + datetime.timedelta(minutes=47),
         channel=channel,
-        type_name="pins_add"
+        type_name="pins_add",
     )
     msg15.type = discord.MessageType.pins_add
-    msg15.reference = MagicMock(message_id=msg14.id, guild_id=guild.id, channel_id=channel.id)
+    msg15.reference = MagicMock(
+        message_id=msg14.id, guild_id=guild.id, channel_id=channel.id
+    )
 
     # Message 16: Thread Created (System)
     msg16 = MockMessage(
@@ -567,7 +578,7 @@ async def main():
         user1,
         base_time + datetime.timedelta(minutes=48),
         channel=channel,
-        type_name="thread_created"
+        type_name="thread_created",
     )
     msg16.type = discord.MessageType.thread_created
 
@@ -576,7 +587,7 @@ async def main():
         "musique.mp3",
         "https://data.freetouse.com/music/tracks/15baf58e-2e84-43b0-a30a-b147308c8088/file/mp3",
         1024 * 1024,
-        content_type="audio/mpeg"
+        content_type="audio/mpeg",
     )
     msg17 = MockMessage(
         1017,
@@ -584,7 +595,7 @@ async def main():
         user2,
         base_time + datetime.timedelta(minutes=50),
         attachments=[audio_att],
-        channel=channel
+        channel=channel,
     )
 
     # Message 18: Video Attachment
@@ -592,7 +603,7 @@ async def main():
         "video.mp4",
         "https://www.w3schools.com/html/mov_bbb.mp4",
         1024 * 1024 * 5,
-        content_type="video/mp4"
+        content_type="video/mp4",
     )
     msg18 = MockMessage(
         1018,
@@ -600,7 +611,7 @@ async def main():
         user1,
         base_time + datetime.timedelta(minutes=52),
         attachments=[video_att],
-        channel=channel
+        channel=channel,
     )
 
     # Message 19: Reply to deleted message
@@ -611,10 +622,10 @@ async def main():
         base_time + datetime.timedelta(minutes=55),
         channel=channel,
         reference=MagicMock(
-            message_id=999999, # ID inexistant
+            message_id=999999,  # ID inexistant
             guild_id=guild.id,
-            channel_id=channel.id
-        )
+            channel_id=channel.id,
+        ),
     )
 
     # Update msg5 with timestamp
