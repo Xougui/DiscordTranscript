@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Any, Dict, Tuple
+from typing import Any
 
 _internal_cache: dict = {}
 
@@ -49,7 +49,7 @@ def cache():
     """A decorator to cache the results of a function."""
 
     def decorator(func):
-        def _make_key(args: Tuple[Any, ...], kwargs: Dict[str, Any]) -> str:
+        def _make_key(args: tuple[Any, ...], kwargs: dict[str, Any]) -> str:
             """Make a cache key from the function's arguments."""
 
             def _true_repr(o):

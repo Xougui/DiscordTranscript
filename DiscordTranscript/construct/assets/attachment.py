@@ -1,13 +1,14 @@
 import math
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+
 from DiscordTranscript.ext.discord_utils import DiscordUtils
 from DiscordTranscript.ext.html_generator import (
+    PARSE_MODE_NONE,
+    audio_attachment,
     fill_out,
     img_attachment,
     msg_attachment,
-    audio_attachment,
     video_attachment,
-    PARSE_MODE_NONE,
 )
 
 if TYPE_CHECKING:

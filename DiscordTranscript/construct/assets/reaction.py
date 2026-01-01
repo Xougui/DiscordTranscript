@@ -1,11 +1,12 @@
 import re
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+
 from DiscordTranscript.ext.emoji_convert import convert_emoji
 from DiscordTranscript.ext.html_generator import (
-    fill_out,
-    emoji,
-    custom_emoji,
     PARSE_MODE_NONE,
+    custom_emoji,
+    emoji,
+    fill_out,
 )
 
 if TYPE_CHECKING:

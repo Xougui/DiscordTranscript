@@ -1,12 +1,19 @@
 from __future__ import annotations
+
 import html
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
+
+from pytz import timezone
 
 from DiscordTranscript.ext.discord_import import discord
 from DiscordTranscript.ext.html_generator import (
-    fill_out,
+    PARSE_MODE_EMBED,
+    PARSE_MODE_MARKDOWN,
+    PARSE_MODE_NONE,
+    PARSE_MODE_SPECIAL_EMBED,
+    embed_author,
+    embed_author_icon,
     embed_body,
-    embed_title,
     embed_description,
     embed_field,
     embed_field_inline,
@@ -14,14 +21,9 @@ from DiscordTranscript.ext.html_generator import (
     embed_footer_icon,
     embed_image,
     embed_thumbnail,
-    embed_author,
-    embed_author_icon,
-    PARSE_MODE_NONE,
-    PARSE_MODE_EMBED,
-    PARSE_MODE_MARKDOWN,
-    PARSE_MODE_SPECIAL_EMBED,
+    embed_title,
+    fill_out,
 )
-from pytz import timezone
 
 if TYPE_CHECKING:
     import discord as discord_typings
@@ -71,7 +73,7 @@ class Embed:
         self,
         embed,
         guild,
-        bot: Optional["discord_typings.Client"] = None,
+        bot: discord_typings.Client | None = None,
         timezone: str = "UTC",
     ):
         """Initializes the Embed.

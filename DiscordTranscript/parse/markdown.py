@@ -1,5 +1,6 @@
 import html
 import re
+
 from DiscordTranscript.ext.emoji_convert import convert_emoji
 
 
@@ -498,7 +499,7 @@ class ParseMarkdown:
 
         content = re.sub("\n", "<br>", self.content)
         output = []
-        if "http://" in content or "https://" in content and "](" not in content:
+        if "http://" in content or ("https://" in content and "](" not in content):
             for word in content.replace("<br>", " <br>").split():
                 if "http" not in word:
                     output.append(word)
