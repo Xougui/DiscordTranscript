@@ -2,8 +2,8 @@ import html
 import json
 import os
 
-from DiscordTranscript.parse.mention import ParseMention
 from DiscordTranscript.parse.markdown import ParseMarkdown
+from DiscordTranscript.parse.mention import ParseMention
 
 dir_path = os.path.abspath(
     os.path.join((os.path.dirname(os.path.realpath(__file__))), "..")
@@ -73,7 +73,7 @@ async def fill_out(
 
 
 def read_file(filename):
-    with open(filename, "r") as f:
+    with open(filename) as f:
         s = f.read()
     return s
 
