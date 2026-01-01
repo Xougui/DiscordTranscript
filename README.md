@@ -233,6 +233,7 @@ Voici une liste des paramètres que vous pouvez utiliser dans les fonctions `exp
 | `guild`| `discord.Guild` | L'instance de votre serveur. Nécessaire pour résoudre les informations des membres (rôles, couleurs, etc.). | `None` |
 | `attachment_handler` | `AttachmentHandler` | Un gestionnaire pour contrôler la façon dont les pièces jointes sont traitées. Voir l'exemple [Intégrer les pièces jointes dans le HTML](#intégrer-les-pièces-jointes-dans-le-html). | `None` (les liens des pièces jointes pointent vers le CDN de Discord) |
 | `tenor_api_key` | `str` | Votre clé API Tenor pour afficher les GIFs. | `None` |
+| `language` | `str` | La langue à utiliser pour la transcription. | `"en"` |
 
 **Note :** Le paramètre `messages` est uniquement disponible pour la fonction `raw_export()`.
 
@@ -556,6 +557,7 @@ Here is a list of parameters you can use in the `export()` and `raw_export()` fu
 | `guild`| `discord.Guild` | Your server's instance. Necessary to resolve member information (roles, colors, etc.). | `None` |
 | `attachment_handler`| `AttachmentHandler` | A handler to control how attachments are processed. See the [Embedding Attachments in HTML](#embedding-attachments-in-html) example. | `None` (attachment links point to Discord's CDN) |
 | `tenor_api_key` | `str` | Your Tenor API key to display GIFs. | `None` |
+| `language` | `str` | The language to use for the transcript. | `"en"` |
 
 **Note:** The `messages` parameter is only available for the `raw_export()` function.
 
