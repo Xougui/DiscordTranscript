@@ -596,13 +596,13 @@ async def main():
         1015,
         "",
         user2,
-        base_time + datetime.timedelta(minutes=47),
+        base_time + datetime.timedelta(minutes=11),
         channel=channel,
         type_name="pins_add",
     )
     msg15.type = discord.MessageType.pins_add
     msg15.reference = MagicMock(
-        message_id=msg14.id, guild_id=guild.id, channel_id=channel.id
+        message_id=msg4.id, guild_id=guild.id, channel_id=channel.id
     )
 
     # Message 16: Thread Created (System)
