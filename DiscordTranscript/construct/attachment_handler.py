@@ -1,9 +1,11 @@
 from __future__ import annotations
+
 import base64
 import io
 from typing import TYPE_CHECKING
 
 import aiohttp
+
 from DiscordTranscript.ext.discord_import import discord
 
 if TYPE_CHECKING:
