@@ -2,23 +2,23 @@
 <html lang="en">
 
 <head>
-    <title>{{SERVER_NAME_SAFE}} - {{CHANNEL_NAME_SAFE}}</title>
+    <title>Serveur de Démonstration - général</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width" />
-    <meta name="title" content="{{SERVER_NAME_SAFE}} - {{CHANNEL_NAME_SAFE}}">
-    <meta name="description" content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}.">
-    
+    <meta name="title" content="Serveur de Démonstration - général">
+    <meta name="description" content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 20 messages. Ce transcript a été généré le 1 January 2026 at 05:42:18 PM (UTC).">
+
     <link rel="icon" type="image/svg+xml" href="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="{{SERVER_NAME_SAFE}} - {{CHANNEL_NAME_SAFE}}" />
-    <meta property="og:description" content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}." />
+    <meta property="og:title" content="Serveur de Démonstration - général" />
+    <meta property="og:description" content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 20 messages. Ce transcript a été généré le 1 January 2026 at 05:42:18 PM (UTC)." />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary" />
-    <meta name='twitter:title' content="{{SERVER_NAME_SAFE}} - {{CHANNEL_NAME_SAFE}}" />
-    <meta name='twitter:description' content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}." />
+    <meta name='twitter:title' content="Serveur de Démonstration - général" />
+    <meta name='twitter:description' content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 20 messages. Ce transcript a été généré le 1 January 2026 at 05:42:18 PM (UTC)." />
 
     <style>
         :root {
@@ -344,7 +344,7 @@
         .chatlog__interaction-link:hover *:not(.chatlog__markdown-spoiler) {
             color: inherit;
         }
-        
+
         .chatlog__reference-edited-timestamp {
             margin-left: 0.25rem;
             color: #949ba4;
@@ -732,7 +732,7 @@
             width: 1.5em;
             height: 1.5em;
         }
-        
+
         .chatlog__reactions {
             display: flex;
         }
@@ -1572,7 +1572,7 @@
         .dropdownContentDesc { color: #949ba4; }
         .dropdownButton:hover { background-color: var(--discord-component-hover); }
         .chatlog__component-dropdown-show { display: block; }
-        .chatlog__component-dropdown a:hover { 
+        .chatlog__component-dropdown a:hover {
             background-color: #404249;
             color: #f2f3f5;
         }
@@ -1798,7 +1798,7 @@
 
         //  Menu Dropdown (Selectmenu)
         function showDropdown(dropdownID) {
-          
+
           document.getElementById("dropdownMenuContent" + dropdownID).classList.toggle("chatlog__component-dropdown-show");
           document.getElementById("dropdownMenu" + dropdownID).classList.toggle("chatlog__component-dropdown-show");
         }
@@ -1812,16 +1812,22 @@
     </script>
 </head>
 <body>
+    <!-- Back Button (Visible on Top Hover) -->
+    <a href="javascript:history.back()" id="back-button" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-[#0a0a0c]/90 border border-white/10 text-white px-6 py-2 rounded-full shadow-2xl backdrop-blur-md transition-all duration-300 opacity-0 -translate-y-full pointer-events-none flex items-center gap-2 font-medium hover:bg-white/10 hover:scale-105">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        Retour
+    </a>
+
 
 <div class="panel">
     <img class="panel__hashtag-icon" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-hashtag.svg" alt="Hashtag icon"/>
-    <span class="panel__channel-name">{{CHANNEL_NAME}}</span>
+    <span class="panel__channel-name">général</span>
 
-    {{CHANNEL_TOPIC}}
+
 
     <div class="panel__summary-button" id="summary-button">
         <svg class="panel__summary-icon" aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></svg>
-        <span>{{SUMMARY}}</span>
+        <span>Informations</span>
     </div>
 
     <a href="https://discord-transcript.xouxou-hosting.fr/index" target="_blank" rel="noopener">
@@ -1835,19 +1841,717 @@
     </div>
 
     <div class="info">
-        <span class="info__title">{{WELCOME_TO}} #{{CHANNEL_NAME}}!</span>
-        {{SUBJECT}}
+        <span class="info__title">Bienvenue dans #général!</span>
+        <span class="info__subject">Ceci est le début du salon #général. </span>
     </div>
 
     <div class="chatlog">
-        {{MESSAGES}}
+        <div class="chatlog__message-group">
+    <div class="chatlog__message chatlog__message--system">
+        <div class="chatlog__message-aside">
+            <img class="chatlog__system-icon" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-thread-add-recipient.svg" alt="System Icon">
+        </div>
+        <div class="chatlog__message-primary">
+            <div class="chatlog__content chatlog__markdown">
+                <span style="color: #FFFFFF; cursor: pointer;" title="Bob#8462">Bob</span> joined the server.
+            </div>
+        </div>
+    </div>
+</div>
+<div class="chatlog__message-group">
+    <div id="chatlog__message-container-1001" class="chatlog__message-container" data-message-id="1001">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-dd62486xej7f1.png?width=1024&format=png&auto=webp&s=834060ca1b6be81c4d32adfbfc7dcdbb7018cf32"  data-user-id="1" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice <img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f9ea.png" alt="🧪" title="Test Tube" aria-label="Emoji: Test Tube"></span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 04:42 PM">01-01-2026 04:42 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1001" id="message-1001">
+                    <span class="chatlog__markdown-preserve">Salut tout le monde ! Bienvenue sur le canal de test. Voici un exemple complet de transcript.</span>
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1002" class="chatlog__message-container" data-message-id="1002">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+                <div class='chatlog__followup-symbol'></div>
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-4zgagzeyej7f1.png?width=1024&format=png&auto=webp&s=36a85f787f4826665e26be46c3b509281551a043"  data-user-id="2" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+                <div class="chatlog__followup">
+	<img class="chatlog__followup-avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-dd62486xej7f1.png?width=1024&format=png&auto=webp&s=834060ca1b6be81c4d32adfbfc7dcdbb7018cf32" alt="Avatar" loading="lazy" data-user-id="1">
+
+	<div class="chatlog__followup-author chatlog__author-name--colored" data-user-id="1" data-user-color="#FFFFFF">Alice <img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f9ea.png" alt="🧪" title="Test Tube" aria-label="Emoji: Test Tube"></div>
+	<div class="chatlog__followup-content">
+		<span class="chatlog__reference-link" onclick="scrollToMessage(event, '1001')">
+			Salut tout le monde ! Bienvenue sur le canal de test. Voici un exemple complet de transcript.
+		</span>
+
+	</div>
+</div>
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 04:43 PM">01-01-2026 04:43 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1002" id="message-1002">
+                    <span class="chatlog__markdown-preserve">Salut Alice ! J&#x27;adore ta photo de profil.</span>
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1003" class="chatlog__message-container" data-message-id="1003">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-dd62486xej7f1.png?width=1024&format=png&auto=webp&s=834060ca1b6be81c4d32adfbfc7dcdbb7018cf32"  data-user-id="1" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice <img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f9ea.png" alt="🧪" title="Test Tube" aria-label="Emoji: Test Tube"></span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 04:47 PM">01-01-2026 04:47 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1003" id="message-1003">
+                    <span class="chatlog__markdown-preserve">Voici un peu de <strong>gras</strong>, de l&#x27;<em><span>italique</span></em>, et du <span class="markdown-underline">souligné</span>.
+Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/1448700603319451731.png" alt="Emoji">
+<div class="pre pre--multiline language-py">print(&#x27;Hello World&#x27;)</div></span>
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1004" class="chatlog__message-container" data-message-id="1004">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-4zgagzeyej7f1.png?width=1024&format=png&auto=webp&s=36a85f787f4826665e26be46c3b509281551a043"  data-user-id="2" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 04:52 PM">01-01-2026 04:52 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1004" id="message-1004">
+                    <span class="chatlog__markdown-preserve">Regardez cette image en pièce jointe :</span>
+
+                    <div class="chatlog__attachment">
+    <a href="https://images.freeimages.com/images/large-previews/e69/wadi-rum-desert-4-1058229.jpg?fmt=webp&h=350" target="_blank" rel="noopener noreferrer" title="View image attachment" class="" onclick="showSpoiler(event, this)">
+        <img class="chatlog__attachment-thumbnail" src="https://images.freeimages.com/images/large-previews/e69/wadi-rum-desert-4-1058229.jpg?fmt=webp&h=350" alt="Image attachment">
+    </a>
+</div>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1015" class="chatlog__message-container" data-message-id="1015">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+               <img class="chatlog__pin-avatar" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-pinned.svg" alt="Pin icon" />
+            </div>
+            <div class="chatlog__message-primary">
+                <div class="chatlog__header">
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1015" id="message-1015">
+                    <span class="chatlog__reference-name chatlog__author-name--colored" data-user-color="#FFFFFF">Bob</span> has pinned
+                    <a class="chatlog__pinned-link" href="#" onclick="scrollToMessage(event, '1004')">
+                        a message
+                    </a>
+                    to this channel
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1005" class="chatlog__message-container" data-message-id="1005">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp"  data-user-id="3" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Lyxios#4628" data-user-id="3" data-user-color="#FFFFFF">Lyxios</span>
+                    <span class="chatlog__bot-tag">
+    <svg class="chatlog__bot-tag-verified"
+         height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="#ffffff"></path></svg>
+    <span>APP</span>
+</span>
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 04:57 PM">01-01-2026 04:57 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1005" id="message-1005">
+
+
+
+
+                    <div class=chatlog__embed>
+    <div class=chatlog__embed-content-container data-embed-color="rgba(88, 101, 242, 1)">
+        <div class=chatlog__embed-content>
+            <div class=chatlog__embed-text>
+                <div class="chatlog__embed-author">
+    <img class="chatlog__embed-author-icon" src="https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp" alt="Author Icon" title="Author Icon">
+    <span class="chatlog__embed-author-name"><a class="chatlog__embed-author-name-link" href="https://github.com/Xougui/DiscordTranscript">Système</a></span>
+</div>
+                <div class="chatlog__embed-title">
+	<span class="markdown">Rapport de Statut</span>
+</div>
+
+                <div class=chatlog__embed-description>
+    <span class="markdown preserve-whitespace">Ceci est un exemple d'embed riche avec des champs.</span>
+</div>
+                <div class="chatlog__embed-fields">
+                    <div class="chatlog__embed-field  chatlog__embed-field--inline ">
+	<div class="chatlog__embed-field-name"><span class="markdown preserve-whitespace">Statut</span></div>
+	<div class="chatlog__embed-field-value"><span class="markdown preserve-whitespace">En ligne</span></div>
+</div><div class="chatlog__embed-field  chatlog__embed-field--inline ">
+	<div class="chatlog__embed-field-name"><span class="markdown preserve-whitespace">Latence</span></div>
+	<div class="chatlog__embed-field-value"><span class="markdown preserve-whitespace">23ms</span></div>
+</div><div class="chatlog__embed-field  chatlog__embed-field">
+	<div class="chatlog__embed-field-name"><span class="markdown preserve-whitespace">Version</span></div>
+	<div class="chatlog__embed-field-value"><span class="markdown preserve-whitespace">1.0.0</span></div>
+</div>
+                </div>
+
+
+                <div class="chatlog__embed-image-container">
+    <a class="chatlog__embed-image-link" href="https://lyxios.xouxou-hosting.fr/images/white_black.png" title="Open embed image">
+    <img class="chatlog__embed-image" src="https://lyxios.xouxou-hosting.fr/images/white_black.png" alt="Embed image" title="Embed image">
+</a>
+</div>
+
+            </div>
+
+
+
+            <div class="chatlog__embed-thumbnail-container">
+    <a class="chatlog__embed-thumbnail-link" href="https://lyxios.xouxou-hosting.fr/images/black_white.png" title="Open embed thumbnail">
+    <img class="chatlog__embed-thumbnail" src="https://lyxios.xouxou-hosting.fr/images/black_white.png" alt="Embed thumbnail" title="Embed thumbnail">
+</a>
+</div>
+
+        </div>
+
+        <div class="chatlog__embed-footer">
+    <img class="chatlog__embed-footer-icon" src="https://lyxios.xouxou-hosting.fr/images/white_black.png" alt="Embed footer icon" title="Embed footer icon"><span class="chatlog__embed-footer-text">Généré automatiquement • 01/01/2026 16:42</span>
+</div>
+
+    </div>
+</div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1006" class="chatlog__message-container" data-message-id="1006">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp"  data-user-id="3" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Lyxios#4628" data-user-id="3" data-user-color="#FFFFFF">Lyxios</span>
+                    <span class="chatlog__bot-tag">
+    <svg class="chatlog__bot-tag-verified"
+         height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="#ffffff"></path></svg>
+    <span>APP</span>
+</span>
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 05:02 PM">01-01-2026 05:02 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1006" id="message-1006">
+                    <span class="chatlog__markdown-preserve">Veuillez choisir une action :</span>
+
+
+
+
+
+                    <div class="chatlog__components"><a href="javascript:;" class="chatlog__component-button  chatlog__component-button--colored chatlog__component-button-link--styled" data-button-color="#5865F2" data-link-style="none" >
+    <span class="chatlog__button-label"><img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/1350435235015426130.gif" alt="Emoji">Confirmer</span>
+</a><a href="javascript:;" class="chatlog__component-button  chatlog__component-button--colored chatlog__component-button-link--styled" data-button-color="#4E5058" data-link-style="none" >
+    <span class="chatlog__button-label"><img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/2699.png" alt="⚙️" title="Gear" aria-label="Emoji: Gear">Options</span>
+</a><a href="javascript:;" class="chatlog__component-button  chatlog__component-button--colored chatlog__component-button-link--styled" data-button-color="#DA373C" data-link-style="none" >
+    <span class="chatlog__button-label"><img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f5d1.png" alt="🗑️" title="Wastebasket" aria-label="Emoji: Wastebasket">Supprimer</span>
+</a><a href="https://discord.com" class="chatlog__component-button  chatlog__component-button--colored chatlog__component-button-link--styled" data-button-color="#4E5058" data-link-style="none" target="_blank" rel="noopener noreferrer">
+    <span class="chatlog__button-label">Site Web<img class="chatlog__reference-icon" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-external-link.svg" alt="External link"></span>
+</a><a href="javascript:;" class="chatlog__component-button chatlog__component-disabled chatlog__component-button--colored chatlog__component-button-link--styled" data-button-color="#4E5058" data-link-style="none" >
+    <span class="chatlog__button-label">Désactivé</span>
+</a></div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1007" class="chatlog__message-container" data-message-id="1007">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp"  data-user-id="3" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Lyxios#4628" data-user-id="3" data-user-color="#FFFFFF">Lyxios</span>
+                    <span class="chatlog__bot-tag">
+    <svg class="chatlog__bot-tag-verified"
+         height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="#ffffff"></path></svg>
+    <span>APP</span>
+</span>
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 05:03 PM">01-01-2026 05:03 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1007" id="message-1007">
+                    <span class="chatlog__markdown-preserve">Quel est votre chiffre préféré ?</span>
+
+
+
+
+
+                    <div class="chatlog__components"><div class="chatlog__component-dropdown ">
+  <button onclick="showDropdown('0')" class="dropdownButton" id="dropdownButton0">Faites votre choix... <img class="chatlog__dropdown-icon" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-dropdown.svg" alt="Dropdown icon"></button>
+  <div id="dropdownMenuContent0">
+    <div id="dropdownMenu0" class="dropdownContent"><div class="chatlog__dropdown-content">
+	<a href="#">
+		<div class="chatlog__dropdown-emoji">
+			<span class="dropdownContentEmoji"><img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/31-20e3.png" alt="1️⃣" title="Keycap 1" aria-label="Emoji: Keycap 1"></span>
+		</div>
+		<div class="chatlog__dropdown-text">
+			<span class="dropdownContentTitle">Option 1</span>
+			<br>
+			<span class="dropdownContentDesc">Ceci est la première option</span>
+		</div>
+	</a>
+</div><div class="chatlog__dropdown-content">
+	<a href="#">
+		<div class="chatlog__dropdown-emoji">
+			<span class="dropdownContentEmoji"><img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/32-20e3.png" alt="2️⃣" title="Keycap 2" aria-label="Emoji: Keycap 2"></span>
+		</div>
+		<div class="chatlog__dropdown-text">
+			<span class="dropdownContentTitle">Option 2</span>
+			<br>
+			<span class="dropdownContentDesc">Celle-ci est sélectionnée par défaut</span>
+		</div>
+	</a>
+</div><div class="chatlog__dropdown-content">
+	<a href="#">
+		<div class="chatlog__dropdown-emoji">
+			<span class="dropdownContentEmoji"><img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/1380533490474549250.png" alt="Emoji"></span>
+		</div>
+		<div class="chatlog__dropdown-text">
+			<span class="dropdownContentTitle">Option 3</span>
+			<br>
+			<span class="dropdownContentDesc">Une autre option sympa</span>
+		</div>
+	</a>
+</div></div>
+  </div>
+</div></div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1008" class="chatlog__message-container" data-message-id="1008">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-dd62486xej7f1.png?width=1024&format=png&auto=webp&s=834060ca1b6be81c4d32adfbfc7dcdbb7018cf32"  data-user-id="1" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice <img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f9ea.png" alt="🧪" title="Test Tube" aria-label="Emoji: Test Tube"></span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 05:07 PM">01-01-2026 05:07 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1008" id="message-1008">
+                    <div class="chatlog__attachment"><img class="chatlog__sticker" src="https://images.freeimages.com/images/large-previews/003/sushi-roll-1321056.jpg?fmt=webp&h=350" alt="Sticker" title="Sticker"></div>
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__message chatlog__message--system">
+        <div class="chatlog__message-aside">
+            <img class="chatlog__system-icon" src="https://discord-transcript.xouxou-hosting.fr/assets/icones/boost.svg" alt="System Icon">
+        </div>
+        <div class="chatlog__message-primary">
+            <div class="chatlog__content chatlog__markdown">
+                <span style="color: #FFFFFF; cursor: pointer;" title="Alice 🧪#1378">Alice 🧪</span> boosted the server!
+            </div>
+        </div>
+    </div>
+</div>
+<div class="chatlog__message-group">
+    <div id="chatlog__message-container-1010" class="chatlog__message-container" data-message-id="1010">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-dd62486xej7f1.png?width=1024&format=png&auto=webp&s=834060ca1b6be81c4d32adfbfc7dcdbb7018cf32"  data-user-id="1" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice <img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f9ea.png" alt="🧪" title="Test Tube" aria-label="Emoji: Test Tube"></span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 05:17 PM">01-01-2026 05:17 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1010" id="message-1010">
+                    <span class="chatlog__markdown-preserve">Voici une mention de rôle : <span class="mention" style="color: #e91e63; background-color: rgba(233, 30, 99, 0.1);" title="999">@Admin</span></span>
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1011" class="chatlog__message-container" data-message-id="1011">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+                <div class='chatlog__followup-symbol'></div>
+                <img class="chatlog__avatar" src="https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp"  data-user-id="3" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+                <div class="chatlog__followup">
+        <img class="chatlog__followup-avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-dd62486xej7f1.png?width=1024&format=png&auto=webp&s=834060ca1b6be81c4d32adfbfc7dcdbb7018cf32" alt="Avatar" loading="lazy" data-user-id="1">
+
+        <div class="chatlog__followup-author chatlog__author-name--colored" data-user-id="1" data-user-color="#FFFFFF">Alice <img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f9ea.png" alt="🧪" title="Test Tube" aria-label="Emoji: Test Tube"></div>
+        <div class="chatlog__followup-content">
+            <span class="chatlog__interaction-filler">used</span>
+            <span class="chatlog__interaction-link">/exemple</span>
+        </div>
+</div>
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Lyxios#4628" data-user-id="3" data-user-color="#FFFFFF">Lyxios</span>
+                    <span class="chatlog__bot-tag">
+    <svg class="chatlog__bot-tag-verified"
+         height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="#ffffff"></path></svg>
+    <span>APP</span>
+</span>
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 05:22 PM">01-01-2026 05:22 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1011" id="message-1011">
+                    <span class="chatlog__markdown-preserve">Ceci est une commande slash d&#x27;exemple.</span>
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1014" class="chatlog__message-container" data-message-id="1014">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-dd62486xej7f1.png?width=1024&format=png&auto=webp&s=834060ca1b6be81c4d32adfbfc7dcdbb7018cf32"  data-user-id="1" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice <img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f9ea.png" alt="🧪" title="Test Tube" aria-label="Emoji: Test Tube"></span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 05:27 PM">01-01-2026 05:27 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1014" id="message-1014">
+                    <span class="chatlog__markdown-preserve">Ce message a été modifié.</span>
+<span class="chatlog__reference-edited-timestamp" data-timestamp="Thursday,  1 January 2026 05:28 PM">(edited)</span>
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1016" class="chatlog__message-container" data-message-id="1016">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+               <img class="chatlog__pin-avatar" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-thread.svg" alt="Thread icon" />
+            </div>
+            <div class="chatlog__message-primary">
+                <div class="chatlog__header">
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1016" id="message-1016">
+                    <span class="chatlog__reference-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-color="#FFFFFF">Alice <img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f9ea.png" alt="🧪" title="Test Tube" aria-label="Emoji: Test Tube"></span> started a thread:
+                    <span class="chatlog__thread-name">Nouveau fil de discussion important</span>.
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1017" class="chatlog__message-container" data-message-id="1017">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-4zgagzeyej7f1.png?width=1024&format=png&auto=webp&s=36a85f787f4826665e26be46c3b509281551a043"  data-user-id="2" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 05:32 PM">01-01-2026 05:32 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1017" id="message-1017">
+                    <span class="chatlog__markdown-preserve">Écoutez ce fichier audio :</span>
+
+                    <div class=chatlog__attachment>
+    <div class="" onclick="">
+        <div class="">
+            <div class="chatlog__attachment-audio-container">
+                <img src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-audio.svg" class="chatlog__attachment-icon" alt="Attachment icon">
+                <div class="chatlog__attachment-filename">
+                    <a href=https://data.freetouse.com/music/tracks/15baf58e-2e84-43b0-a30a-b147308c8088/file/mp3>musique.mp3</a>
+                </div>
+                <div class="chatlog__attachment-filesize">
+                    1.0 MB
+                </div>
+                <audio controls>
+                    <source src="https://data.freetouse.com/music/tracks/15baf58e-2e84-43b0-a30a-b147308c8088/file/mp3" alt="Audio Attachment" title="musique.mp3">
+                </audio>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1018" class="chatlog__message-container" data-message-id="1018">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-dd62486xej7f1.png?width=1024&format=png&auto=webp&s=834060ca1b6be81c4d32adfbfc7dcdbb7018cf32"  data-user-id="1" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice <img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f9ea.png" alt="🧪" title="Test Tube" aria-label="Emoji: Test Tube"></span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 05:34 PM">01-01-2026 05:34 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1018" id="message-1018">
+                    <span class="chatlog__markdown-preserve">Regardez cette vidéo :</span>
+
+                    <div class=chatlog__attachment>
+  <video class=chatlog__attachment-thumbnail src=https://www.w3schools.com/html/mov_bbb.mp4 controls>Video</video>
+</div>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1019" class="chatlog__message-container" data-message-id="1019">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+                <div class='chatlog__followup-symbol'></div>
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-4zgagzeyej7f1.png?width=1024&format=png&auto=webp&s=36a85f787f4826665e26be46c3b509281551a043"  data-user-id="2" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+                <div class="chatlog__followup">
+    <span class="chatlog__reference-unknown"><em>Original message was deleted.</em></span>
+</div>
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 05:37 PM">01-01-2026 05:37 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1019" id="message-1019">
+                    <span class="chatlog__markdown-preserve">Je réponds à un message qui n&#x27;existe plus.</span>
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1020" class="chatlog__message-container" data-message-id="1020">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-dd62486xej7f1.png?width=1024&format=png&auto=webp&s=834060ca1b6be81c4d32adfbfc7dcdbb7018cf32"  data-user-id="1" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice <img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f9ea.png" alt="🧪" title="Test Tube" aria-label="Emoji: Test Tube"></span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 05:40 PM">01-01-2026 05:40 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1020" id="message-1020">
+                    <span class="chatlog__markdown-preserve">Attention, image spoiler ci-dessous :</span>
+
+                    <div class="chatlog__attachment">
+    <a href="https://images.freeimages.com/variants/nDv5dLEb1auNuDied29fLkGp/f4a36f6589a0e50e702740b15352bc00e4bfaf6f58bd4db850e167794d05993d?fmt=webp&h=350" target="_blank" rel="noopener noreferrer" title="View image attachment" class="spoiler spoiler-image spoiler--hidden" onclick="showSpoiler(event, this)">
+        <img class="chatlog__attachment-thumbnail" src="https://images.freeimages.com/variants/nDv5dLEb1auNuDied29fLkGp/f4a36f6589a0e50e702740b15352bc00e4bfaf6f58bd4db850e167794d05993d?fmt=webp&h=350" alt="Image attachment">
+    </a>
+</div>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div id="chatlog__message-container-1009" class="chatlog__message-container" data-message-id="1009">
+        <div class="chatlog__message">
+            <div class="chatlog__message-aside">
+
+                <img class="chatlog__avatar" src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-4zgagzeyej7f1.png?width=1024&format=png&auto=webp&s=36a85f787f4826665e26be46c3b509281551a043"  data-user-id="2" alt="Avatar" />
+            </div>
+            <div class="chatlog__message-primary">
+
+                <div class="chatlog__header">
+                    <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
+
+                    <span class="chatlog__timestamp" data-timestamp="Thursday,  1 January 2026 05:42 PM">01-01-2026 05:42 PM</span>
+                </div>
+
+                <div class="chatlog__content chatlog__markdown" data-message-id="1009" id="message-1009">
+                    <span class="chatlog__markdown-preserve">Merci pour votre participation !</span>
+
+
+
+
+
+
+
+                    <div class="chatlog__reactions"><div class=chatlog__reaction>
+    <img class="emoji emoji--small" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f44d.png" alt="👍" title="Thumbs Up Sign" aria-label="Emoji: Thumbs Up Sign">
+    <span class="chatlog__reaction-count">10</span>
+</div>
+<div class=chatlog__reaction>
+    <img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/1323626699870441502.gif" alt="Emoji" onerror="this.src='https://cdn.discordapp.com/emojis/1323626699870441502.png';this.onerror=null;">
+    <span class="chatlog__reaction-count">4</span>
+</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     </div>
 </div>
 
 <div class="footer">
-    <span class="footer__text">{{GENERATED_ON}} {{DATE_TIME}}</span>
+    <span class="footer__text">Ce transcript a été généré le 1 January 2026 at 05:42:18 PM (UTC)</span>
     <div class="footer__powered">
-        <span>{{POWERED_BY}}</span>
+        <span>Propulsé par</span>
         <a href="https://discord-transcript.xouxou-hosting.fr/index" class="footer__powered-link" target="_blank" rel="noopener">
             <img class="footer__logo" src="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg" alt="DiscordTranscript">
             DiscordTranscript
@@ -1856,40 +2560,123 @@
 </div>
 
 <div id="context-menu">
-    <div class="item">{{COPY_MESSAGE_ID}}</div>
+    <div class="item">Copier l'ID du message</div>
 </div>
 
 <div id="summary-popout" class="summary-popout">
     <div class="meta__header">
-         <img src="{{SERVER_AVATAR_URL}}" alt="Avatar">
+         <img src="https://images-ext-1.discordapp.net/external/eWd-a9CcVDoj8a-UH3tcpShBjAHE9pcuAhI7lWv_u6o/%3Fsize%3D1024/https/cdn.discordapp.com/icons/1449148933732306976/c15c158e4c693ad4294f35f8253610b6.png?format=webp&quality=lossless&width=921&height=921" alt="Avatar">
     </div>
     <div class="meta__description">
         <div class="meta__details">
-            <div class="meta__user">{{SERVER_NAME}}</div>
+            <div class="meta__user">Serveur de Démonstration</div>
         </div>
         <div class="meta__field">
-            <div class="meta__title">{{GUILD_ID_LABEL}}</div>
-            <div class="meta__value">{{GUILD_ID}}</div>
+            <div class="meta__title">ID du serveur</div>
+            <div class="meta__value">123456789</div>
         </div>
         <div class="meta__field">
-            <div class="meta__title">{{CHANNEL_ID_LABEL}}</div>
-            <div class="meta__value">{{CHANNEL_ID}}</div>
+            <div class="meta__title">ID du salon</div>
+            <div class="meta__value">987654321</div>
         </div>
         <div class="meta__field">
-            <div class="meta__title">{{CHANNEL_CREATED_AT_LABEL}}</div>
-            <div class="meta__value">{{CHANNEL_CREATED_AT}}</div>
+            <div class="meta__title">Date de création du salon</div>
+            <div class="meta__value">Jan 01, 2026 (05:42:17 PM)</div>
         </div>
         <div class="meta__field">
-            <div class="meta__title">{{MESSAGE_COUNT_LABEL}}</div>
-            <div class="meta__value">{{MESSAGE_COUNT}}</div>
+            <div class="meta__title">Nombre total de messages</div>
+            <div class="meta__value">20</div>
         </div>
         <div class="meta__field">
-            <div class="meta__title">{{MESSAGE_PARTICIPANTS_LABEL}}</div>
-            <div class="meta__value">{{MESSAGE_PARTICIPANTS}}</div>
+            <div class="meta__title">Nombre total de participants</div>
+            <div class="meta__value">3</div>
         </div>
     </div>
 </div>
-{{META_DATA}}
+<div id="meta-popout-1" class="meta-popout">
+    <div class="meta__header">
+         <img src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-dd62486xej7f1.png?width=1024&format=png&auto=webp&s=834060ca1b6be81c4d32adfbfc7dcdbb7018cf32" alt="Avatar">
+    </div>
+    <div class="meta__description">
+
+        <div class="meta__details">
+            <div class="meta__user">Alice 🧪</div>
+            <div class="meta__discriminator">#1378</div>
+
+        </div>
+        <div class="meta__divider-2"></div>
+        <div class="meta__field">
+            <div class="meta__title">Member Since</div>
+            <div class="meta__value"><img src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-logo.svg" alt="Discord icon"/> Jan 01, 2026 <div class="meta__divider"></div> <img src="https://images-ext-1.discordapp.net/external/eWd-a9CcVDoj8a-UH3tcpShBjAHE9pcuAhI7lWv_u6o/%3Fsize%3D1024/https/cdn.discordapp.com/icons/1449148933732306976/c15c158e4c693ad4294f35f8253610b6.png?format=webp&quality=lossless&width=921&height=921" class="meta__img-border" alt="Guild icon"/> Jan 01, 2026</div>
+        </div>
+        <div class="meta__field">
+            <div class="meta__title">Member ID</div>
+            <div class="meta__value">1</div>
+        </div>
+        <div class="meta__field">
+            <div class="meta__title">Message Count</div>
+            <div class="meta__value">7</div>
+        </div>
+    </div>
+</div>
+
+<div id="meta-popout-2" class="meta-popout">
+    <div class="meta__header">
+         <img src="https://preview.redd.it/the-new-discord-default-profile-pictures-v0-4zgagzeyej7f1.png?width=1024&format=png&auto=webp&s=36a85f787f4826665e26be46c3b509281551a043" alt="Avatar">
+    </div>
+    <div class="meta__description">
+
+        <div class="meta__details">
+            <div class="meta__user">Bob</div>
+            <div class="meta__discriminator">#8462</div>
+
+        </div>
+        <div class="meta__divider-2"></div>
+        <div class="meta__field">
+            <div class="meta__title">Member Since</div>
+            <div class="meta__value"><img src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-logo.svg" alt="Discord icon"/> Jan 01, 2026 <div class="meta__divider"></div> <img src="https://images-ext-1.discordapp.net/external/eWd-a9CcVDoj8a-UH3tcpShBjAHE9pcuAhI7lWv_u6o/%3Fsize%3D1024/https/cdn.discordapp.com/icons/1449148933732306976/c15c158e4c693ad4294f35f8253610b6.png?format=webp&quality=lossless&width=921&height=921" class="meta__img-border" alt="Guild icon"/> Jan 01, 2026</div>
+        </div>
+        <div class="meta__field">
+            <div class="meta__title">Member ID</div>
+            <div class="meta__value">2</div>
+        </div>
+        <div class="meta__field">
+            <div class="meta__title">Message Count</div>
+            <div class="meta__value">5</div>
+        </div>
+    </div>
+</div>
+
+<div id="meta-popout-3" class="meta-popout">
+    <div class="meta__header">
+         <img src="https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp" alt="Avatar">
+    </div>
+    <div class="meta__description">
+
+        <div class="meta__details">
+            <div class="meta__user">Lyxios</div>
+            <div class="meta__discriminator">#4628</div>
+            <span class="chatlog__bot-tag">
+    <svg class="chatlog__bot-tag-verified"
+         height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="#ffffff"></path></svg>
+    <span>APP</span>
+</span>
+        </div>
+        <div class="meta__divider-2"></div>
+        <div class="meta__field">
+            <div class="meta__title">Member Since</div>
+            <div class="meta__value"><img src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-logo.svg" alt="Discord icon"/> Jan 01, 2026 <div class="meta__divider"></div> <img src="https://images-ext-1.discordapp.net/external/eWd-a9CcVDoj8a-UH3tcpShBjAHE9pcuAhI7lWv_u6o/%3Fsize%3D1024/https/cdn.discordapp.com/icons/1449148933732306976/c15c158e4c693ad4294f35f8253610b6.png?format=webp&quality=lossless&width=921&height=921" class="meta__img-border" alt="Guild icon"/> Jan 01, 2026</div>
+        </div>
+        <div class="meta__field">
+            <div class="meta__title">Member ID</div>
+            <div class="meta__value">3</div>
+        </div>
+        <div class="meta__field">
+            <div class="meta__title">Message Count</div>
+            <div class="meta__value">4</div>
+        </div>
+    </div>
+</div>
 
 <div id="image-modal" class="modal">
     <span class="modal-close">&times;</span>
@@ -1994,7 +2781,7 @@
         }
     });
 
-    
+
     const summaryPopout = document.getElementById('summary-popout')
 
     window.onload = function() {
@@ -2081,7 +2868,32 @@
         theme: 'disc',
     });
 
-    {{FANCY_TIME}}
+    <!-- Timestamps: Content -->
+dayjs.extend(window.dayjs_plugin_utc);
+dayjs.extend(window.dayjs_plugin_timezone);
+dayjs.extend(window.dayjs_plugin_customParseFormat);
+dayjs.extend(window.dayjs_plugin_isToday);
+dayjs.extend(window.dayjs_plugin_isTomorrow);
+dayjs.extend(window.dayjs_plugin_isBetween);
+
+dayjs.tz.setDefault("UTC")
+dayjs().format("DD/MM/YYYY hh:mm A");
+var timeStamps = document.getElementsByClassName('chatlog__timestamp');
+for(var i = 0; i < timeStamps.length; i++) {
+    const date_1 = dayjs.tz(timeStamps[i].innerText, "DD-MM-YYYY hh:mm A", "UTC");
+    const date_2 = dayjs.tz();
+    const diff = date_2.diff(date_1, 'day', true)
+
+    if (date_1.isTomorrow()) {
+        timeStamps[i].innerText = "Tomorrow at " + date_1.format('hh:mm A')
+    } else if (date_1.isToday()) {
+        timeStamps[i].innerText = "Today at " + date_1.format('hh:mm A')
+    } else if (date_1.add(1, 'day').isToday()) {
+        timeStamps[i].innerText = "Yesterday at " + date_1.format('hh:mm A')
+    } else if (date_1.isBetween(date_2, date_2.subtract(7, 'day'))) {
+        timeStamps[i].innerText = date_1.day(date_1.day()).format("dddd [at] hh:mm A")
+    }
+}
     });
 </script>
 
@@ -2131,15 +2943,15 @@
             img.onclick = function(e) {
                 // If inside a hidden spoiler, do not open
                 if (this.closest('.spoiler--hidden')) return;
-                
+
                 // If image is not loaded, do not open
                 if (this.naturalHeight === 0) return;
-                
+
                 // Check if click is on the image content (handling object-fit: contain)
                 if (this.naturalHeight > 0) {
                     const ratio = this.naturalWidth / this.naturalHeight;
                     const domRatio = this.clientWidth / this.clientHeight;
-                    
+
                     let renderHeight, renderWidth, xOffset, yOffset;
 
                     if (ratio < domRatio) {
@@ -2153,7 +2965,7 @@
                         xOffset = 0;
                         yOffset = (this.clientHeight - renderHeight) / 2;
                     }
-                    
+
                     const rect = this.getBoundingClientRect();
                     const clickX = e.clientX - rect.left - this.clientLeft;
                     const clickY = e.clientY - rect.top - this.clientTop;
@@ -2199,5 +3011,20 @@
     });
 </script>
 
-</body>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            // 6. Back Button Logic
+            const backBtn = document.getElementById('back-button');
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 100) {
+                    backBtn.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+                } else {
+                    backBtn.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+                }
+            });
+        });
+    </script>
+    </body>
 </html>

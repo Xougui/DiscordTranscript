@@ -736,18 +736,18 @@ async def main():
     print(f"Generated local file: {local_path.absolute()}")
 
     # 2. Écriture vers le chemin spécifique (si le dossier parent existe)
-    dev_path = Path(
-        r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_preview.html"
-    )
+    # dev_path = Path(
+    #     r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_preview.html"
+    # )
 
-    try:
-        if dev_path.parent.exists():
-            dev_path.write_text(html, encoding="utf-8")
-            print(f"Generated dev path: {dev_path}")
-        else:
-            print(f"Dev path skipped (directory not found): {dev_path.parent}")
-    except Exception as e:
-        print(f"Could not write to dev path: {e}")
+    # try:
+    #     if dev_path.parent.exists():
+    #         dev_path.write_text(html, encoding="utf-8")
+    #         print(f"Generated dev path: {dev_path}")
+    #     else:
+    #         print(f"Dev path skipped (directory not found): {dev_path.parent}")
+    # except Exception as e:
+    #     print(f"Could not write to dev path: {e}")
 
 
 if __name__ == "__main__":
