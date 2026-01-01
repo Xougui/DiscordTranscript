@@ -449,13 +449,13 @@ class MessageConstruct:
             sticker = await self.message.stickers[0].fetch()
             sticker_image_url = f"https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/stickers/{sticker.pack_id}/{sticker.id}.gif"
 
+        sticker_template = '<div class="chatlog__attachment"><img class="chatlog__sticker" src="{{ATTACH_URL}}" alt="Sticker" title="Sticker"></div>'
+
         self.message.content = await fill_out(
             self.guild,
-            img_attachment,
+            sticker_template,
             [
-                ("SPOILER_CLASSES", "", PARSE_MODE_NONE),
                 ("ATTACH_URL", str(sticker_image_url), PARSE_MODE_NONE),
-                ("ATTACH_URL_THUMB", str(sticker_image_url), PARSE_MODE_NONE),
             ],
             bot=self.bot,
             timezone=self.pytz_timezone,

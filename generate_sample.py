@@ -401,7 +401,7 @@ async def main():
     # Message 4: Attachment (Image)
     attachment = MockAttachment(
         "photo_vacances.png",
-        "https://lyxios.xouxou-hosting.fr/images/black_white.png",
+        "https://images.freeimages.com/images/large-previews/e69/wadi-rum-desert-4-1058229.jpg?fmt=webp&h=350",
         1024,
     )
     msg4 = MockMessage(
@@ -511,7 +511,7 @@ async def main():
 
     # Message 8: Sticker
     sticker = MockSticker(
-        "Cool Sticker", "https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp"
+        "Cool Sticker", "https://images.freeimages.com/images/large-previews/003/sushi-roll-1321056.jpg?fmt=webp&h=350"
     )
     msg8 = MockMessage(
         1008,
@@ -665,7 +665,7 @@ async def main():
     # Message 20: Spoiler Image
     spoiler_att = MockAttachment(
         "SPOILER_secret.png",
-        "https://lyxios.xouxou-hosting.fr/images/black_white.png",
+        "https://images.freeimages.com/variants/nDv5dLEb1auNuDied29fLkGp/f4a36f6589a0e50e702740b15352bc00e4bfaf6f58bd4db850e167794d05993d?fmt=webp&h=350",
         1024,
     )
     msg20 = MockMessage(
