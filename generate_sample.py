@@ -744,7 +744,9 @@ async def main():
         "**Niveau d'accès :** ⭐ Premium\n"
         "**Dernière connexion :** Il y a 2 heures"
     )
-    section_info = MockSection([text_info])
+    # Ajout d'un bouton comme accessoire dans la section
+    btn_refresh = MockButton("Actualiser", MockButtonStyle.secondary, emoji=MockEmoji("🔄"))
+    section_info = MockSection([text_info], accessory=btn_refresh)
 
     # Section 3: Menu de sélection
     select_v2 = MockSelectMenu(
@@ -765,6 +767,18 @@ async def main():
     )
     action_row_select = MockActionRow([select_v2])
 
+    # Section 3b: Second Menu de sélection (Langue)
+    select_lang = MockSelectMenu(
+        "select_lang",
+        [
+            MockSelectOption("Français", "fr", emoji=MockEmoji("🇫🇷"), default=True),
+            MockSelectOption("English", "en", emoji=MockEmoji("🇬🇧")),
+            MockSelectOption("Deutsch", "de", emoji=MockEmoji("🇩🇪")),
+        ],
+        placeholder="Langue / Language",
+    )
+    action_row_lang = MockActionRow([select_lang])
+
     # Section 4: Boutons d'action
     btn_save = MockButton("Sauvegarder", MockButtonStyle.success, emoji=MockEmoji("💾"))
     btn_cancel = MockButton("Annuler", MockButtonStyle.secondary)
@@ -781,6 +795,7 @@ async def main():
             section_info,
             separator,
             action_row_select,
+            action_row_lang,
             action_row_buttons,
         ],
         accent_color=MockColor(0x5865F2),
