@@ -160,6 +160,14 @@ class Component:
             temp = Component(child, self.guild, self.bot, self.timezone)
             await temp.build_component(child)
             children_html += temp.components
+            if temp.menus:
+                children_html += (
+                    f'<div class="chatlog__components">{temp.menus}</div>'
+                )
+            if temp.buttons:
+                children_html += (
+                    f'<div class="chatlog__components">{temp.buttons}</div>'
+                )
 
         accessory_html = ""
         if c.accessory:
@@ -168,6 +176,10 @@ class Component:
             accessory_html += temp.components
             # Accessories like Buttons need to be wrapped if they are buttons?
             # `build_button` adds to `self.buttons`.
+            if temp.menus:
+                accessory_html += (
+                    f'<div class="chatlog__components">{temp.menus}</div>'
+                )
             if temp.buttons:
                 accessory_html += (
                     f'<div class="chatlog__components">{temp.buttons}</div>'
