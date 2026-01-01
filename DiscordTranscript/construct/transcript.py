@@ -1,27 +1,28 @@
-import traceback
 import datetime
 import html
-import pytz
 import re
-from typing import List, Optional, TYPE_CHECKING
+import traceback
+from typing import TYPE_CHECKING, Optional
 
-from DiscordTranscript.construct.attachment_handler import AttachmentHandler
-from DiscordTranscript.ext.discord_import import discord
-from DiscordTranscript.construct.message import gather_messages
+import pytz
+
 from DiscordTranscript.construct.assets.component import Component
+from DiscordTranscript.construct.attachment_handler import AttachmentHandler
+from DiscordTranscript.construct.message import gather_messages
 from DiscordTranscript.ext.cache import clear_cache
-from DiscordTranscript.i18n import TRANSLATIONS
+from DiscordTranscript.ext.discord_import import discord
 from DiscordTranscript.ext.discord_utils import DiscordUtils
 from DiscordTranscript.ext.html_generator import (
-    fill_out,
-    total,
-    channel_topic,
-    meta_data_temp,
-    fancy_time,
-    channel_subject,
-    PARSE_MODE_NONE,
     PARSE_MODE_HTML_SAFE,
+    PARSE_MODE_NONE,
+    channel_subject,
+    channel_topic,
+    fancy_time,
+    fill_out,
+    meta_data_temp,
+    total,
 )
+from DiscordTranscript.i18n import TRANSLATIONS
 
 if TYPE_CHECKING:
     import discord as discord_typings
@@ -50,16 +51,16 @@ class TranscriptDAO:
     def __init__(
         self,
         channel: "discord_typings.TextChannel",
-        limit: Optional[int],
-        messages: Optional[List["discord_typings.Message"]],
+        limit: int | None,
+        messages: list["discord_typings.Message"] | None,
         pytz_timezone,
         military_time: bool,
         fancy_times: bool,
-        before: Optional[datetime.datetime],
-        after: Optional[datetime.datetime],
+        before: datetime.datetime | None,
+        after: datetime.datetime | None,
         bot: Optional["discord_typings.Client"],
-        attachment_handler: Optional[AttachmentHandler],
-        tenor_api_key: Optional[str] = None,
+        attachment_handler: AttachmentHandler | None,
+        tenor_api_key: str | None = None,
         language: str = "en",
     ):
         """Initializes the TranscriptDAO.
