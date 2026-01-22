@@ -104,6 +104,13 @@ component_menu_options = read_file(
 component_menu_options_emoji = read_file(
     dir_path + "/html/component/component_menu_options_emoji.html"
 )
+component_container = read_file(dir_path + "/html/component/component_container.html")
+component_section = read_file(dir_path + "/html/component/component_section.html")
+component_text_display = read_file(
+    dir_path + "/html/component/component_text_display.html"
+)
+component_thumbnail = read_file(dir_path + "/html/component/component_thumbnail.html")
+component_separator = read_file(dir_path + "/html/component/component_separator.html")
 
 # EMBED
 embed_body = read_file(dir_path + "/html/embed/body.html")

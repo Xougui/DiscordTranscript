@@ -22,7 +22,6 @@ from DiscordTranscript.ext.html_generator import (
     bot_tag_verified,
     end_message,
     fill_out,
-    img_attachment,
     message_body,
     message_content,
     message_interaction,
