@@ -371,7 +371,7 @@ class ParseMarkdown:
             affected_url = match.group(2)
             self.content = self.content.replace(
                 self.content[match.start() : match.end()],
-                '<a href="%s">%s</a>' % (affected_url, affected_text),
+                '<a href="%s" style="color: #00a8fc;">%s</a>' % (affected_url, affected_text),
             )
             match = re.search(pattern, self.content)
 
@@ -468,7 +468,7 @@ class ParseMarkdown:
                 )
                 match = re.search(pattern, content)
 
-        pattern = re.compile(r'<a href="(.*?)">(.*?)</a>')
+        pattern = re.compile(r'<a href="(.*?)".*?>(.*?)</a>')
         match = re.search(pattern, content)
         while match is not None:
             affected_url = match.group(1)
@@ -510,7 +510,7 @@ class ParseMarkdown:
                     match_url = re.search(pattern, word)
                     if match_url:
                         match_url = match_url.group(1)
-                        url = f'<a href="https://{match_url}">https://{match_url}</a>'
+                        url = f'<a href="https://{match_url}" style="color: #00a8fc;">https://{match_url}</a>'
                         word = word.replace("https://" + match_url, url)
                         word = word.replace("http://" + match_url, url)
                     output.append(remove_silent_link(word, match_url))
@@ -522,7 +522,7 @@ class ParseMarkdown:
                         continue
                     elif word_link:
                         word_link = word_link.group()
-                        word_full = f'<a href="{word_link}">{word_link}</a>'
+                        word_full = f'<a href="{word_link}" style="color: #00a8fc;">{word_link}</a>'
                         word = re.sub(pattern, word_full, word)
                     output.append(remove_silent_link(word))
                 elif "http://" in word:
@@ -533,7 +533,7 @@ class ParseMarkdown:
                         continue
                     elif word_link:
                         word_link = word_link.group()
-                        word_full = f'<a href="{word_link}">{word_link}</a>'
+                        word_full = f'<a href="{word_link}" style="color: #00a8fc;">{word_link}</a>'
                         word = re.sub(pattern, word_full, word)
                     output.append(remove_silent_link(word))
                 else:
