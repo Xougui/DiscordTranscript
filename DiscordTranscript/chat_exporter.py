@@ -1,6 +1,5 @@
 import datetime
 import io
-import os
 from typing import TYPE_CHECKING, Optional
 
 from DiscordTranscript.construct.attachment_handler import (
@@ -85,7 +84,6 @@ async def export(
     before: datetime.datetime | None = None,
     after: datetime.datetime | None = None,
     attachment_handler: AttachmentHandler | None = None,
-    tenor_api_key: str | None = None,
     language: str = "en",
 ):
     """Creates a customized transcript of a Discord channel.
@@ -103,7 +101,6 @@ async def export(
         before (Optional[datetime.datetime]): The date to fetch messages before. Defaults to None.
         after (Optional[datetime.datetime]): The date to fetch messages after. Defaults to None.
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use. Defaults to None.
-        tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs. Defaults to None.
         language (str): The language to use for the transcript. Defaults to "en".
 
     Returns:
@@ -111,8 +108,6 @@ async def export(
     """
     if guild:
         channel.guild = guild
-
-    tenor_api_key = tenor_api_key or os.getenv("TENOR_API_KEY")
 
     return (
         await Transcript(
@@ -126,7 +121,6 @@ async def export(
             after=after,
             bot=bot,
             attachment_handler=attachment_handler,
-            tenor_api_key=tenor_api_key,
             language=language,
         ).export()
     ).html
@@ -141,7 +135,6 @@ async def raw_export(
     military_time: bool | None = False,
     fancy_times: bool | None = True,
     attachment_handler: AttachmentHandler | None = None,
-    tenor_api_key: str | None = None,
     language: str = "en",
 ):
     """Creates a customized transcript with your own captured Discord messages.
@@ -157,7 +150,6 @@ async def raw_export(
         military_time (bool): Whether to use military time. Defaults to False.
         fancy_times (bool): Whether to use fancy times. Defaults to True.
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use. Defaults to None.
-        tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs. Defaults to None.
         language (str): The language to use for the transcript. Defaults to "en".
 
     Returns:
@@ -165,8 +157,6 @@ async def raw_export(
     """
     if guild:
         channel.guild = guild
-
-    tenor_api_key = tenor_api_key or os.getenv("TENOR_API_KEY")
 
     return (
         await Transcript(
@@ -180,7 +170,6 @@ async def raw_export(
             after=None,
             bot=bot,
             attachment_handler=attachment_handler,
-            tenor_api_key=tenor_api_key,
             language=language,
         ).export()
     ).html

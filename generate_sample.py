@@ -219,6 +219,10 @@ class MockEmbed:
         image=None,
         thumbnail=None,
         timestamp=None,
+        video=None,
+        provider=None,
+        type="rich",
+        url=None,
     ):
         self.title = title
         self.description = description
@@ -230,10 +234,10 @@ class MockEmbed:
         self.image = image
         self.thumbnail = thumbnail
         self.timestamp = timestamp
-        self.url = None
-        self.video = None
-        self.provider = None
-        self.type = "rich"
+        self.url = url
+        self.video = video
+        self.provider = provider
+        self.type = type
 
 
 class MockEmbedField:
@@ -244,13 +248,15 @@ class MockEmbedField:
 
 
 class MockEmbedProxy:
-    def __init__(self, url=None, text=None, icon_url=None, name=None):
+    def __init__(self, url=None, text=None, icon_url=None, name=None, width=None, height=None):
         self.url = url
         self.text = text
         self.icon_url = icon_url
         self.name = name
         self.proxy_icon_url = None
         self.proxy_url = url
+        self.width = width
+        self.height = height
 
 
 # Inherit from discord.Button/SelectMenu so isinstance checks pass
@@ -818,6 +824,106 @@ async def main():
         channel=channel,
     )
 
+    # Message 23: Embed avec Vidéo (Style YouTube)
+    embed_video = MockEmbed(
+        title="Never Gonna Give You Up",
+        description="The legendary video.",
+        color=0xFF0000,
+        url="https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        video=MockEmbedProxy(url="https://www.youtube.com/embed/dQw4w9WgXcQ", width=560, height=315),
+        provider=MockEmbedProxy(name="YouTube", url="https://www.youtube.com"),
+        type="video",
+    )
+    msg23 = MockMessage(
+        1023,
+        "Voici une vidéo intégrée :",
+        user2,
+        base_time + datetime.timedelta(minutes=61),
+        embeds=[embed_video],
+        channel=channel,
+    )
+
+    # Message 24: Embed Image Seule (GIF)
+    embed_image_only = MockEmbed(
+        type="image",
+        image=MockEmbedProxy(url="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3V5eGk2eGk2eGk2eGk2eGk2eGk2eGk2eGk2eGk2eGk2/xT4uQulxzV39haRFjG/giphy.gif"),
+        color=0x202225,
+    )
+    msg24 = MockMessage(
+        1024,
+        "",
+        user1,
+        base_time + datetime.timedelta(minutes=62),
+        embeds=[embed_image_only],
+        channel=channel,
+    )
+
+    # Message 25: Pièces jointes multiples
+    att_text = MockAttachment("notes.txt", "https://example.com/notes.txt", 1024, "text/plain")
+    att_img = MockAttachment("screenshot.png", "https://png.pngtree.com/thumb_back/fh260/background/20240522/pngtree-abstract-cloudy-background-beautiful-natural-streaks-of-sky-and-clouds-red-image_15684333.jpg", 5000, "image/png")
+    msg25 = MockMessage(
+        1025,
+        "Voici plusieurs fichiers pour le dossier :",
+        user2,
+        base_time + datetime.timedelta(minutes=63),
+        attachments=[att_text, att_img],
+        channel=channel,
+    )
+
+    # Message 26: Markdown Avancé
+    md_advanced = (
+        "# Grand Titre\n"
+        "## Sous-titre\n"
+        "### Sous-sous-titre\n\n"
+        "-# Subtext\n"
+        "**Liste numérotée :**\n"
+        "1. Premier élément\n"
+        "2. Deuxième élément\n"
+        "3. Troisième élément\n\n"
+        "> Ceci est une citation en bloc.\n"
+        "> Elle peut s'étendre sur plusieurs lignes.\n\n"
+        "**Liste à puces :**\n"
+        "- Liste à puces item 1\n"
+        "- Liste à puces item 2\n"
+        "  - Sous-item indenté\n\n"
+        "Voici un [lien vers Discord](https://discord.com).\n"
+        "Et du code inline `print('test')`."
+    )
+    msg26 = MockMessage(
+        1026,
+        md_advanced,
+        user1,
+        base_time + datetime.timedelta(minutes=64),
+        channel=channel,
+    )
+
+    # Message 27: Contenu Mixte (Texte + Embed + Composants)
+    embed_mixed = MockEmbed(
+        title="Confirmation requise",
+        description="Veuillez confirmer la réception des documents ci-dessus.",
+        color=0xF1C40F,
+    )
+    btn_confirm = MockButton("J'ai reçu", MockButtonStyle.success, emoji=MockEmoji("✅"))
+    msg27 = MockMessage(
+        1027,
+        "Merci de vérifier.",
+        bot_user,
+        base_time + datetime.timedelta(minutes=65),
+        embeds=[embed_mixed],
+        components=[MockActionRow([btn_confirm])],
+        channel=channel,
+    )
+
+    # Message 28: Bloc de code long
+    long_code = "```python\n" + "\n".join([f"print('Ligne de code numéro {i}')" for i in range(1, 21)]) + "\n```"
+    msg28 = MockMessage(
+        1028,
+        "Voici un fichier de code plus long :\n" + long_code,
+        user1,
+        base_time + datetime.timedelta(minutes=66),
+        channel=channel,
+    )
+
     # Update msg5 with timestamp
     msg5.embeds[0].timestamp = base_time
 
@@ -844,6 +950,12 @@ async def main():
         msg20,
         msg21,
         msg22,
+        msg23,
+        msg24,
+        msg25,
+        msg26,
+        msg27,
+        msg28,
     ]
     # Transcript.export reverses the list if after is None, expecting Newest->Oldest input.
     # So we sort descending (Newest first) to get Oldest first in the output.

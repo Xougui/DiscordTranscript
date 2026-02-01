@@ -42,7 +42,6 @@ class TranscriptDAO:
         before (Optional[datetime.datetime]): The date to fetch messages before.
         after (Optional[datetime.datetime]): The date to fetch messages after.
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
-        tenor_api_key (Optional[str]): The Tenor API key to use.
         bot (Optional[discord.Client]): The bot to use for fetching members.
     """
 
@@ -60,7 +59,6 @@ class TranscriptDAO:
         after: datetime.datetime | None,
         bot: Optional["discord_typings.Client"],
         attachment_handler: AttachmentHandler | None,
-        tenor_api_key: str | None = None,
         language: str = "en",
     ):
         """Initializes the TranscriptDAO.
@@ -76,7 +74,6 @@ class TranscriptDAO:
             after (Optional[datetime.datetime]): The date to fetch messages after.
             bot (Optional['discord.Client']): The bot to use for fetching members.
             attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
-            tenor_api_key (Optional[str]): The Tenor API key to use.
             language (str): The language to use for the transcript. Defaults to "en".
         """
         self.channel = channel
@@ -88,7 +85,6 @@ class TranscriptDAO:
         self.after = after
         self.pytz_timezone = pytz_timezone
         self.attachment_handler = attachment_handler
-        self.tenor_api_key = tenor_api_key
         self.bot = bot
         self.language = language
 
@@ -105,7 +101,6 @@ class TranscriptDAO:
             self.pytz_timezone,
             self.military_time,
             self.attachment_handler,
-            self.tenor_api_key,
             bot=self.bot,
             translations=translations,
         )

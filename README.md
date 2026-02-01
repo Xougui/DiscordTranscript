@@ -52,7 +52,6 @@ A Python library for creating HTML transcripts of Discord channels. This is usef
 - [Utilisation](#utilisation)
 - [Exemples](#exemples)
 - [Paramètres](#paramètres)
-- [Obtenir une clé API Tenor](#obtaining-a-tenor-api-key)
 
 ---
 
@@ -232,7 +231,6 @@ Voici une liste des paramètres que vous pouvez utiliser dans les fonctions `exp
 | `bot` | `discord.Client` | L'instance de votre bot. Nécessaire pour résoudre les informations des utilisateurs qui ont quitté le serveur. | `None` |
 | `guild`| `discord.Guild` | L'instance de votre serveur. Nécessaire pour résoudre les informations des membres (rôles, couleurs, etc.). | `None` |
 | `attachment_handler` | `AttachmentHandler` | Un gestionnaire pour contrôler la façon dont les pièces jointes sont traitées. Voir l'exemple [Intégrer les pièces jointes dans le HTML](#intégrer-les-pièces-jointes-dans-le-html). | `None` (les liens des pièces jointes pointent vers le CDN de Discord) |
-| `tenor_api_key` | `str` | Votre clé API Tenor pour afficher les GIFs. | `None` |
 | `language` | `str` | La langue à utiliser pour la transcription. | `"en"` |
 
 **Note :** Le paramètre `messages` est uniquement disponible pour la fonction `raw_export()`.
@@ -331,33 +329,6 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
   )
   ```
 
-- **`tenor_api_key`**: Pour afficher les GIFs Tenor directement dans la transcription.
-  ```python
-  transcript = await DiscordTranscript.export(
-      ctx.channel,
-      tenor_api_key="VOTRE_CLÉ_API_TENOR", # Fournit votre clé API Tenor
-      bot=bot,
-  )
-  ```
-
----
-
-## <a id="obtaining-a-tenor-api-key"></a>Obtenir une clé API Tenor
-
-Pour utiliser la fonctionnalité d'affichage des GIFs Tenor, vous devez fournir une clé API Tenor. **Suivez attentivement le [guide de démarrage rapide de Tenor](https://developers.google.com/tenor/guides/quickstart) pour en obtenir une.**
-
-1.  **Connectez-vous à la [console Google Cloud](https://console.cloud.google.com/)**.
-2.  **Créez un nouveau projet** (ou sélectionnez-en un existant).
-3.  **Activez l'API Tenor** :
-    -   Dans le menu de navigation, allez dans `APIs & Services` > `Bibliothèque`.
-    -   Recherchez `Tenor API` et activez-la pour votre projet.
-4.  **Générez une clé API** :
-    -   Allez dans `APIs & Services` > `Identifiants`.
-    -   Cliquez sur `Créer des identifiants` et sélectionnez `Clé API`.
-5.  **Copiez votre clé** et utilisez-la dans le paramètre `tenor_api_key`.
-
-Il est recommandé de restreindre votre clé API pour éviter toute utilisation non autorisée. Vous pouvez le faire depuis la page `Identifiants`.
-
 </details>
 
 ---
@@ -375,7 +346,6 @@ Il est recommandé de restreindre votre clé API pour éviter toute utilisation 
 - [Usage](#usage-en)
 - [Examples](#examples-en)
 - [Parameters](#parameters-en)
-- [Getting a Tenor API Key](#getting-a-tenor-api-key-en)
 
 ---
 
@@ -556,7 +526,6 @@ Here is a list of parameters you can use in the `export()` and `raw_export()` fu
 | `bot` | `discord.Client` | Your bot's instance. Necessary to resolve user information for members who have left the server. | `None` |
 | `guild`| `discord.Guild` | Your server's instance. Necessary to resolve member information (roles, colors, etc.). | `None` |
 | `attachment_handler`| `AttachmentHandler` | A handler to control how attachments are processed. See the [Embedding Attachments in HTML](#embedding-attachments-in-html) example. | `None` (attachment links point to Discord's CDN) |
-| `tenor_api_key` | `str` | Your Tenor API key to display GIFs. | `None` |
 | `language` | `str` | The language to use for the transcript. | `"en"` |
 
 **Note:** The `messages` parameter is only available for the `raw_export()` function.
@@ -654,32 +623,5 @@ Here’s how you can use the parameters to customize your transcripts.
       bot=bot,
   )
   ```
-
-- **`tenor_api_key`**: To display Tenor GIFs directly in the transcript.
-  ```python
-  transcript = await DiscordTranscript.export(
-      ctx.channel,
-      tenor_api_key="YOUR_TENOR_API_KEY", # Provide your Tenor API key
-      bot=bot,
-  )
-  ```
-
----
-
-## <a id="getting-a-tenor-api-key-en"></a>Getting a Tenor API Key
-
-To use the Tenor GIF display feature, you need to provide a Tenor API key. **Carefully follow the [Tenor quickstart guide](https://developers.google.com/tenor/guides/quickstart) to get one.**
-
-1.  **Log in to the [Google Cloud console](https://console.cloud.google.com/)**.
-2.  **Create a new project** (or select an existing one).
-3.  **Enable the Tenor API**:
-    -   In the navigation menu, go to `APIs & Services` > `Library`.
-    -   Search for `Tenor API` and enable it for your project.
-4.  **Generate an API key**:
-    -   Go to `APIs & Services` > `Credentials`.
-    -   Click `Create credentials` and select `API key`.
-5.  **Copy your key** and use it in the `tenor_api_key` parameter.
-
-It is recommended to restrict your API key to prevent unauthorized use. You can do this from the `Credentials` page.
 
 </details>

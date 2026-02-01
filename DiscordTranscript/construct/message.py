@@ -5,7 +5,6 @@ import html
 import re
 from typing import TYPE_CHECKING
 
-import aiohttp
 from pytz import timezone
 
 from DiscordTranscript.construct.assets import Attachment, Component, Embed, Reaction
@@ -62,8 +61,6 @@ class MessageConstruct:
         guild (discord.Guild): The guild the channel belongs to.
         message_dict (dict): A dictionary of all messages in the channel.
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
-        tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs.
-        processed_tenor_links (List[str]): A list of Tenor links that have already been processed.
         time_format (str): The format to use for timestamps.
         message_created_at (str): The message's creation time.
         message_edited_at (str): The message's edit time.
@@ -98,7 +95,6 @@ class MessageConstruct:
         meta_data: dict,
         message_dict: dict,
         attachment_handler: AttachmentHandler | None,
-        tenor_api_key: str | None = None,
         bot: discord_typings.Client | None = None,
         translations: dict = None,
     ):
@@ -113,7 +109,6 @@ class MessageConstruct:
             meta_data (dict): A dictionary of metadata for the transcript.
             message_dict (dict): A dictionary of all messages in the channel.
             attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
-            tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs.
             bot (Optional[discord.Client]): The bot instance.
             translations (dict): A dictionary of translations.
         """
@@ -124,7 +119,6 @@ class MessageConstruct:
         self.guild = guild
         self.message_dict = message_dict
         self.attachment_handler = attachment_handler
-        self.tenor_api_key = tenor_api_key
         self.processed_tenor_links = []
         self.bot = bot
         self.translations = translations or {}
@@ -241,20 +235,34 @@ class MessageConstruct:
         content = self.message.content
         placeholders = {}
 
-        if self.tenor_api_key and "tenor.com/view" in content:
-            async with aiohttp.ClientSession() as session:
-                links = [word for word in content.split() if "tenor.com/view" in word]
-                for i, link in enumerate(links):
-                    gif_url = await _process_tenor_link(
-                        session, self.tenor_api_key, link
-                    )
-                    if gif_url:
+        # Scan for Tenor links that have corresponding embeds
+        if "tenor.com/view" in content and self.message.embeds:
+            for i, embed in enumerate(self.message.embeds):
+                if not embed.url or "tenor.com/view" not in embed.url:
+                    continue
+
+                # Check if this embed URL matches a link in the content
+                if embed.url in content:
+                    video_url = None
+                    # Try to get video URL from embed
+                    if hasattr(embed, "video") and embed.video and embed.video.url:
+                        video_url = embed.video.url
+                    # Fallback to thumbnail if no video (though Tenor usually has video)
+                    elif hasattr(embed, "thumbnail") and embed.thumbnail and embed.thumbnail.url:
+                        video_url = embed.thumbnail.url
+
+                    if video_url:
                         placeholder = f"TENORGIFPLACEHOLDER{i}"
-                        placeholders[placeholder] = (
-                            f'<img src="{gif_url}" alt="GIF from Tenor" style="max-width: 100%;">'
-                        )
-                        content = content.replace(link, placeholder)
-                        self.processed_tenor_links.append(link)
+
+                        # Construct HTML tag - prefer video for MP4s/WebMs
+                        if video_url.endswith(('.mp4', '.webm')):
+                            html_tag = f'<video src="{video_url}" autoplay loop muted playsinline style="max-width: 100%;"></video>'
+                        else:
+                            html_tag = f'<img src="{video_url}" alt="GIF from Tenor" style="max-width: 100%;">'
+
+                        placeholders[placeholder] = html_tag
+                        content = content.replace(embed.url, placeholder)
+                        self.processed_tenor_links.append(embed.url)
 
         if self.message_edited_at:
             self.message_edited_at = _set_edit_at(self.message_edited_at)
@@ -864,49 +872,12 @@ class MessageConstruct:
         return local_time.strftime(self.time_format)
 
 
-async def _process_tenor_link(
-    session: aiohttp.ClientSession, tenor_api_key: str, link: str
-) -> str | None:
-    """Processes a Tenor link and returns the direct GIF URL.
-
-    Args:
-        session (aiohttp.ClientSession): The aiohttp client session.
-        tenor_api_key (str): The Tenor API key.
-        link (str): The Tenor link to process.
-
-    Returns:
-        Optional[str]: The direct GIF URL, or None if not found.
-    """
-    tenor_regex = r"https?:\/\/tenor\.com\/view\/[a-zA-Z0-9\-%]+\-([0-9]{16,20})"
-    match = re.search(tenor_regex, link)
-    if not match:
-        return None
-
-    gif_id = match.group(1)
-    if not gif_id:
-        return None
-
-    url = f"https://tenor.googleapis.com/v2/posts?ids={gif_id}&key={tenor_api_key}&media_filter=gif"
-
-    try:
-        async with session.get(url) as response:
-            if response.status == 200:
-                data = await response.json()
-                if data and "results" in data and data["results"]:
-                    gif_url = data["results"][0]["media_formats"]["gif"]["url"]
-                    return gif_url
-            return None
-    except Exception:
-        return None
-
-
 async def gather_messages(
     messages: list[discord_typings.Message],
     guild: discord_typings.Guild,
     pytz_timezone,
     military_time,
     attachment_handler: AttachmentHandler | None,
-    tenor_api_key: str | None = None,
     bot: discord_typings.Client | None = None,
     translations: dict = None,
 ) -> tuple[str, dict]:
@@ -918,7 +889,6 @@ async def gather_messages(
         pytz_timezone (str): The timezone to use for timestamps.
         military_time (bool): Whether to use military time.
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
-        tenor_api_key (Optional[str]): The Tenor API key to use for fetching GIFs.
         bot (Optional[discord.Client]): The bot instance.
         translations (dict): A dictionary of translations.
 
@@ -951,7 +921,6 @@ async def gather_messages(
             meta_data,
             message_dict,
             attachment_handler,
-            tenor_api_key=tenor_api_key,
             bot=bot,
             translations=translations,
         )
