@@ -135,6 +135,12 @@ class MessageConstruct:
         self.message_created_at, self.message_edited_at = self.set_time()
         self.meta_data = meta_data
 
+        self.suppressed_embed_links = []
+        if self.message.content:
+            self.suppressed_embed_links = re.findall(
+                r"<(https?://[^>]+)>", self.message.content
+            )
+
     async def construct_message(
         self,
     ) -> tuple[str, dict]:
@@ -467,6 +473,13 @@ class MessageConstruct:
                 embed
                 for embed in self.message.embeds
                 if not (embed.url and embed.url in self.processed_tenor_links)
+            ]
+
+        if self.suppressed_embed_links:
+            self.message.embeds = [
+                embed
+                for embed in self.message.embeds
+                if not (embed.url and embed.url in self.suppressed_embed_links)
             ]
 
         for e in self.message.embeds:

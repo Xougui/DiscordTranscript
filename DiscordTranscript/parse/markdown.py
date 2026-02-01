@@ -23,6 +23,36 @@ class ParseMarkdown:
         self.content = content
         self.code_blocks_content = []
         self.placeholders = placeholders or {}
+        self.links_placeholders = {}
+
+    def add_link_placeholder(self, full_tag=None, start_tag=None, end_tag=None):
+        """Adds a link placeholder.
+
+        Args:
+            full_tag (str, optional): The full link tag. Defaults to None.
+            start_tag (str, optional): The start link tag. Defaults to None.
+            end_tag (str, optional): The end link tag. Defaults to None.
+
+        Returns:
+            str or tuple: The placeholder(s).
+        """
+        link_id = len(self.links_placeholders)
+        if full_tag:
+            placeholder = f"%LINK-FULL-{link_id}%"
+            self.links_placeholders[placeholder] = full_tag
+            return placeholder
+        elif start_tag and end_tag:
+            start_ph = f"%LINK-START-{link_id}%"
+            end_ph = f"%LINK-END-{link_id}%"
+            self.links_placeholders[start_ph] = start_tag
+            self.links_placeholders[end_ph] = end_tag
+            return start_ph, end_ph
+        return ""
+
+    def restore_links(self):
+        """Restores the links from placeholders."""
+        for placeholder, tag in self.links_placeholders.items():
+            self.content = self.content.replace(placeholder, tag)
 
     async def standard_message_flow(self):
         """The standard flow for parsing a message.
@@ -37,6 +67,7 @@ class ParseMarkdown:
         await self.parse_emoji()
         self.reverse_code_block_markdown()
         self.reverse_tenor_placeholders()
+        self.restore_links()
         return self.content
 
     async def link_embed_flow(self):
@@ -47,6 +78,7 @@ class ParseMarkdown:
         """
         self.parse_embed_markdown()
         await self.parse_emoji()
+        self.restore_links()
 
     async def standard_embed_flow(self):
         """The standard flow for parsing an embed.
@@ -61,6 +93,7 @@ class ParseMarkdown:
 
         await self.parse_emoji()
         self.reverse_code_block_markdown()
+        self.restore_links()
         return self.content
 
     async def special_embed_flow(self):
@@ -75,6 +108,7 @@ class ParseMarkdown:
 
         await self.parse_emoji()
         self.reverse_code_block_markdown()
+        self.restore_links()
         return self.content
 
     async def message_reference_flow(self):
@@ -369,9 +403,14 @@ class ParseMarkdown:
         while match is not None:
             affected_text = match.group(1)
             affected_url = match.group(2)
+
+            start_tag = f'<a href="{affected_url}" style="color: #00a8fc;">'
+            end_tag = '</a>'
+            start_ph, end_ph = self.add_link_placeholder(start_tag=start_tag, end_tag=end_tag)
+
             self.content = self.content.replace(
                 self.content[match.start() : match.end()],
-                '<a href="%s" style="color: #00a8fc;">%s</a>' % (affected_url, affected_text),
+                f'{start_ph}{affected_text}{end_ph}'
             )
             match = re.search(pattern, self.content)
 
@@ -488,15 +527,6 @@ class ParseMarkdown:
 
     def https_http_links(self):
         """Parses https and http links."""
-
-        def remove_silent_link(url, raw_url=None):
-            pattern = rf"`.*{raw_url}.*`"
-            match = re.search(pattern, self.content)
-
-            if "&lt;" in url and "&gt;" in url and not match:
-                return url.replace("&lt;", "").replace("&gt;", "")
-            return url
-
         content = re.sub("\n", "<br>", self.content)
         output = []
         if "http://" in content or ("https://" in content and "](" not in content):
@@ -509,11 +539,12 @@ class ParseMarkdown:
                     pattern = r"&lt;https?:\/\/(.*)&gt;"
                     match_url = re.search(pattern, word)
                     if match_url:
-                        match_url = match_url.group(1)
-                        url = f'<a href="https://{match_url}" style="color: #00a8fc;">https://{match_url}</a>'
-                        word = word.replace("https://" + match_url, url)
-                        word = word.replace("http://" + match_url, url)
-                    output.append(remove_silent_link(word, match_url))
+                        match_url_str = match_url.group(1)
+                        full_tag = f'<a href="https://{match_url_str}" style="color: #00a8fc;">https://{match_url_str}</a>'
+                        placeholder = self.add_link_placeholder(full_tag=full_tag)
+                        output.append(placeholder)
+                    else:
+                        output.append(word)
                 elif "https://" in word:
                     pattern = r"https://[^\s>`\"*]*"
                     word_link = re.search(pattern, word)
@@ -521,10 +552,11 @@ class ParseMarkdown:
                         output.append(word)
                         continue
                     elif word_link:
-                        word_link = word_link.group()
-                        word_full = f'<a href="{word_link}" style="color: #00a8fc;">{word_link}</a>'
-                        word = re.sub(pattern, word_full, word)
-                    output.append(remove_silent_link(word))
+                        match_url_str = word_link.group()
+                        full_tag = f'<a href="{match_url_str}" style="color: #00a8fc;">{match_url_str}</a>'
+                        placeholder = self.add_link_placeholder(full_tag=full_tag)
+                        word = re.sub(pattern, placeholder, word)
+                    output.append(word)
                 elif "http://" in word:
                     pattern = r"http://[^\s>`\"*]*"
                     word_link = re.search(pattern, word)
@@ -532,10 +564,11 @@ class ParseMarkdown:
                         output.append(word)
                         continue
                     elif word_link:
-                        word_link = word_link.group()
-                        word_full = f'<a href="{word_link}" style="color: #00a8fc;">{word_link}</a>'
-                        word = re.sub(pattern, word_full, word)
-                    output.append(remove_silent_link(word))
+                        match_url_str = word_link.group()
+                        full_tag = f'<a href="{match_url_str}" style="color: #00a8fc;">{match_url_str}</a>'
+                        placeholder = self.add_link_placeholder(full_tag=full_tag)
+                        word = re.sub(pattern, placeholder, word)
+                    output.append(word)
                 else:
                     output.append(word)
             content = " ".join(output)
