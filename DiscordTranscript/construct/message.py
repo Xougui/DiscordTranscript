@@ -119,6 +119,7 @@ class MessageConstruct:
         self.guild = guild
         self.message_dict = message_dict
         self.attachment_handler = attachment_handler
+        self.processed_tenor_links = []
         self.bot = bot
         self.translations = translations or {}
         self.time_format = "%A, %e %B %Y %I:%M %p"
@@ -233,6 +234,35 @@ class MessageConstruct:
 
         content = self.message.content
         placeholders = {}
+
+        # Scan for Tenor links that have corresponding embeds
+        if "tenor.com/view" in content and self.message.embeds:
+            for i, embed in enumerate(self.message.embeds):
+                if not embed.url or "tenor.com/view" not in embed.url:
+                    continue
+
+                # Check if this embed URL matches a link in the content
+                if embed.url in content:
+                    video_url = None
+                    # Try to get video URL from embed
+                    if hasattr(embed, "video") and embed.video and embed.video.url:
+                        video_url = embed.video.url
+                    # Fallback to thumbnail if no video (though Tenor usually has video)
+                    elif hasattr(embed, "thumbnail") and embed.thumbnail and embed.thumbnail.url:
+                        video_url = embed.thumbnail.url
+
+                    if video_url:
+                        placeholder = f"TENORGIFPLACEHOLDER{i}"
+
+                        # Construct HTML tag - prefer video for MP4s/WebMs
+                        if video_url.endswith(('.mp4', '.webm')):
+                            html_tag = f'<video src="{video_url}" controls autoplay loop muted style="max-width: 100%;"></video>'
+                        else:
+                            html_tag = f'<img src="{video_url}" alt="GIF from Tenor" style="max-width: 100%;">'
+
+                        placeholders[placeholder] = html_tag
+                        content = content.replace(embed.url, placeholder)
+                        self.processed_tenor_links.append(embed.url)
 
         if self.message_edited_at:
             self.message_edited_at = _set_edit_at(self.message_edited_at)
@@ -446,6 +476,13 @@ class MessageConstruct:
 
     async def build_assets(self):
         """Builds the HTML for the message's assets (embeds, attachments, components, reactions)."""
+        if self.processed_tenor_links:
+            self.message.embeds = [
+                embed
+                for embed in self.message.embeds
+                if not (embed.url and embed.url in self.processed_tenor_links)
+            ]
+
         if self.suppressed_embed_links:
             self.message.embeds = [
                 embed

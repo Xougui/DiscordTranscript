@@ -66,6 +66,7 @@ class ParseMarkdown:
 
         await self.parse_emoji()
         self.reverse_code_block_markdown()
+        self.reverse_tenor_placeholders()
         self.restore_links()
         return self.content
 
@@ -388,6 +389,11 @@ class ParseMarkdown:
             self.content = self.content.replace(
                 f"%s{x + 1}", self.code_blocks_content[x]
             )
+
+    def reverse_tenor_placeholders(self):
+        """Reverses the tenor placeholders."""
+        for placeholder, img_tag in self.placeholders.items():
+            self.content = self.content.replace(html.escape(placeholder), img_tag)
 
     def parse_embed_markdown(self):
         """Parses embed markdown."""
