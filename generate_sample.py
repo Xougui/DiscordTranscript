@@ -876,11 +876,17 @@ async def main():
         "## Sous-titre\n"
         "### Sous-sous-titre\n\n"
         "-# Subtext\n"
+        "**Liste numérotée :**\n"
+        "1. Premier élément\n"
+        "2. Deuxième élément\n"
+        "3. Troisième élément\n\n"
         "> Ceci est une citation en bloc.\n"
         "> Elle peut s'étendre sur plusieurs lignes.\n\n"
+        "**Liste à puces :**\n"
         "- Liste à puces item 1\n"
         "- Liste à puces item 2\n"
         "  - Sous-item indenté\n\n"
+        "Voici un [lien vers Discord](https://discord.com).\n"
         "Et du code inline `print('test')`."
     )
     msg26 = MockMessage(
