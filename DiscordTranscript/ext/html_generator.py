@@ -114,6 +114,7 @@ component_separator = read_file(dir_path + "/html/component/component_separator.
 
 # EMBED
 embed_body = read_file(dir_path + "/html/embed/body.html")
+embed_body_image_only = read_file(dir_path + "/html/embed/body_image_only.html")
 embed_title = read_file(dir_path + "/html/embed/title.html")
 embed_description = read_file(dir_path + "/html/embed/description.html")
 embed_field = read_file(dir_path + "/html/embed/field.html")
@@ -124,6 +125,8 @@ embed_image = read_file(dir_path + "/html/embed/image.html")
 embed_thumbnail = read_file(dir_path + "/html/embed/thumbnail.html")
 embed_author = read_file(dir_path + "/html/embed/author.html")
 embed_author_icon = read_file(dir_path + "/html/embed/author_icon.html")
+embed_provider = read_file(dir_path + "/html/embed/provider.html")
+embed_video = read_file(dir_path + "/html/embed/video.html")
 
 # REACTION
 emoji = read_file(dir_path + "/html/reaction/emoji.html")
