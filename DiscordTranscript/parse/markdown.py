@@ -61,6 +61,7 @@ class ParseMarkdown:
             str: The parsed content.
         """
         self.parse_code_block_markdown()
+        self.parse_masked_links()
         self.https_http_links()
         self.parse_normal_markdown()
 
@@ -76,7 +77,7 @@ class ParseMarkdown:
         Returns:
             str: The parsed content.
         """
-        self.parse_embed_markdown()
+        self.parse_masked_links()
         await self.parse_emoji()
         self.restore_links()
 
@@ -88,7 +89,7 @@ class ParseMarkdown:
         """
         self.parse_code_block_markdown()
         self.https_http_links()
-        self.parse_embed_markdown()
+        self.parse_masked_links()
         self.parse_normal_markdown()
 
         await self.parse_emoji()
@@ -189,48 +190,76 @@ class ParseMarkdown:
         """Converts a markdown ordered list to HTML."""
         lines = self.content.split("\n")
         html = ""
-        indent_stack = [0]
-        started = True
+        # Stack of (indent, list_type)
+        list_stack = []
 
         for line in lines:
-            match = re.match(r"^(\s*)([-*])\s+(.+)$", line)
+            match = re.match(r"^(\s*)([-*]|\d+\.)\s+(.+)$", line)
             if match:
-                indent, bullet, content = match.groups()
-                indent = len(indent)
+                indent_str, bullet, content = match.groups()
+                indent = len(indent_str)
+                is_ordered = bullet[-1] == '.'
+                list_type = "ol" if is_ordered else "ul"
 
-                if started:
-                    html += '<ul class="markup" style="list-style-type: disc; padding-left: 20px; margin: 0 !important;">\n'
-                    started = False
-                if indent % 2 == 0:
-                    while indent < indent_stack[-1]:
-                        html += "</ul>\n"
-                        indent_stack.pop()
-                    if indent > indent_stack[-1]:
-                        style_type = "circle" if len(indent_stack) == 1 else "square"
-                        html += f'<ul class="markup" style="list-style-type: {style_type};">\n'
-                        indent_stack.append(indent)
+                if not list_stack:
+                    # Start new list
+                    style = ' style="list-style-type: decimal;"' if is_ordered else ' style="list-style-type: disc;"'
+                    style = style[:-1] + '; padding-left: 20px; margin: 0 !important;"'
+                    
+                    start_attr = ""
+                    if is_ordered:
+                        try:
+                            start_num = int(bullet[:-1])
+                            if start_num != 1:
+                                start_attr = f' start="{start_num}"'
+                        except ValueError:
+                            pass
+
+                    html += f'<{list_type} class="markup"{style}{start_attr}>\n'
+                    list_stack.append((indent, list_type))
                 else:
-                    while indent + 1 < indent_stack[-1]:
-                        html += "</ul>\n"
-                        indent_stack.pop()
-                    if indent + 1 > indent_stack[-1]:
-                        style_type = "circle" if len(indent_stack) == 1 else "square"
-                        html += f'<ul class="markup" style="list-style-type: {style_type};">\n'
-                        indent_stack.append(indent + 1)
+                    last_indent, last_type = list_stack[-1]
+                    
+                    if indent > last_indent:
+                        # Nested list
+                        style = ' style="list-style-type: decimal;"' if is_ordered else ""
+                        if not is_ordered:
+                            depth = len([t for i, t in list_stack if t == 'ul'])
+                            styles = ["disc", "circle", "square"]
+                            s_type = styles[depth % 3]
+                            style = f' style="list-style-type: {s_type};"'
+                        
+                        html += f'<{list_type} class="markup"{style}>\n'
+                        list_stack.append((indent, list_type))
+                    elif indent < last_indent:
+                        while list_stack and list_stack[-1][0] > indent:
+                            _, ltype = list_stack.pop()
+                            html += f"</{ltype}>\n"
+                        
+                        if list_stack and list_stack[-1][1] != list_type:
+                             _, old_type = list_stack.pop()
+                             html += f"</{old_type}>\n"
+                             style = ' style="list-style-type: decimal;"' if is_ordered else ' style="list-style-type: disc;"'
+                             html += f'<{list_type} class="markup"{style}>\n'
+                             list_stack.append((indent, list_type))
+                    else:
+                        if list_stack[-1][1] != list_type:
+                             _, old_type = list_stack.pop()
+                             html += f"</{old_type}>\n"
+                             style = ' style="list-style-type: decimal;"' if is_ordered else ' style="list-style-type: disc;"'
+                             html += f'<{list_type} class="markup"{style}>\n'
+                             list_stack.append((indent, list_type))
 
                 html += f'<li class="markup">{content.strip()}</li>\n'
             else:
-                while len(indent_stack) > 1:
-                    html += "</ul>\n"
-                    indent_stack.pop()
-                if not started:
-                    html += "</ul>\n"
-                    started = True
+                while list_stack:
+                    _, ltype = list_stack.pop()
+                    html += f"</{ltype}>\n"
                 html += line + "\n"
 
-        while len(indent_stack) > 1:
-            html += "</ul>\n"
-            indent_stack.pop()
+        while list_stack:
+            _, ltype = list_stack.pop()
+            html += f"</{ltype}>\n"
 
         self.content = html
 
@@ -404,14 +433,16 @@ class ParseMarkdown:
         for placeholder, img_tag in self.placeholders.items():
             self.content = self.content.replace(html.escape(placeholder), img_tag)
 
-    def parse_embed_markdown(self):
-        """Parses embed markdown."""
+    def parse_masked_links(self):
+        """Parses masked links (e.g. [text](url))."""
         # [Message](Link)
         pattern = re.compile(r"\[(.+?)]\((.+?)\)")
         match = re.search(pattern, self.content)
         while match is not None:
             affected_text = match.group(1)
             affected_url = match.group(2)
+            if affected_url.startswith("<") and affected_url.endswith(">"):
+                affected_url = affected_url[1:-1]
 
             start_tag = f'<a href="{affected_url}" style="color: #00a8fc;">'
             end_tag = '</a>'
