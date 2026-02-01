@@ -527,49 +527,40 @@ class ParseMarkdown:
 
     def https_http_links(self):
         """Parses https and http links."""
-        content = re.sub("\n", "<br>", self.content)
-        output = []
-        if "http://" in content or ("https://" in content and "](" not in content):
-            for word in content.replace("<br>", " <br>").split():
-                if "http" not in word:
-                    output.append(word)
-                    continue
+        regex = r"(&lt;https?:\/\/.*?&gt;)|((?<!\]\()https?:\/\/(?:[^\s<&]|&(?!lt;|gt;|quot;))+)"
 
-                if "&lt;" in word and "&gt;" in word:
-                    pattern = r"&lt;https?:\/\/(.*)&gt;"
-                    match_url = re.search(pattern, word)
-                    if match_url:
-                        match_url_str = match_url.group(1)
-                        full_tag = f'<a href="https://{match_url_str}" style="color: #00a8fc;">https://{match_url_str}</a>'
-                        placeholder = self.add_link_placeholder(full_tag=full_tag)
-                        output.append(placeholder)
-                    else:
-                        output.append(word)
-                elif "https://" in word:
-                    pattern = r"https://[^\s>`\"*]*"
-                    word_link = re.search(pattern, word)
-                    if word_link and word_link.group().endswith(")"):
-                        output.append(word)
-                        continue
-                    elif word_link:
-                        match_url_str = word_link.group()
-                        full_tag = f'<a href="{match_url_str}" style="color: #00a8fc;">{match_url_str}</a>'
-                        placeholder = self.add_link_placeholder(full_tag=full_tag)
-                        word = re.sub(pattern, placeholder, word)
-                    output.append(word)
-                elif "http://" in word:
-                    pattern = r"http://[^\s>`\"*]*"
-                    word_link = re.search(pattern, word)
-                    if word_link and word_link.group().endswith(")"):
-                        output.append(word)
-                        continue
-                    elif word_link:
-                        match_url_str = word_link.group()
-                        full_tag = f'<a href="{match_url_str}" style="color: #00a8fc;">{match_url_str}</a>'
-                        placeholder = self.add_link_placeholder(full_tag=full_tag)
-                        word = re.sub(pattern, placeholder, word)
-                    output.append(word)
-                else:
-                    output.append(word)
-            content = " ".join(output)
-            self.content = re.sub("<br>", "\n", content)
+        def replace_link(match):
+            if match.group(1):
+                # Wrapped link
+                full_match = match.group(1)
+                url = full_match[4:-4]
+                full_tag = f'<a href="{url}" style="color: #00a8fc;">{url}</a>'
+                return self.add_link_placeholder(full_tag=full_tag)
+
+            url = match.group(2)
+
+            # Handle trailing punctuation
+            trailing_punctuation = {'.', ',', ':', ')', ']', '}'}
+            cleaned_url = url
+            suffix = ""
+
+            while True:
+                if not cleaned_url:
+                    break
+                last_char = cleaned_url[-1]
+                if last_char in trailing_punctuation:
+                    if last_char == ')' and '(' in cleaned_url:
+                        break
+                    suffix = last_char + suffix
+                    cleaned_url = cleaned_url[:-1]
+                    continue
+                if cleaned_url.endswith("&#39;"):
+                    suffix = "&#39;" + suffix
+                    cleaned_url = cleaned_url[:-5]
+                    continue
+                break
+
+            full_tag = f'<a href="{cleaned_url}" style="color: #00a8fc;">{cleaned_url}</a>'
+            return self.add_link_placeholder(full_tag=full_tag) + suffix
+
+        self.content = re.sub(regex, replace_link, self.content)
