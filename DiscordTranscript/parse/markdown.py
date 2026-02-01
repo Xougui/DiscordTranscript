@@ -243,9 +243,10 @@ class ParseMarkdown:
             [r"\*(.*?)\*", "<em><span>%s</span></em>"],
             [r"_(.*?)_", "<em><span>%s</span></em>"],
             [r"~~(.*?)~~", '<span class="markdown-strikethrough">%s</span>'],
-            [r"^\s*###\s(.*?)$", '<h3 style="font-weight: bold; font-size: 1.25em;">%s</h3>'],
-            [r"^\s*##\s(.*?)$", '<h2 style="font-weight: bold; font-size: 1.5em;">%s</h2>'],
-            [r"^\s*#\s(.*?)$", '<h1 style="font-weight: bold; font-size: 2em;">%s</h1>'],
+            [r"^\s*-#\s+(.*?)$", '<span style="color: #949BA4; font-size: 0.75rem; line-height: 1.375rem;">%s</span>'],
+            [r"^\s*###\s(.*?)$", '<h3 style="font-weight: 700; font-size: 1rem; margin: 0.25em 0; line-height: 1.25;">%s</h3>'],
+            [r"^\s*##\s(.*?)$", '<h2 style="font-weight: 700; font-size: 1.25rem; margin: 0.25em 0; line-height: 1.25;">%s</h2>'],
+            [r"^\s*#\s(.*?)$", '<h1 style="font-weight: 700; font-size: 1.5rem; margin: 0.25em 0; line-height: 1.25;">%s</h1>'],
             [
                 r"\|\|(.*?)\|\|",
                 '<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"> <span '
@@ -261,15 +262,29 @@ class ParseMarkdown:
         lines = self.content.split("\n")
         new_lines = []
         in_quote = False
+        in_multiline_quote = False
         quote_content = []
-        pattern = re.compile(r"^\s*&gt;\s?(.*)")
+        pattern_single = re.compile(r"^\s*&gt;\s?(.*)")
+        pattern_multi = re.compile(r"^\s*&gt;&gt;&gt;\s?(.*)")
 
         for line in lines:
-            match = pattern.match(line)
-            if match:
+            if in_multiline_quote:
+                quote_content.append(line)
+                continue
+
+            match_multi = pattern_multi.match(line)
+            if match_multi:
+                in_multiline_quote = True
+                if in_quote:
+                    in_quote = False
+                quote_content.append(match_multi.group(1))
+                continue
+
+            match_single = pattern_single.match(line)
+            if match_single:
                 if not in_quote:
                     in_quote = True
-                quote_content.append(match.group(1))
+                quote_content.append(match_single.group(1))
             else:
                 if in_quote:
                     new_lines.append(
@@ -279,7 +294,7 @@ class ParseMarkdown:
                     in_quote = False
                 new_lines.append(line)
 
-        if in_quote:
+        if in_quote or in_multiline_quote:
             new_lines.append(f'<div class="quote">{"<br>".join(quote_content)}</div>')
 
         self.content = "\n".join(new_lines)
@@ -408,36 +423,6 @@ class ParseMarkdown:
             )
             match = re.search(pattern, self.content)
 
-        self.content = self.content.split("\n")
-        y = None
-        new_content = ""
-        pattern = re.compile(r"^>\s(.+)")
-
-        if len(self.content) == 1:
-            if re.search(pattern, self.content[0]):
-                self.content = f'<div class="quote">{self.content[0][2:]}</div>'
-                return
-            self.content = self.content[0]
-            return
-
-        for x in self.content:
-            if re.search(pattern, x) and y:
-                y = y + "\n" + x[2:]
-            elif not y:
-                if re.search(pattern, x):
-                    y = x[2:]
-                else:
-                    new_content = new_content + x + "\n"
-            else:
-                new_content = new_content + f'<div class="quote">{y}</div>'
-                new_content = new_content + x
-                y = ""
-
-        if y:
-            new_content = new_content + f'<div class="quote">{y}</div>'
-
-        self.content = new_content
-
     @staticmethod
     def order_list_html_to_markdown(content):
         """Converts an HTML ordered list to markdown."""
@@ -472,9 +457,9 @@ class ParseMarkdown:
         holders = (
             [r"<strong>(.*?)</strong>", "**%s**"],
             [r"<em>([^<>]+)</em>", "*%s*"],
-            [r"<h1>([^<>]+)</h1>", "# %s"],
-            [r"<h2>([^<>]+)</h2>", "## %s"],
-            [r"<h3>([^<>]+)</h3>", "### %s"],
+            [r"<h1[^>]*>([^<>]+)</h1>", "# %s"],
+            [r"<h2[^>]*>([^<>]+)</h2>", "## %s"],
+            [r"<h3[^>]*>([^<>]+)</h3>", "### %s"],
             [r'<span style="text-decoration: underline">([^<>]+)</span>', "__%s__"],
             [r'<span style="text-decoration: line-through">([^<>]+)</span>', "~~%s~~"],
             [r'<div class="quote">(.*?)</div>', "> %s"],
