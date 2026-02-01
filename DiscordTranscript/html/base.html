@@ -569,6 +569,12 @@
             font-weight: 600;
         }
 
+        .chatlog__embed-provider {
+            font-size: 0.75em;
+            color: #dbdee1;
+            margin-bottom: 2px;
+        }
+
         .chatlog__embed-title {
             margin-bottom: 0.2em;
             font-size: 0.875em;
@@ -627,6 +633,23 @@
 
         .chatlog__embed-image {
             max-width: 500px;
+            max-height: 400px;
+            border-radius: 4px;
+        }
+
+        .chatlog__embed-video-container {
+            margin-top: 0.6em;
+            width: 100%;
+            max-width: 500px;
+            max-height: 400px;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chatlog__embed-video-container iframe,
+        .chatlog__embed-video-container video {
+            max-width: 100%;
             max-height: 400px;
             border-radius: 4px;
         }

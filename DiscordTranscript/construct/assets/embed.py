@@ -14,6 +14,7 @@ from DiscordTranscript.ext.html_generator import (
     embed_author,
     embed_author_icon,
     embed_body,
+    embed_body_image_only,
     embed_description,
     embed_field,
     embed_field_inline,
@@ -22,6 +23,8 @@ from DiscordTranscript.ext.html_generator import (
     embed_image,
     embed_thumbnail,
     embed_title,
+    embed_provider,
+    embed_video,
     fill_out,
 )
 
@@ -51,6 +54,8 @@ class Embed:
         thumbnail (str): The thumbnail of the embed.
         footer (str): The footer of the embed.
         fields (str): The fields of the embed.
+        provider (str): The provider of the embed.
+        video (str): The video of the embed.
         check_against (Any): The value to check against for empty values.
         embed (discord.Embed): The embed to represent.
         guild (discord.Guild): The guild the embed is in.
@@ -66,6 +71,8 @@ class Embed:
     thumbnail: str
     footer: str
     fields: str
+    provider: str
+    video: str
 
     check_against = None
 
@@ -89,6 +96,8 @@ class Embed:
         self.bot = bot
         self.timezone = timezone
         self.timestamp = ""
+        self.provider = ""
+        self.video = ""
 
     async def flow(self):
         """Builds the embed and returns the HTML.
@@ -98,12 +107,14 @@ class Embed:
         """
         self.check_against = _gather_checker()
         self.build_colour()
+        await self.build_provider()
         await self.build_title()
         await self.build_description()
         await self.build_fields()
         await self.build_author()
         await self.build_image()
         await self.build_thumbnail()
+        await self.build_video()
         await self.build_timestamp()
         await self.build_footer()
         await self.build_embed()
@@ -116,6 +127,33 @@ class Embed:
             (self.embed.colour.r, self.embed.colour.g, self.embed.colour.b)
             if self.embed.colour != self.check_against
             else (0x20, 0x22, 0x25)  # default colour
+        )
+
+    async def build_provider(self):
+        """Builds the provider of the embed."""
+        self.provider = ""
+        if not hasattr(self.embed, "provider") or not self.embed.provider:
+            return
+
+        name = self.embed.provider.name
+        url = self.embed.provider.url
+
+        if not name or name == self.check_against:
+            return
+
+        name = html.escape(name)
+
+        if url and url != self.check_against:
+             content = f'<a href="{url}" target="_blank" rel="noopener noreferrer">{name}</a>'
+        else:
+             content = name
+
+        self.provider = await fill_out(
+            self.guild,
+            embed_provider,
+            [("PROVIDER_NAME", content, PARSE_MODE_NONE)],
+            bot=self.bot,
+            timezone=self.timezone,
         )
 
     async def build_title(self):
@@ -255,6 +293,36 @@ class Embed:
             else ""
         )
 
+    async def build_video(self):
+        """Builds the video of the embed."""
+        self.video = ""
+        if not hasattr(self.embed, "video") or not self.embed.video:
+            return
+
+        url = self.embed.video.url
+        if not url or url == self.check_against:
+            return
+
+        # Simple heuristic for video tag vs iframe
+        # If url ends with video extension, use video tag
+        video_extensions = ('.mp4', '.webm', '.ogg', '.mov')
+        if url.lower().endswith(video_extensions):
+            content = f'<video controls src="{url}"></video>'
+        else:
+             # Assume iframe (e.g. YouTube)
+             # Use width/height if available, defaulting to 400x300 or similar
+             width = self.embed.video.width if self.embed.video.width and self.embed.video.width != self.check_against else 500
+             height = self.embed.video.height if self.embed.video.height and self.embed.video.height != self.check_against else 400
+             content = f'<iframe src="{url}" width="{width}" height="{height}" frameborder="0" allowfullscreen></iframe>'
+
+        self.video = await fill_out(
+            self.guild,
+            embed_video,
+            [("EMBED_VIDEO", content, PARSE_MODE_NONE)],
+            bot=self.bot,
+            timezone=self.timezone,
+        )
+
     async def build_timestamp(self):
         """Builds the timestamp of the embed."""
         if not self.embed.timestamp or self.embed.timestamp == self.check_against:
@@ -315,13 +383,28 @@ class Embed:
 
     async def build_embed(self):
         """Builds the embed."""
+        # Check if it's an image-only embed
+        # Type must be image or gifv
+        is_image_only = False
+        if hasattr(self.embed, "type") and self.embed.type in ("image", "gifv"):
+             # Must have no text content
+             if not self.title and not self.description and not self.fields and not self.author and not self.footer and not self.provider:
+                 if self.image or self.thumbnail or self.video:
+                     is_image_only = True
+
+        if is_image_only:
+             template = embed_body_image_only
+        else:
+             template = embed_body
+
         self.embed = await fill_out(
             self.guild,
-            embed_body,
+            template,
             [
                 ("EMBED_R", str(self.r)),
                 ("EMBED_G", str(self.g)),
                 ("EMBED_B", str(self.b)),
+                ("EMBED_PROVIDER", self.provider, PARSE_MODE_NONE),
                 ("EMBED_AUTHOR", self.author, PARSE_MODE_NONE),
                 ("EMBED_TITLE", self.title, PARSE_MODE_NONE),
                 ("EMBED_IMAGE", self.image, PARSE_MODE_NONE),
@@ -329,6 +412,7 @@ class Embed:
                 ("EMBED_DESC", self.description, PARSE_MODE_NONE),
                 ("EMBED_FIELDS", self.fields, PARSE_MODE_NONE),
                 ("EMBED_FOOTER", self.footer, PARSE_MODE_NONE),
+                ("EMBED_VIDEO", self.video, PARSE_MODE_NONE),
             ],
             bot=self.bot,
             timezone=self.timezone,
