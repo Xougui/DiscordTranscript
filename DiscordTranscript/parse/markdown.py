@@ -199,30 +199,32 @@ class ParseMarkdown:
                 indent = len(indent)
 
                 if started:
-                    html += '<ul class="markup" style="padding-left: 20px;margin: 0 !important">\n'
+                    html += '<ul class="markup" style="list-style-type: disc; padding-left: 20px; margin: 0 !important;">\n'
                     started = False
                 if indent % 2 == 0:
                     while indent < indent_stack[-1]:
                         html += "</ul>\n"
                         indent_stack.pop()
                     if indent > indent_stack[-1]:
-                        html += '<ul class="markup">\n'
+                        style_type = "circle" if len(indent_stack) == 1 else "square"
+                        html += f'<ul class="markup" style="list-style-type: {style_type};">\n'
                         indent_stack.append(indent)
                 else:
                     while indent + 1 < indent_stack[-1]:
                         html += "</ul>\n"
                         indent_stack.pop()
                     if indent + 1 > indent_stack[-1]:
-                        html += '<ul class="markup">\n'
+                        style_type = "circle" if len(indent_stack) == 1 else "square"
+                        html += f'<ul class="markup" style="list-style-type: {style_type};">\n'
                         indent_stack.append(indent + 1)
 
                 html += f'<li class="markup">{content.strip()}</li>\n'
             else:
                 while len(indent_stack) > 1:
-                    html += "</ul>"
+                    html += "</ul>\n"
                     indent_stack.pop()
                 if not started:
-                    html += "</ul>"
+                    html += "</ul>\n"
                     started = True
                 html += line + "\n"
 
@@ -241,9 +243,9 @@ class ParseMarkdown:
             [r"\*(.*?)\*", "<em><span>%s</span></em>"],
             [r"_(.*?)_", "<em><span>%s</span></em>"],
             [r"~~(.*?)~~", '<span class="markdown-strikethrough">%s</span>'],
-            [r"^###\s(.*?)$", "<h3>%s</h3>"],
-            [r"^##\s(.*?)$", "<h2>%s</h2>"],
-            [r"^#\s(.*?)$", "<h1>%s</h1>"],
+            [r"^\s*###\s(.*?)$", '<h3 style="font-weight: bold; font-size: 1.25em;">%s</h3>'],
+            [r"^\s*##\s(.*?)$", '<h2 style="font-weight: bold; font-size: 1.5em;">%s</h2>'],
+            [r"^\s*#\s(.*?)$", '<h1 style="font-weight: bold; font-size: 2em;">%s</h1>'],
             [
                 r"\|\|(.*?)\|\|",
                 '<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"> <span '
@@ -253,15 +255,7 @@ class ParseMarkdown:
 
         for x in holder:
             p, r = x
-
-            pattern = re.compile(p, re.M)
-            match = re.search(pattern, self.content)
-            while match is not None:
-                affected_text = match.group(1)
-                self.content = self.content.replace(
-                    self.content[match.start() : match.end()], r % affected_text
-                )
-                match = re.search(pattern, self.content)
+            self.content = re.sub(p, lambda m: r.replace("%s", m.group(1)), self.content, flags=re.M)
 
         # > quote
         lines = self.content.split("\n")
