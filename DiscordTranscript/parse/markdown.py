@@ -174,7 +174,7 @@ class ParseMarkdown:
 
     def strip_preserve(self):
         """Strips the preserve tags from the content."""
-        p = r'<span class="chatlog__markdown-preserve">(.*)</span>'
+        p = r'<div class="chatlog__markdown-preserve">(.*)</div>'
         r = "%s"
 
         pattern = re.compile(p)
