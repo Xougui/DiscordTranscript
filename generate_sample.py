@@ -875,6 +875,7 @@ async def main():
         "# Grand Titre\n"
         "## Sous-titre\n"
         "### Sous-sous-titre\n\n"
+        "-# Subtext\n"
         "> Ceci est une citation en bloc.\n"
         "> Elle peut s'étendre sur plusieurs lignes.\n\n"
         "- Liste à puces item 1\n"
