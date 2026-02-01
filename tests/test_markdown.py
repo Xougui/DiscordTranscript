@@ -98,7 +98,8 @@ async def test_multiline_code_block_markdown():
 async def test_link_markdown():
     parser = ParseMarkdown("[google](https://google.com)")
     parser.parse_embed_markdown()
-    assert parser.content == '<a href="https://google.com">google</a>'
+    parser.restore_links()
+    assert parser.content == '<a href="https://google.com" style="color: #00a8fc;">google</a>'
 
 
 @pytest.mark.asyncio
@@ -106,7 +107,7 @@ async def test_https_link():
     parser = ParseMarkdown("https://google.com")
     await parser.standard_message_flow()
     assert (
-        parser.content.strip() == '<a href="https://google.com">https://google.com</a>'
+        parser.content.strip() == '<a href="https://google.com" style="color: #00a8fc;">https://google.com</a>'
     )
 
 
@@ -125,3 +126,26 @@ async def test_custom_emoji():
         '<img class="emoji emoji--small" src="https://cdn.discordapp.com/emojis/12345.png" alt="Emoji">'
         in parser.content
     )
+
+@pytest.mark.asyncio
+async def test_link_with_underscore():
+    url = "https://example.com/?foo=bar_baz"
+    parser = ParseMarkdown(url)
+    await parser.standard_message_flow()
+    assert parser.content.strip() == f'<a href="{url}" style="color: #00a8fc;">{url}</a>'
+
+@pytest.mark.asyncio
+async def test_link_with_markdown_in_text():
+    parser = ParseMarkdown("[**bold**](https://google.com)")
+    await parser.standard_embed_flow()
+    assert parser.content.strip() == '<a href="https://google.com" style="color: #00a8fc;"><strong>bold</strong></a>'
+
+@pytest.mark.asyncio
+async def test_link_suppression_syntax():
+    # This tests that <URL> is rendered as URL without brackets (and clickable)
+    # The actual suppression of embed is handled in MessageConstruct, not ParseMarkdown
+    url = "https://google.com"
+    content = f"&lt;{url}&gt;"
+    parser = ParseMarkdown(content)
+    await parser.standard_message_flow()
+    assert parser.content.strip() == f'<a href="{url}" style="color: #00a8fc;">{url}</a>'

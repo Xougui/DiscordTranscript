@@ -809,6 +809,15 @@ async def main():
         channel=channel,
     )
 
+    # Message 22: Message avec un lien
+    msg22 = MockMessage(
+        1022,
+        "Voici un lien vers le dépôt GitHub : https://github.com/Xougui/DiscordTranscript",
+        user1,
+        base_time + datetime.timedelta(minutes=60),
+        channel=channel,
+    )
+
     # Update msg5 with timestamp
     msg5.embeds[0].timestamp = base_time
 
@@ -834,6 +843,7 @@ async def main():
         msg19,
         msg20,
         msg21,
+        msg22,
     ]
     # Transcript.export reverses the list if after is None, expecting Newest->Oldest input.
     # So we sort descending (Newest first) to get Oldest first in the output.
