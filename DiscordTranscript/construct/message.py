@@ -256,7 +256,7 @@ class MessageConstruct:
 
                         # Construct HTML tag - prefer video for MP4s/WebMs
                         if video_url.endswith(('.mp4', '.webm')):
-                            html_tag = f'<video src="{video_url}" controls autoplay loop muted style="max-width: 100%;"></video>'
+                            html_tag = f'<video src="{video_url}" autoplay loop muted playsinline style="max-width: 100%;"></video>'
                         else:
                             html_tag = f'<img src="{video_url}" alt="GIF from Tenor" style="max-width: 100%;">'
 
