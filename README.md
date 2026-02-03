@@ -41,7 +41,7 @@ A Python library for creating HTML transcripts of Discord channels. This is usef
 | ![Preview 1](https://github.com/Xougui/DiscordTranscript/blob/main/screenshots/1.png?raw=true) | ![Preview 2](https://github.com/Xougui/DiscordTranscript/blob/main/screenshots/2.png?raw=true) |
 | ![Preview 3](https://github.com/Xougui/DiscordTranscript/blob/main/screenshots/3.png?raw=true) | ![Preview 4](https://github.com/Xougui/DiscordTranscript/blob/main/screenshots/4.png?raw=true) |
 | ![Preview 5](https://github.com/Xougui/DiscordTranscript/blob/main/screenshots/5.png?raw=true) | ![Preview 6](https://github.com/Xougui/DiscordTranscript/blob/main/screenshots/6.png?raw=true) |
-| ![Preview 7](https://github.com/Xougui/DiscordTranscript/blob/main/screenshots/7.png?raw=true) | |
+| ![Preview 7](https://github.com/Xougui/DiscordTranscript/blob/main/screenshots/7.png?raw=true) | ![Preview 8](https://github.com/Xougui/DiscordTranscript/blob/main/screenshots/8.png?raw=true) |
 
 </details>
 
