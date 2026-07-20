@@ -76,7 +76,6 @@ class MessageConstruct:
 
     message_html: str = ""
 
-    # Asset Types
     embeds: str = ""
     reactions: str = ""
     components: str = ""
@@ -235,27 +234,28 @@ class MessageConstruct:
         content = self.message.content
         placeholders = {}
 
-        # Scan for Tenor links that have corresponding embeds
         if "tenor.com/view" in content and self.message.embeds:
             for i, embed in enumerate(self.message.embeds):
                 if not embed.url or "tenor.com/view" not in embed.url:
                     continue
 
-                # Check if this embed URL matches a link in the content
                 if embed.url in content:
                     video_url = None
-                    # Try to get video URL from embed
+
                     if hasattr(embed, "video") and embed.video and embed.video.url:
                         video_url = embed.video.url
-                    # Fallback to thumbnail if no video (though Tenor usually has video)
-                    elif hasattr(embed, "thumbnail") and embed.thumbnail and embed.thumbnail.url:
+
+                    elif (
+                        hasattr(embed, "thumbnail")
+                        and embed.thumbnail
+                        and embed.thumbnail.url
+                    ):
                         video_url = embed.thumbnail.url
 
                     if video_url:
                         placeholder = f"TENORGIFPLACEHOLDER{i}"
 
-                        # Construct HTML tag - prefer video for MP4s/WebMs
-                        if video_url.endswith(('.mp4', '.webm')):
+                        if video_url.endswith((".mp4", ".webm")):
                             html_tag = f'<video src="{video_url}" autoplay loop muted playsinline style="max-width: 100%;"></video>'
                         else:
                             html_tag = f'<img src="{video_url}" alt="GIF from Tenor" style="max-width: 100%;">'

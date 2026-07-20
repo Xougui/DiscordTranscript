@@ -98,5 +98,4 @@ class AttachmentToDiscordChannelHandler(AttachmentHandler):
                     msg = await self.channel.send(file=attach)
                     return msg.attachments[0]
         except discord.errors.HTTPException as e:
-            # discords http errors, including missing permissions
             raise e

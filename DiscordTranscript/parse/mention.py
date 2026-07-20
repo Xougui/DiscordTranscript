@@ -172,9 +172,7 @@ class ParseMention:
                 else:
                     if role.color.r == 0 and role.color.g == 0 and role.color.b == 0:
                         colour = "#dee0fc"
-                        bg_colour = (
-                            "rgba(88, 101, 242, 0.3)"  # Default blurple with opacity
-                        )
+                        bg_colour = "rgba(88, 101, 242, 0.3)"
                     else:
                         colour = "#%02x%02x%02x" % (
                             role.color.r,

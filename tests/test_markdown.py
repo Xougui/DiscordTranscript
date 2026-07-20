@@ -142,8 +142,8 @@ async def test_link_with_markdown_in_text():
 
 @pytest.mark.asyncio
 async def test_link_suppression_syntax():
-    # This tests that <URL> is rendered as URL without brackets (and clickable)
-    # The actual suppression of embed is handled in MessageConstruct, not ParseMarkdown
+                                                                               
+                                                                                       
     url = "https://google.com"
     content = f"&lt;{url}&gt;"
     parser = ParseMarkdown(content)

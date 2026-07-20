@@ -45,18 +45,18 @@ async def test_message_order_with_before_only(mock_channel):
     Test that messages are in the correct chronological order
     when using only the `before` parameter.
     """
-    # Create mock messages with specific creation dates
+                                                       
     message1 = create_mock_message("message 1", datetime.datetime(2023, 1, 1, 12, 0, 0))
     message2 = create_mock_message("message 2", datetime.datetime(2023, 1, 1, 12, 1, 0))
 
-    # The `history` method returns messages in reverse chronological order
+                                                                          
     async def mock_history_generator():
         for msg in [message2, message1]:
             yield msg
 
     mock_channel.history = MagicMock(return_value=mock_history_generator())
 
-    # Create a Transcript instance with a `before` date
+                                                       
     transcript = Transcript(
         channel=mock_channel,
         limit=None,
@@ -72,10 +72,10 @@ async def test_message_order_with_before_only(mock_channel):
 
     await transcript.export()
 
-    # Get the messages that were passed to build_transcript
+                                                           
     exported_messages = transcript.messages
 
-    # Check that the messages are in the correct chronological order
+                                                                    
     assert len(exported_messages) == 2
     assert exported_messages[0].created_at < exported_messages[1].created_at
 

@@ -21,9 +21,9 @@ from DiscordTranscript.ext.html_generator import (
     embed_footer,
     embed_footer_icon,
     embed_image,
+    embed_provider,
     embed_thumbnail,
     embed_title,
-    embed_provider,
     embed_video,
     fill_out,
 )
@@ -126,7 +126,7 @@ class Embed:
         self.r, self.g, self.b = (
             (self.embed.colour.r, self.embed.colour.g, self.embed.colour.b)
             if self.embed.colour != self.check_against
-            else (0x20, 0x22, 0x25)  # default colour
+            else (0x20, 0x22, 0x25)
         )
 
     async def build_provider(self):
@@ -144,9 +144,11 @@ class Embed:
         name = html.escape(name)
 
         if url and url != self.check_against:
-             content = f'<a href="{url}" target="_blank" rel="noopener noreferrer">{name}</a>'
+            content = (
+                f'<a href="{url}" target="_blank" rel="noopener noreferrer">{name}</a>'
+            )
         else:
-             content = name
+            content = name
 
         self.provider = await fill_out(
             self.guild,
@@ -194,7 +196,6 @@ class Embed:
         """Builds the fields of the embed."""
         self.fields = ""
 
-        # This does not have to be here, but Pycord.
         if not self.embed.fields:
             return
 
@@ -303,17 +304,23 @@ class Embed:
         if not url or url == self.check_against:
             return
 
-        # Simple heuristic for video tag vs iframe
-        # If url ends with video extension, use video tag
-        video_extensions = ('.mp4', '.webm', '.ogg', '.mov')
+        video_extensions = (".mp4", ".webm", ".ogg", ".mov")
         if url.lower().endswith(video_extensions):
             content = f'<video controls src="{url}"></video>'
         else:
-             # Assume iframe (e.g. YouTube)
-             # Use width/height if available, defaulting to 400x300 or similar
-             width = self.embed.video.width if self.embed.video.width and self.embed.video.width != self.check_against else 500
-             height = self.embed.video.height if self.embed.video.height and self.embed.video.height != self.check_against else 400
-             content = f'<iframe src="{url}" width="{width}" height="{height}" frameborder="0" allowfullscreen></iframe>'
+            width = (
+                self.embed.video.width
+                if self.embed.video.width
+                and self.embed.video.width != self.check_against
+                else 500
+            )
+            height = (
+                self.embed.video.height
+                if self.embed.video.height
+                and self.embed.video.height != self.check_against
+                else 400
+            )
+            content = f'<iframe src="{url}" width="{width}" height="{height}" frameborder="0" allowfullscreen></iframe>'
 
         self.video = await fill_out(
             self.guild,
@@ -333,7 +340,6 @@ class Embed:
         if not time.tzinfo:
             time = timezone("UTC").localize(time)
 
-        # Format similar to Discord client
         local_time = time.astimezone(timezone(self.timezone))
         self.timestamp = local_time.strftime("%d/%m/%Y %H:%M")
 
@@ -351,7 +357,6 @@ class Embed:
             else None
         )
 
-        # Append timestamp if available
         if self.timestamp:
             if self.footer:
                 self.footer += f" • {self.timestamp}"
@@ -383,19 +388,24 @@ class Embed:
 
     async def build_embed(self):
         """Builds the embed."""
-        # Check if it's an image-only embed
-        # Type must be image or gifv
+
         is_image_only = False
         if hasattr(self.embed, "type") and self.embed.type in ("image", "gifv"):
-             # Must have no text content
-             if not self.title and not self.description and not self.fields and not self.author and not self.footer and not self.provider:
-                 if self.image or self.thumbnail or self.video:
-                     is_image_only = True
+            if (
+                not self.title
+                and not self.description
+                and not self.fields
+                and not self.author
+                and not self.footer
+                and not self.provider
+            ):
+                if self.image or self.thumbnail or self.video:
+                    is_image_only = True
 
         if is_image_only:
-             template = embed_body_image_only
+            template = embed_body_image_only
         else:
-             template = embed_body
+            template = embed_body
 
         self.embed = await fill_out(
             self.guild,

@@ -10,7 +10,6 @@ import discord
 
 from DiscordTranscript import raw_export
 
-# Monkey-patch discord pour supporter les composants V2 pour le mocking
 for cls_name in [
     "SectionComponent",
     "TextDisplay",
@@ -20,9 +19,6 @@ for cls_name in [
 ]:
     if not hasattr(discord, cls_name):
         setattr(discord, cls_name, type(cls_name, (), {}))
-
-
-# Mock objects to simulate discord.py models
 
 
 @dataclass
@@ -248,7 +244,9 @@ class MockEmbedField:
 
 
 class MockEmbedProxy:
-    def __init__(self, url=None, text=None, icon_url=None, name=None, width=None, height=None):
+    def __init__(
+        self, url=None, text=None, icon_url=None, name=None, width=None, height=None
+    ):
         self.url = url
         self.text = text
         self.icon_url = icon_url
@@ -259,17 +257,15 @@ class MockEmbedProxy:
         self.height = height
 
 
-# Inherit from discord.Button/SelectMenu so isinstance checks pass
 class MockButton(discord.Button):
     def __init__(self, label, style, url=None, emoji=None, disabled=False):
-        # We don't call super().__init__ because it might require arguments or state we don't want to manage
         self.label = label
         self.style = style
         self.url = url
         self.emoji = emoji
         self.disabled = disabled
-        # self.type is a property in discord.Button returning ComponentType.button
-        self._underlying = MagicMock()  # Just in case
+
+        self._underlying = MagicMock()
 
 
 class MockActionRow(discord.ActionRow):
@@ -302,7 +298,7 @@ class MockSelectMenu(discord.SelectMenu):
         self.min_values = min_values
         self.max_values = max_values
         self.disabled = disabled
-        # self.type is a property
+
         self._underlying = MagicMock()
 
 
@@ -384,7 +380,6 @@ async def main():
     channel = MockChannel()
     channel.guild = guild
 
-    # Users with the provided images
     user1 = MockUser(
         1,
         "Alice 🧪",
@@ -411,7 +406,6 @@ async def main():
 
     base_time = datetime.datetime.now() - datetime.timedelta(hours=1)
 
-    # Message 1: Simple text
     msg1 = MockMessage(
         1001,
         "Salut tout le monde ! Bienvenue sur le canal de test. Voici un exemple complet de transcript.",
@@ -420,7 +414,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 2: Reply
     msg2 = MockMessage(
         1002,
         "Salut Alice ! J'adore ta photo de profil.",
@@ -433,7 +426,6 @@ async def main():
     )
     msg2.type.name = "reply"
 
-    # Message 3: Markdown and Custom Emojis
     custom_emoji_str = "<:mmmh_yeah:1448700603319451731>"
     markdown_content = (
         f"Voici un peu de **gras**, de l'*italique*, et du __souligné__.\n"
@@ -448,7 +440,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 4: Attachment (Image)
     attachment = MockAttachment(
         "photo_vacances.png",
         "https://images.freeimages.com/images/large-previews/e69/wadi-rum-desert-4-1058229.jpg?fmt=webp&h=350",
@@ -463,7 +454,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 5: Complex Embed
     embed = MockEmbed(
         title="Rapport de Statut",
         description="Ceci est un exemple d'embed riche avec des champs.",
@@ -476,7 +466,7 @@ async def main():
         author=MockEmbedProxy(
             name="Système",
             icon_url="https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp",
-            url="https://github.com/Xougui/DiscordTranscript",  # Link Added
+            url="https://github.com/Xougui/DiscordTranscript",
         ),
         footer=MockEmbedProxy(
             text="Généré automatiquement",
@@ -498,7 +488,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 6: Components (Buttons)
     custom_emoji = MockEmoji("custom_check", id=1350435235015426130, animated=True)
     button_primary = MockButton(
         "Confirmer", MockButtonStyle.primary, emoji=custom_emoji
@@ -527,7 +516,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 7: Components (Select Menu)
     select_options = [
         MockSelectOption(
             "Option 1", "1", "Ceci est la première option", MockEmoji("1️⃣")
@@ -560,7 +548,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 8: Sticker
     sticker = MockSticker(
         "Cool Sticker",
         "https://images.freeimages.com/images/large-previews/003/sushi-roll-1321056.jpg?fmt=webp&h=350",
@@ -574,9 +561,7 @@ async def main():
         channel=channel,
     )
 
-    # Message 9: Reactions
-    # Important: Pass string for unicode emoji, MockEmoji for custom (or string for custom if formatted properly, but MockEmoji handles the id)
-    reaction1 = MockReaction("👍", 10)  # Pass string directly
+    reaction1 = MockReaction("👍", 10)
     reaction2 = MockReaction(
         MockEmoji("panda_fire", id=1323626699870441502, animated=True), 4
     )
@@ -589,7 +574,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 10: Role Mention
     msg10 = MockMessage(
         1010,
         "Voici une mention de rôle : <@&999>",
@@ -598,7 +582,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 11: Slash Command
     interaction_meta = MockInteractionMetadata(user1, "exemple")
     msg11 = MockMessage(
         1011,
@@ -609,7 +592,6 @@ async def main():
         interaction_metadata=interaction_meta,
     )
 
-    # Message 12: System Join
     msg12 = MockMessage(
         1012,
         "",
@@ -618,10 +600,9 @@ async def main():
         channel=channel,
         type_name="new_member",
     )
-    # Mapping fake type enum
+
     msg12.type = discord.MessageType.new_member
 
-    # Message 13: System Boost
     msg13 = MockMessage(
         1013,
         "",
@@ -630,10 +611,9 @@ async def main():
         channel=channel,
         type_name="premium_guild_subscription",
     )
-    # Mapping fake type enum
+
     msg13.type = discord.MessageType.premium_guild_subscription
 
-    # Message 14: Edited Message
     msg14 = MockMessage(
         1014,
         "Ce message a été modifié.",
@@ -643,7 +623,6 @@ async def main():
     )
     msg14.edited_at = base_time + datetime.timedelta(minutes=46)
 
-    # Message 15: Pinned Message (System)
     msg15 = MockMessage(
         1015,
         "",
@@ -657,7 +636,6 @@ async def main():
         message_id=msg4.id, guild_id=guild.id, channel_id=channel.id
     )
 
-    # Message 16: Thread Created (System)
     msg16 = MockMessage(
         1016,
         "Nouveau fil de discussion important",
@@ -668,7 +646,6 @@ async def main():
     )
     msg16.type = discord.MessageType.thread_created
 
-    # Message 17: Audio Attachment
     audio_att = MockAttachment(
         "musique.mp3",
         "https://data.freetouse.com/music/tracks/15baf58e-2e84-43b0-a30a-b147308c8088/file/mp3",
@@ -684,7 +661,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 18: Video Attachment
     video_att = MockAttachment(
         "video.mp4",
         "https://www.w3schools.com/html/mov_bbb.mp4",
@@ -700,7 +676,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 19: Reply to deleted message
     msg19 = MockMessage(
         1019,
         "Je réponds à un message qui n'existe plus.",
@@ -708,13 +683,12 @@ async def main():
         base_time + datetime.timedelta(minutes=55),
         channel=channel,
         reference=MagicMock(
-            message_id=999999,  # ID inexistant
+            message_id=999999,
             guild_id=guild.id,
             channel_id=channel.id,
         ),
     )
 
-    # Message 20: Spoiler Image
     spoiler_att = MockAttachment(
         "SPOILER_secret.png",
         "https://images.freeimages.com/variants/nDv5dLEb1auNuDied29fLkGp/f4a36f6589a0e50e702740b15352bc00e4bfaf6f58bd4db850e167794d05993d?fmt=webp&h=350",
@@ -729,10 +703,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 21: Composants V2 (Container, Section, TextDisplay)
-    # Imitation d'une vue type Embed comme demandé
-
-    # Section 1: En-tête avec Titre et Miniature
     text_header = MockTextDisplay(
         "**Panel de Configuration**\n"
         "Gérez vos paramètres utilisateur et vos préférences directement depuis ce message interactif."
@@ -740,20 +710,19 @@ async def main():
     thumb = MockThumbnail("https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp")
     section_header = MockSection([text_header], accessory=thumb)
 
-    # Séparateur
     separator = MockSeparator()
 
-    # Section 2: Informations supplémentaires (Texte seul)
     text_info = MockTextDisplay(
         "**Statut du compte :** ✅ Vérifié\n"
         "**Niveau d'accès :** ⭐ Premium\n"
         "**Dernière connexion :** Il y a 2 heures"
     )
-    # Ajout d'un bouton comme accessoire dans la section
-    btn_refresh = MockButton("Actualiser", MockButtonStyle.secondary, emoji=MockEmoji("🔄"))
+
+    btn_refresh = MockButton(
+        "Actualiser", MockButtonStyle.secondary, emoji=MockEmoji("🔄")
+    )
     section_info = MockSection([text_info], accessory=btn_refresh)
 
-    # Section 3: Menu de sélection
     select_v2 = MockSelectMenu(
         "select_v2",
         [
@@ -772,7 +741,6 @@ async def main():
     )
     action_row_select = MockActionRow([select_v2])
 
-    # Section 3b: Second Menu de sélection (Langue)
     select_lang = MockSelectMenu(
         "select_lang",
         [
@@ -784,7 +752,6 @@ async def main():
     )
     action_row_lang = MockActionRow([select_lang])
 
-    # Section 4: Boutons d'action
     btn_save = MockButton("Sauvegarder", MockButtonStyle.success, emoji=MockEmoji("💾"))
     btn_cancel = MockButton("Annuler", MockButtonStyle.secondary)
     btn_help = MockButton(
@@ -792,7 +759,6 @@ async def main():
     )
     action_row_buttons = MockActionRow([btn_save, btn_cancel, btn_help])
 
-    # Container contenant tout
     container = MockContainer(
         children=[
             section_header,
@@ -815,7 +781,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 22: Message avec un lien
     msg22 = MockMessage(
         1022,
         "Voici un lien vers le dépôt GitHub : https://github.com/Xougui/DiscordTranscript",
@@ -824,13 +789,14 @@ async def main():
         channel=channel,
     )
 
-    # Message 23: Embed avec Vidéo (Style YouTube)
     embed_video = MockEmbed(
         title="Never Gonna Give You Up",
         description="The legendary video.",
         color=0xFF0000,
         url="https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        video=MockEmbedProxy(url="https://www.youtube.com/embed/dQw4w9WgXcQ", width=560, height=315),
+        video=MockEmbedProxy(
+            url="https://www.youtube.com/embed/dQw4w9WgXcQ", width=560, height=315
+        ),
         provider=MockEmbedProxy(name="YouTube", url="https://www.youtube.com"),
         type="video",
     )
@@ -843,10 +809,11 @@ async def main():
         channel=channel,
     )
 
-    # Message 24: Embed Image Seule (GIF)
     embed_image_only = MockEmbed(
         type="image",
-        image=MockEmbedProxy(url="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3V5eGk2eGk2eGk2eGk2eGk2eGk2eGk2eGk2eGk2eGk2/xT4uQulxzV39haRFjG/giphy.gif"),
+        image=MockEmbedProxy(
+            url="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3V5eGk2eGk2eGk2eGk2eGk2eGk2eGk2eGk2eGk2eGk2/xT4uQulxzV39haRFjG/giphy.gif"
+        ),
         color=0x202225,
     )
     msg24 = MockMessage(
@@ -858,9 +825,15 @@ async def main():
         channel=channel,
     )
 
-    # Message 25: Pièces jointes multiples
-    att_text = MockAttachment("notes.txt", "https://example.com/notes.txt", 1024, "text/plain")
-    att_img = MockAttachment("screenshot.png", "https://png.pngtree.com/thumb_back/fh260/background/20240522/pngtree-abstract-cloudy-background-beautiful-natural-streaks-of-sky-and-clouds-red-image_15684333.jpg", 5000, "image/png")
+    att_text = MockAttachment(
+        "notes.txt", "https://example.com/notes.txt", 1024, "text/plain"
+    )
+    att_img = MockAttachment(
+        "screenshot.png",
+        "https://png.pngtree.com/thumb_back/fh260/background/20240522/pngtree-abstract-cloudy-background-beautiful-natural-streaks-of-sky-and-clouds-red-image_15684333.jpg",
+        5000,
+        "image/png",
+    )
     msg25 = MockMessage(
         1025,
         "Voici plusieurs fichiers pour le dossier :",
@@ -870,7 +843,6 @@ async def main():
         channel=channel,
     )
 
-    # Message 26: Markdown Avancé
     md_advanced = (
         "# Grand Titre\n"
         "## Sous-titre\n"
@@ -897,13 +869,14 @@ async def main():
         channel=channel,
     )
 
-    # Message 27: Contenu Mixte (Texte + Embed + Composants)
     embed_mixed = MockEmbed(
         title="Confirmation requise",
         description="Veuillez confirmer la réception des documents ci-dessus.",
         color=0xF1C40F,
     )
-    btn_confirm = MockButton("J'ai reçu", MockButtonStyle.success, emoji=MockEmoji("✅"))
+    btn_confirm = MockButton(
+        "J'ai reçu", MockButtonStyle.success, emoji=MockEmoji("✅")
+    )
     msg27 = MockMessage(
         1027,
         "Merci de vérifier.",
@@ -914,8 +887,11 @@ async def main():
         channel=channel,
     )
 
-    # Message 28: Bloc de code long
-    long_code = "```python\n" + "\n".join([f"print('Ligne de code numéro {i}')" for i in range(1, 21)]) + "\n```"
+    long_code = (
+        "```python\n"
+        + "\n".join([f"print('Ligne de code numéro {i}')" for i in range(1, 21)])
+        + "\n```"
+    )
     msg28 = MockMessage(
         1028,
         "Voici un fichier de code plus long :\n" + long_code,
@@ -924,7 +900,6 @@ async def main():
         channel=channel,
     )
 
-    # Update msg5 with timestamp
     msg5.embeds[0].timestamp = base_time
 
     messages = [
@@ -957,15 +932,11 @@ async def main():
         msg27,
         msg28,
     ]
-    # Transcript.export reverses the list if after is None, expecting Newest->Oldest input.
-    # So we sort descending (Newest first) to get Oldest first in the output.
+
     messages.sort(key=lambda x: x.created_at, reverse=True)
 
     html = await raw_export(channel, messages, guild=guild, language="fr")
 
-    # Correction des avertissements "parser-blocking script"
-    # Remplace l'injection via document.write par une balise script standard avec defer
-    # (Regex is kept just in case, but base.html now handles defer natively)
     html = re.sub(
         r"<script>\s*document\.write\s*\(\s*['\"]\s*<script\s+src=['\"]([^'\"]+)['\"]\s*>\s*<\\/script>\s*['\"]\s*\)\s*;?\s*</script>",
         r'<script src="\1" defer></script>',
@@ -975,7 +946,6 @@ async def main():
 
     print("Generated test_render.html successfully.")
 
-    # Injection du bouton retour
     html = html.replace("<body>", "<body>" + BACK_BUTTON_HTML)
     html = html.replace("</body>", BACK_BUTTON_SCRIPT + "</body>")
 
@@ -983,15 +953,12 @@ async def main():
 
     print(f"Hostname détecté : {hostname}")
 
-    # Gestion des chemins de sortie avec pathlib
     output_filename = "test_render.html"
     local_path = Path(output_filename)
 
-    # 1. Écriture locale (toujours effectuée)
     local_path.write_text(html, encoding="utf-8")
     print(f"Generated local file: {local_path.absolute()}")
 
-    # 2. Écriture vers le chemin spécifique (si le dossier parent existe)
     if hostname == "PC_Xougui":
         dev_path = Path(
             r"C:\Users\xougu\Desktop\Transcript_Site\exemples\exemple_preview.html"

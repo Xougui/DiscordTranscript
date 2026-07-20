@@ -190,7 +190,7 @@ class ParseMarkdown:
         """Converts a markdown ordered list to HTML."""
         lines = self.content.split("\n")
         html = ""
-        # Stack of (indent, list_type)
+
         list_stack = []
 
         for line in lines:
@@ -198,14 +198,17 @@ class ParseMarkdown:
             if match:
                 indent_str, bullet, content = match.groups()
                 indent = len(indent_str)
-                is_ordered = bullet[-1] == '.'
+                is_ordered = bullet[-1] == "."
                 list_type = "ol" if is_ordered else "ul"
 
                 if not list_stack:
-                    # Start new list
-                    style = ' style="list-style-type: decimal;"' if is_ordered else ' style="list-style-type: disc;"'
+                    style = (
+                        ' style="list-style-type: decimal;"'
+                        if is_ordered
+                        else ' style="list-style-type: disc;"'
+                    )
                     style = style[:-1] + '; padding-left: 20px; margin: 0 !important;"'
-                    
+
                     start_attr = ""
                     if is_ordered:
                         try:
@@ -219,36 +222,45 @@ class ParseMarkdown:
                     list_stack.append((indent, list_type))
                 else:
                     last_indent, last_type = list_stack[-1]
-                    
+
                     if indent > last_indent:
-                        # Nested list
-                        style = ' style="list-style-type: decimal;"' if is_ordered else ""
+                        style = (
+                            ' style="list-style-type: decimal;"' if is_ordered else ""
+                        )
                         if not is_ordered:
-                            depth = len([t for i, t in list_stack if t == 'ul'])
+                            depth = len([t for i, t in list_stack if t == "ul"])
                             styles = ["disc", "circle", "square"]
                             s_type = styles[depth % 3]
                             style = f' style="list-style-type: {s_type};"'
-                        
+
                         html += f'<{list_type} class="markup"{style}>\n'
                         list_stack.append((indent, list_type))
                     elif indent < last_indent:
                         while list_stack and list_stack[-1][0] > indent:
                             _, ltype = list_stack.pop()
                             html += f"</{ltype}>\n"
-                        
+
                         if list_stack and list_stack[-1][1] != list_type:
-                             _, old_type = list_stack.pop()
-                             html += f"</{old_type}>\n"
-                             style = ' style="list-style-type: decimal;"' if is_ordered else ' style="list-style-type: disc;"'
-                             html += f'<{list_type} class="markup"{style}>\n'
-                             list_stack.append((indent, list_type))
+                            _, old_type = list_stack.pop()
+                            html += f"</{old_type}>\n"
+                            style = (
+                                ' style="list-style-type: decimal;"'
+                                if is_ordered
+                                else ' style="list-style-type: disc;"'
+                            )
+                            html += f'<{list_type} class="markup"{style}>\n'
+                            list_stack.append((indent, list_type))
                     else:
                         if list_stack[-1][1] != list_type:
-                             _, old_type = list_stack.pop()
-                             html += f"</{old_type}>\n"
-                             style = ' style="list-style-type: decimal;"' if is_ordered else ' style="list-style-type: disc;"'
-                             html += f'<{list_type} class="markup"{style}>\n'
-                             list_stack.append((indent, list_type))
+                            _, old_type = list_stack.pop()
+                            html += f"</{old_type}>\n"
+                            style = (
+                                ' style="list-style-type: decimal;"'
+                                if is_ordered
+                                else ' style="list-style-type: disc;"'
+                            )
+                            html += f'<{list_type} class="markup"{style}>\n'
+                            list_stack.append((indent, list_type))
 
                 html += f'<li class="markup">{content.strip()}</li>\n'
             else:
@@ -272,10 +284,22 @@ class ParseMarkdown:
             [r"\*(.*?)\*", "<em><span>%s</span></em>"],
             [r"_(.*?)_", "<em><span>%s</span></em>"],
             [r"~~(.*?)~~", '<span class="markdown-strikethrough">%s</span>'],
-            [r"^\s*-#\s+(.*?)$", '<span style="color: #949BA4; font-size: 0.75rem; line-height: 1.375rem;">%s</span>'],
-            [r"^\s*###\s(.*?)$", '<h3 style="font-weight: 700; font-size: 1rem; margin: 0.25em 0; line-height: 1.25;">%s</h3>'],
-            [r"^\s*##\s(.*?)$", '<h2 style="font-weight: 700; font-size: 1.25rem; margin: 0.25em 0; line-height: 1.25;">%s</h2>'],
-            [r"^\s*#\s(.*?)$", '<h1 style="font-weight: 700; font-size: 1.5rem; margin: 0.25em 0; line-height: 1.25;">%s</h1>'],
+            [
+                r"^\s*-#\s+(.*?)$",
+                '<span style="color: #949BA4; font-size: 0.75rem; line-height: 1.375rem;">%s</span>',
+            ],
+            [
+                r"^\s*###\s(.*?)$",
+                '<h3 style="font-weight: 700; font-size: 1rem; margin: 0.25em 0; line-height: 1.25;">%s</h3>',
+            ],
+            [
+                r"^\s*##\s(.*?)$",
+                '<h2 style="font-weight: 700; font-size: 1.25rem; margin: 0.25em 0; line-height: 1.25;">%s</h2>',
+            ],
+            [
+                r"^\s*#\s(.*?)$",
+                '<h1 style="font-weight: 700; font-size: 1.5rem; margin: 0.25em 0; line-height: 1.25;">%s</h1>',
+            ],
             [
                 r"\|\|(.*?)\|\|",
                 '<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"> <span '
@@ -285,9 +309,10 @@ class ParseMarkdown:
 
         for x in holder:
             p, r = x
-            self.content = re.sub(p, lambda m: r.replace("%s", m.group(1)), self.content, flags=re.M)
+            self.content = re.sub(
+                p, lambda m: r.replace("%s", m.group(1)), self.content, flags=re.M
+            )
 
-        # > quote
         lines = self.content.split("\n")
         new_lines = []
         in_quote = False
@@ -330,8 +355,7 @@ class ParseMarkdown:
 
     def parse_code_block_markdown(self, reference=False):
         """Parses code block markdown."""
-        # The content of a code block is treated as plain text and should not be parsed for markdown.
-        # Therefore, we do not call return_to_markdown on the extracted content.
+
         markdown_languages = [
             "asciidoc",
             "autohotkey",
@@ -357,7 +381,6 @@ class ParseMarkdown:
         ]
         self.content = re.sub(r"\n", "<br>", self.content)
 
-        # ```code```
         pattern = re.compile(r"```(.*?)```")
         match = re.search(pattern, self.content)
         while match is not None:
@@ -375,7 +398,7 @@ class ParseMarkdown:
                 affected_text = re.sub(r"^<br>|<br>$", "", affected_text)
                 second_match = re.search(second_pattern, affected_text)
             affected_text = re.sub("  ", "&nbsp;&nbsp;", affected_text)
-            # affected_text = html.escape(affected_text)
+
             self.code_blocks_content.append(affected_text)
             if not reference:
                 self.content = self.content.replace(
@@ -392,12 +415,11 @@ class ParseMarkdown:
 
             match = re.search(pattern, self.content)
 
-        # ``code``
         pattern = re.compile(r"``(.*?)``")
         match = re.search(pattern, self.content)
         while match is not None:
             affected_text = match.group(1)
-            # affected_text = html.escape(affected_text)
+
             self.code_blocks_content.append(affected_text)
             self.content = self.content.replace(
                 self.content[match.start() : match.end()],
@@ -405,12 +427,11 @@ class ParseMarkdown:
             )
             match = re.search(pattern, self.content)
 
-        # `code`
         pattern = re.compile(r"`(.*?)`")
         match = re.search(pattern, self.content)
         while match is not None:
             affected_text = match.group(1)
-            # affected_text = html.escape(affected_text)
+
             self.code_blocks_content.append(affected_text)
             self.content = self.content.replace(
                 self.content[match.start() : match.end()],
@@ -435,7 +456,7 @@ class ParseMarkdown:
 
     def parse_masked_links(self):
         """Parses masked links (e.g. [text](url))."""
-        # [Message](Link)
+
         pattern = re.compile(r"\[(.+?)]\((.+?)\)")
         match = re.search(pattern, self.content)
         while match is not None:
@@ -445,12 +466,14 @@ class ParseMarkdown:
                 affected_url = affected_url[1:-1]
 
             start_tag = f'<a href="{affected_url}" style="color: #00a8fc;">'
-            end_tag = '</a>'
-            start_ph, end_ph = self.add_link_placeholder(start_tag=start_tag, end_tag=end_tag)
+            end_tag = "</a>"
+            start_ph, end_ph = self.add_link_placeholder(
+                start_tag=start_tag, end_tag=end_tag
+            )
 
             self.content = self.content.replace(
                 self.content[match.start() : match.end()],
-                f'{start_ph}{affected_text}{end_ph}'
+                f"{start_ph}{affected_text}{end_ph}",
             )
             match = re.search(pattern, self.content)
 
@@ -484,7 +507,7 @@ class ParseMarkdown:
 
     def return_to_markdown(self, content):
         """Returns the content to markdown."""
-        # content = self.order_list_html_to_markdown(content)
+
         holders = (
             [r"<strong>(.*?)</strong>", "**%s**"],
             [r"<em>([^<>]+)</em>", "*%s*"],
@@ -541,7 +564,6 @@ class ParseMarkdown:
 
         def replace_link(match):
             if match.group(1):
-                # Wrapped link
                 full_match = match.group(1)
                 url = full_match[4:-4]
                 full_tag = f'<a href="{url}" style="color: #00a8fc;">{url}</a>'
@@ -549,8 +571,7 @@ class ParseMarkdown:
 
             url = match.group(2)
 
-            # Handle trailing punctuation
-            trailing_punctuation = {'.', ',', ':', ')', ']', '}'}
+            trailing_punctuation = {".", ",", ":", ")", "]", "}"}
             cleaned_url = url
             suffix = ""
 
@@ -559,7 +580,7 @@ class ParseMarkdown:
                     break
                 last_char = cleaned_url[-1]
                 if last_char in trailing_punctuation:
-                    if last_char == ')' and '(' in cleaned_url:
+                    if last_char == ")" and "(" in cleaned_url:
                         break
                     suffix = last_char + suffix
                     cleaned_url = cleaned_url[:-1]
@@ -570,7 +591,9 @@ class ParseMarkdown:
                     continue
                 break
 
-            full_tag = f'<a href="{cleaned_url}" style="color: #00a8fc;">{cleaned_url}</a>'
+            full_tag = (
+                f'<a href="{cleaned_url}" style="color: #00a8fc;">{cleaned_url}</a>'
+            )
             return self.add_link_placeholder(full_tag=full_tag) + suffix
 
         self.content = re.sub(regex, replace_link, self.content)

@@ -41,7 +41,7 @@ async def fill_out(
         str: The filled out HTML template.
     """
     for r in replacements:
-        if len(r) == 2:  # default case
+        if len(r) == 2:
             k, v = r
             r = (k, v, PARSE_MODE_MARKDOWN)
 
@@ -62,9 +62,8 @@ async def fill_out(
         elif mode == PARSE_MODE_EMOJI:
             v = await ParseMarkdown(v).special_emoji_flow()
         elif mode == PARSE_MODE_HTML_SAFE:
-            # escape html characters
             v = html.escape(v, quote=True)
-            # escape characters that could be used for xss
+
             v = json.dumps(v, ensure_ascii=False)[1:-1]
 
         base = base.replace("{{" + k + "}}", str(v or "").strip())
@@ -78,7 +77,6 @@ def read_file(filename):
     return s
 
 
-# MESSAGES
 start_message = read_file(dir_path + "/html/message/start.html")
 bot_tag = read_file(dir_path + "/html/message/bot-tag.html")
 bot_tag_verified = read_file(dir_path + "/html/message/bot-tag-verified.html")
@@ -95,7 +93,7 @@ message_body = read_file(dir_path + "/html/message/message.html")
 end_message = read_file(dir_path + "/html/message/end.html")
 meta_data_temp = read_file(dir_path + "/html/message/meta.html")
 
-# COMPONENTS
+
 component_button = read_file(dir_path + "/html/component/component_button.html")
 component_menu = read_file(dir_path + "/html/component/component_menu.html")
 component_menu_options = read_file(
@@ -112,7 +110,7 @@ component_text_display = read_file(
 component_thumbnail = read_file(dir_path + "/html/component/component_thumbnail.html")
 component_separator = read_file(dir_path + "/html/component/component_separator.html")
 
-# EMBED
+
 embed_body = read_file(dir_path + "/html/embed/body.html")
 embed_body_image_only = read_file(dir_path + "/html/embed/body_image_only.html")
 embed_title = read_file(dir_path + "/html/embed/title.html")
@@ -128,20 +126,20 @@ embed_author_icon = read_file(dir_path + "/html/embed/author_icon.html")
 embed_provider = read_file(dir_path + "/html/embed/provider.html")
 embed_video = read_file(dir_path + "/html/embed/video.html")
 
-# REACTION
+
 emoji = read_file(dir_path + "/html/reaction/emoji.html")
 custom_emoji = read_file(dir_path + "/html/reaction/custom_emoji.html")
 
-# ATTACHMENT
+
 img_attachment = read_file(dir_path + "/html/attachment/image.html")
 msg_attachment = read_file(dir_path + "/html/attachment/message.html")
 audio_attachment = read_file(dir_path + "/html/attachment/audio.html")
 video_attachment = read_file(dir_path + "/html/attachment/video.html")
 
-# GUILD / FULL TRANSCRIPT
+
 total = read_file(dir_path + "/html/base.html")
 
-# SCRIPT
+
 fancy_time = read_file(dir_path + "/html/script/fancy_time.html")
 channel_topic = read_file(dir_path + "/html/script/channel_topic.html")
 channel_subject = read_file(dir_path + "/html/script/channel_subject.html")
