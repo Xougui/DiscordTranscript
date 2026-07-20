@@ -43,10 +43,10 @@ include = ["DiscordTranscript*"]
 exclude = ["tests*"]
 
 [tool.ruff]
-# Options globales (Linter/Checker)
+
 target-version = "py312"
 line-length = 88
-# NOTE : "line-ending" a été déplacé dans [tool.ruff.format]
+
 exclude = [
     ".venv",
     ".git",
@@ -81,9 +81,9 @@ known-first-party = ["DiscordTranscript"]
 combine-as-imports = true
 force-sort-within-sections = true
 
-# NOUVELLE SECTION - Ceci est l'endroit correct pour les options de formatage
+
 [tool.ruff.format]
-# C'est ici que 'line-ending' doit se trouver.
+
 line-ending = "lf"
 quote-style = "double"
 docstring-code-format = true
