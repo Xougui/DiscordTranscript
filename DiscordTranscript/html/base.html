@@ -6,27 +6,30 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width" />
     <meta name="title" content="{{SERVER_NAME_SAFE}} - {{CHANNEL_NAME_SAFE}}">
-    <meta name="description" content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}.">
-    
+    <meta name="description"
+        content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}.">
+
     <link rel="icon" type="image/svg+xml" href="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="{{SERVER_NAME_SAFE}} - {{CHANNEL_NAME_SAFE}}" />
-    <meta property="og:description" content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}." />
+    <meta property="og:description"
+        content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}." />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary" />
     <meta name='twitter:title' content="{{SERVER_NAME_SAFE}} - {{CHANNEL_NAME_SAFE}}" />
-    <meta name='twitter:description' content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}." />
+    <meta name='twitter:description'
+        content="{{TRANSCRIPT_OF_CHANNEL}} {{CHANNEL_NAME_SAFE}} ({{CHANNEL_ID}}) {{FROM_SERVER}} {{SERVER_NAME_SAFE}} ({{GUILD_ID}}) {{WITH}} {{MESSAGE_COUNT}} {{MESSAGES_LABEL}}. {{GENERATED_ON}} {{DATE_TIME}}." />
 
     <style>
         :root {
             --discord-blurple: #5865F2;
             --discord-blurple-hover: #4752C4;
-            --discord-green: #23A559;
+            --discord-green: #23A55A;
             --discord-green-hover: #1A7F42;
-            --discord-red: #DA373C;
+            --discord-red: #F23F43;
             --discord-red-hover: #A1282C;
             --discord-grey: #4E5058;
             --discord-grey-hover: #6D6F78;
@@ -37,36 +40,42 @@
             --discord-border-color: #1E1F22;
             --discord-text-placeholder: #dbdee1;
             --discord-icon-color: #dbdee1;
+            --background-primary: #313338;
+            --background-secondary: #2b2d31;
+            --background-tertiary: #1e1f22;
+            --background-floating: #232428;
+            --text-normal: #dbdee1;
+            --text-muted: #949ba4;
         }
 
         @font-face {
-          font-family: gg sans;
-          font-weight: 400;
-          src: url(https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/ggsans-400.woff2) format("woff2")
+            font-family: gg sans;
+            font-weight: 400;
+            src: url(https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/ggsans-400.woff2) format("woff2")
         }
 
         @font-face {
-          font-family: gg sans;
-          font-weight: 500;
-          src: url(https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/ggsans-500.woff2) format("woff2")
+            font-family: gg sans;
+            font-weight: 500;
+            src: url(https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/ggsans-500.woff2) format("woff2")
         }
 
         @font-face {
-          font-family: gg sans;
-          font-weight: 600;
-          src: url(https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/ggsans-600.woff2) format("woff2")
+            font-family: gg sans;
+            font-weight: 600;
+            src: url(https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/ggsans-600.woff2) format("woff2")
         }
 
         @font-face {
-          font-family: gg sans;
-          font-weight: 700;
-          src: url(https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/ggsans-700.woff2) format("woff2")
+            font-family: gg sans;
+            font-weight: 700;
+            src: url(https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/ggsans-700.woff2) format("woff2")
         }
 
         @font-face {
-          font-family: gg sans;
-          font-weight: 800;
-          src: url(https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/ggsans-800.woff2) format("woff2")
+            font-family: gg sans;
+            font-weight: 800;
+            src: url(https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/ggsans-800.woff2) format("woff2")
         }
 
         a {
@@ -140,20 +149,20 @@
             filter: blur(44px);
         }
 
-            .spoiler-image.spoiler--hidden:after {
-                content: "SPOILER";
-                color: #dbdee1;
-                background-color: rgba(0, 0, 0, 0.6);
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                font-weight: 600;
-                padding: 0.5em 1em;
-                border-radius: 8px;
-                letter-spacing: 0.05em;
-                font-size: 0.9em;
-            }
+        .spoiler-image.spoiler--hidden:after {
+            content: "SPOILER";
+            color: #dbdee1;
+            background-color: rgba(0, 0, 0, 0.6);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: 600;
+            padding: 0.5em 1em;
+            border-radius: 8px;
+            letter-spacing: 0.05em;
+            font-size: 0.9em;
+        }
 
         .spoiler--hidden:hover .spoiler-image:after {
             color: #fff;
@@ -179,7 +188,7 @@
             margin-top: 0.25em;
             padding: 0.5em;
             border: 2px solid;
-            border-radius: 5px;
+            border-radius: 4px;
         }
 
         .pre--inline {
@@ -235,8 +244,8 @@
             grid-column: 1;
             border-style: solid;
             border-width: 2px 0 0 2px;
-            border-radius: 8px 0 0 0;
-            margin-left: 16px;
+            border-radius: 6px 0 0 0;
+            margin-left: 18px;
             margin-top: 8px;
         }
 
@@ -299,7 +308,8 @@
         }
 
         .chatlog__followup-author {
-            -webkit-user-select: none; user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
             cursor: pointer;
             margin-right: 0.3rem;
             font-weight: 600;
@@ -310,7 +320,8 @@
         }
 
         .chatlog__followup-content {
-            -webkit-user-select: none; user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -348,7 +359,7 @@
         .chatlog__interaction-link:hover *:not(.chatlog__markdown-spoiler) {
             color: inherit;
         }
-        
+
         .chatlog__reference-edited-timestamp {
             margin-left: 0.25rem;
             color: #949ba4;
@@ -357,7 +368,8 @@
             line-height: 1;
             direction: ltr;
             unicode-bidi: bidi-override;
-            -webkit-user-select: none; user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .chatlog__reference-attachment-icon {
@@ -409,7 +421,7 @@
             color: #ffffff;
         }
 
-                .chatlog__author-name:hover {
+        .chatlog__author-name:hover {
             text-decoration: underline;
             cursor: pointer;
         }
@@ -446,8 +458,8 @@
 
         .chatlog__message {
             display: grid;
-            grid-template-columns: auto 1fr;
-            padding: 0.1rem 0.5rem;
+            grid-template-columns: 56px 1fr;
+            padding: 0.125rem 1rem 0.125rem 0.5rem;
             direction: ltr;
             unicode-bidi: bidi-override;
             transition: background-color 0.1s ease;
@@ -464,14 +476,14 @@
         }
 
         .chatlog__attachment {
-            margin-top: 0.3em;
+            margin-top: 0.375rem;
         }
 
         .chatlog__attachment-thumbnail {
             vertical-align: top;
             max-width: 45vw;
             max-height: 225px;
-            border-radius: 3px;
+            border-radius: 8px;
         }
 
         .chatlog__sticker {
@@ -479,14 +491,14 @@
             height: 160px;
             object-fit: contain;
             vertical-align: top;
-            border-radius: 3px;
+            border-radius: 8px;
         }
 
         .chatlog__attachment-audio-container {
             width: 100%;
             max-width: 520px;
             padding: 10px;
-            border-radius: 3px;
+            border-radius: 8px;
             overflow: hidden;
             background-color: #2b2d31;
             border: 1px solid #1e1f22;
@@ -502,7 +514,7 @@
             width: 100%;
             max-width: 520px;
             padding: 10px;
-            border-radius: 3px;
+            border-radius: 8px;
             overflow: hidden;
             background-color: #2b2d31;
             border: 1px solid #1e1f22;
@@ -718,17 +730,37 @@
             background-color: var(--button-color);
         }
 
-        .chatlog__component-button[data-button-color="#5865F2"] { background-color: var(--discord-blurple); }
-        .chatlog__component-button[data-button-color="#5865F2"]:hover { background-color: var(--discord-blurple-hover); }
+        .chatlog__component-button[data-button-color="#5865F2"] {
+            background-color: var(--discord-blurple);
+        }
 
-        .chatlog__component-button[data-button-color="#4E5058"] { background-color: var(--discord-grey); }
-        .chatlog__component-button[data-button-color="#4E5058"]:hover { background-color: var(--discord-grey-hover); }
+        .chatlog__component-button[data-button-color="#5865F2"]:hover {
+            background-color: var(--discord-blurple-hover);
+        }
 
-        .chatlog__component-button[data-button-color="#DA373C"] { background-color: var(--discord-red); }
-        .chatlog__component-button[data-button-color="#DA373C"]:hover { background-color: var(--discord-red-hover); }
+        .chatlog__component-button[data-button-color="#4E5058"] {
+            background-color: var(--discord-grey);
+        }
 
-        .chatlog__component-button[data-button-color="#23A559"] { background-color: var(--discord-green); }
-        .chatlog__component-button[data-button-color="#23A559"]:hover { background-color: var(--discord-green-hover); }
+        .chatlog__component-button[data-button-color="#4E5058"]:hover {
+            background-color: var(--discord-grey-hover);
+        }
+
+        .chatlog__component-button[data-button-color="#DA373C"] {
+            background-color: var(--discord-red);
+        }
+
+        .chatlog__component-button[data-button-color="#DA373C"]:hover {
+            background-color: var(--discord-red-hover);
+        }
+
+        .chatlog__component-button[data-button-color="#23A559"] {
+            background-color: var(--discord-green);
+        }
+
+        .chatlog__component-button[data-button-color="#23A559"]:hover {
+            background-color: var(--discord-green-hover);
+        }
 
         .chatlog__component-button:not([data-button-color="#5865F2"]):not([data-button-color="#4E5058"]):not([data-button-color="#DA373C"]):not([data-button-color="#23A559"]):hover {
             filter: brightness(0.85);
@@ -751,7 +783,7 @@
             align-items: center;
         }
 
-        .chatlog__button-label > * {
+        .chatlog__button-label>* {
             padding-left: 2.5px;
             padding-right: 2.5px;
         }
@@ -760,7 +792,7 @@
             width: 1.5em;
             height: 1.5em;
         }
-        
+
         .chatlog__reactions {
             display: flex;
         }
@@ -865,7 +897,8 @@
 
         /* General */
 
-        html, body {
+        html,
+        body {
             height: 100%;
             width: 100%;
             background-color: #313338;
@@ -879,14 +912,25 @@
             flex-direction: column;
         }
 
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             font-weight: 700;
             margin: 0 0 4px 0;
             padding: 0;
         }
-        h1 { font-size: 1.5rem; }
-        h2 { font-size: 1.25rem; }
-        h3 { font-size: 1.1rem; }
+
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+        }
 
         a {
             color: #00a8fc;
@@ -1003,7 +1047,8 @@
 
         .chatlog__embed-content-container {
             background-color: #2b2d31;
-            border: 1px solid #1e1f22; /* Fallback */
+            border: 1px solid #1e1f22;
+            /* Fallback */
             border-left: 4px solid var(--embed-color, #1e1f22);
             border-radius: 4px;
             padding: 0.5rem 1rem 1rem 0.75rem;
@@ -1033,7 +1078,8 @@
             align-items: center;
             padding: 0 16px;
             height: 48px;
-            -webkit-user-select: none; user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
             font-weight: 700;
             font-size: 20px;
             box-shadow: 0 1px 0 rgba(4, 4, 5, 0.2), 0 1.5px 0 rgba(6, 6, 7, 0.05), 0 2px 0 rgba(4, 4, 5, 0.05);
@@ -1191,16 +1237,16 @@
         }
 
         .main::-webkit-scrollbar {
-          width: 8px;
-          background-color: rgba(0,0,0,0);
+            width: 8px;
+            background-color: rgba(0, 0, 0, 0);
         }
 
         /* Add a thumb */
         .main::-webkit-scrollbar-thumb {
-          background-color: #1e1f22;
-          border: 0 #313338 solid;
-          border-left-width: 1px;
-          border-right-width: 1px;
+            background-color: #1e1f22;
+            border: 0 #313338 solid;
+            border-left-width: 1px;
+            border-right-width: 1px;
         }
 
         .buffer {
@@ -1214,7 +1260,8 @@
             flex-direction: column;
             justify-content: flex-end;
             flex-shrink: 0;
-            -webkit-user-select: none; user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .info__title {
@@ -1244,7 +1291,8 @@
             background-color: #1e1f22;
             position: relative;
             z-index: 10;
-            -webkit-user-select: none; user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .footer__text {
@@ -1345,7 +1393,8 @@
 
         .meta-popout.mounted {
             transform: scale(1);
-            transition: transform .3 ease-in-out;;
+            transition: transform .3 ease-in-out;
+            ;
         }
 
         .meta__divider {
@@ -1371,7 +1420,8 @@
         }
 
         .meta__header img {
-            -webkit-user-select: none; user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
             border-radius: 50%;
             margin-bottom: 10px;
             position: relative;
@@ -1451,65 +1501,65 @@
         }
 
         .dropdownButton {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background-color: var(--discord-component-bg);
-          border: 1px solid var(--discord-border-color);
-          border-radius: 4px;
-          padding: 8px 12px;
-          cursor: pointer;
-          transition: background-color 0.2s ease, border-color 0.2s ease;
-          -webkit-user-select: none;
-          user-select: none;
-          box-sizing: border-box;
-          min-height: 38px;
-          width: 100%;
-          color: var(--discord-text-placeholder);
-          font-size: 14px;
-          font-weight: 400;
-          line-height: 1.3;
-          position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--discord-component-bg);
+            border: 1px solid var(--discord-border-color);
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            -webkit-user-select: none;
+            user-select: none;
+            box-sizing: border-box;
+            min-height: 38px;
+            width: 100%;
+            color: var(--discord-text-placeholder);
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.3;
+            position: relative;
         }
 
         .chatlog__component-disabled {
-          cursor: not-allowed;
-          opacity: 0.6;
-          pointer-events: none;
+            cursor: not-allowed;
+            opacity: 0.6;
+            pointer-events: none;
         }
 
         .chatlog__component-disabled a {
-          cursor: not-allowed;
+            cursor: not-allowed;
         }
 
         .chatlog__component-disabled button {
-          cursor: not-allowed;
+            cursor: not-allowed;
         }
 
         .chatlog__component-dropdown {
-          width: 100%;
-          max-width: 400px;
-          margin-top: 5px;
-          position: relative;
-          display: inline-block;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 5px;
+            position: relative;
+            display: inline-block;
         }
 
         .chatlog__dropdown-content {
-          position: relative;
+            position: relative;
         }
 
         .chatlog__dropdown-emoji {
-          left: 10px;
-          position: absolute;
+            left: 10px;
+            position: absolute;
         }
 
         .chatlog__dropdown-emoji img {
-          width: 1.4em;
-          height: 1.4em;
+            width: 1.4em;
+            height: 1.4em;
         }
 
         .chatlog__dropdown-text {
-          padding-left: 25px
+            padding-left: 25px
         }
 
         .chatlog__role-icon {
@@ -1520,54 +1570,54 @@
         }
 
         .dropdownContent {
-          z-index: 100;
-          display: none;
-          width: 100%;
-          font-size: 14px;
-          position: absolute;
-          top: 100%;
-          margin-top: 4px;
-          background-color: #2b2d31;
-          border: 1px solid #1e1f22;
-          box-shadow: 0 8px 16px rgba(0,0,0,0.24);
-          box-sizing: border-box;
-          border-radius: 4px;
-          max-height: 250px;
-          overflow-y: auto;
+            z-index: 100;
+            display: none;
+            width: 100%;
+            font-size: 14px;
+            position: absolute;
+            top: 100%;
+            margin-top: 4px;
+            background-color: #2b2d31;
+            border: 1px solid #1e1f22;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
+            box-sizing: border-box;
+            border-radius: 4px;
+            max-height: 250px;
+            overflow-y: auto;
         }
 
         .dropdownContentEmoji {
-          width: 25px;
-          position: absolute;
+            width: 25px;
+            position: absolute;
         }
 
         .dropdownContentTitle {
-          color: white;
-          font-weight: 600;
+            color: white;
+            font-weight: 600;
         }
 
         .dropdownContent a {
-          display: block;
-          padding: 8px 12px;
-          text-decoration: none;
-          margin: 2px;
-          border-radius: 2px;
-          transition: background-color 0.1s;
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            margin: 2px;
+            border-radius: 2px;
+            transition: background-color 0.1s;
         }
 
         .chatlog__dropdown-icon {
-          color: var(--discord-icon-color);
-          flex-shrink: 0;
-          width: 18px;
-          height: 18px;
-          margin-left: 8px;
-          opacity: 0.8;
+            color: var(--discord-icon-color);
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            margin-left: 8px;
+            opacity: 0.8;
         }
 
         .dropdownContent::-webkit-scrollbar {
             width: 8px;
             height: 8px;
-            background-color: rgba(0,0,0,0);
+            background-color: rgba(0, 0, 0, 0);
         }
 
         .dropdownContent::-webkit-scrollbar-thumb {
@@ -1581,100 +1631,135 @@
             color: #dfe0e4;
         }
 
-        .tippy-box[data-theme~='disc'][data-placement^='top'] > .tippy-arrow::before {
-          border-top-color: #111214;
+        .tippy-box[data-theme~='disc'][data-placement^='top']>.tippy-arrow::before {
+            border-top-color: #111214;
         }
 
-        .tippy-box[data-theme~='disc'][data-placement^='left'] > .tippy-arrow::before {
-          border-left-color: #111214;
+        .tippy-box[data-theme~='disc'][data-placement^='left']>.tippy-arrow::before {
+            border-left-color: #111214;
         }
 
-        .tippy-box[data-theme~='disc'][data-placement^='bottom'] > .tippy-arrow::before {
-          border-bottom-color: #111214;
+        .tippy-box[data-theme~='disc'][data-placement^='bottom']>.tippy-arrow::before {
+            border-bottom-color: #111214;
         }
 
-        .tippy-box[data-theme~='disc'][data-placement^='right'] > .tippy-arrow::before {
-          border-right-color: #111214;
+        .tippy-box[data-theme~='disc'][data-placement^='right']>.tippy-arrow::before {
+            border-right-color: #111214;
         }
 
-        .dropdownContentDesc { color: #949ba4; }
-        .dropdownButton:hover { background-color: var(--discord-component-hover); }
-        .chatlog__component-dropdown-show { display: block; }
-        .chatlog__component-dropdown a:hover { 
+        .dropdownContentDesc {
+            color: #949ba4;
+        }
+
+        .dropdownButton:hover {
+            background-color: var(--discord-component-hover);
+        }
+
+        .chatlog__component-dropdown-show {
+            display: block;
+        }
+
+        .chatlog__component-dropdown a:hover {
             background-color: #404249;
             color: #f2f3f5;
         }
 
-        .cursor_pointer { cursor: pointer; }
+        .cursor_pointer {
+            cursor: pointer;
+        }
 
-        .markdown-underline { text-decoration: underline; }
-        .markdown-strikethrough { text-decoration: line-through; }
-        .chatlog__markdown-tenor-gif { max-width: 100%; }
+        .markdown-underline {
+            text-decoration: underline;
+        }
+
+        .markdown-strikethrough {
+            text-decoration: line-through;
+        }
+
+        .chatlog__markdown-tenor-gif {
+            max-width: 100%;
+        }
 
         /* Media Query for Mobile Devices */
         @media screen and (max-width: 768px) {
             .chatlog__message {
                 grid-template-columns: 50px 1fr;
             }
+
             .chatlog__message-aside {
                 width: 50px;
             }
+
             .chatlog__avatar {
                 width: 35px;
                 height: 35px;
             }
+
             .chatlog__embed,
             .chatlog__attachment-container,
             .chatlog__attachment-audio-container {
                 max-width: 100%;
             }
+
             .chatlog__embed-image {
                 max-width: 100%;
                 height: auto;
             }
+
             .panel__channel-topic {
                 display: none;
             }
+
             .chatlog__embed-field--inline {
                 flex-basis: 100%;
                 min-width: 100%;
             }
+
             .chatlog__embed-content {
                 flex-wrap: wrap;
             }
+
             .chatlog__embed-thumbnail {
                 margin-left: 0;
                 margin-top: 10px;
                 max-width: 60px;
                 max-height: 60px;
             }
+
             .panel {
                 font-size: 16px;
                 padding: 0 10px;
             }
-            .panel__summary-button > span {
+
+            .panel__summary-button>span {
                 display: none;
             }
+
             .panel__summary-icon {
                 margin-right: 0;
             }
+
             .summary-popout {
                 width: 90%;
                 left: 5% !important;
             }
+
             .meta-popout {
                 width: 90%;
                 left: 5% !important;
             }
+
             body {
                 display: flex;
                 flex-direction: column;
                 overflow: hidden;
             }
+
             .main {
                 height: auto;
                 flex: 1;
             }
+
             .footer {
                 height: auto;
                 flex-shrink: 0;
@@ -1683,11 +1768,13 @@
                 gap: 2px;
                 padding: 8px;
             }
+
             .footer__text {
                 white-space: normal;
                 text-align: center;
                 font-size: 12px;
             }
+
             .footer__powered {
                 margin-left: 0;
                 font-size: 12px;
@@ -1763,7 +1850,8 @@
             cursor: pointer;
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" defer></script>
     <script src="https://unpkg.com/@popperjs/core@2.11.5/dist/umd/popper.min.js" defer></script>
     <script src="https://unpkg.com/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js" defer></script>
@@ -1810,7 +1898,7 @@
                     block: 'center',
                 });
 
-                setTimeout(function() {
+                setTimeout(function () {
                     element.classList.remove('chatlog__message-container--highlighted');
                 }, 1500);
             }
@@ -1826,9 +1914,9 @@
 
         //  Menu Dropdown (Selectmenu)
         function showDropdown(dropdownID) {
-          
-          document.getElementById("dropdownMenuContent" + dropdownID).classList.toggle("chatlog__component-dropdown-show");
-          document.getElementById("dropdownMenu" + dropdownID).classList.toggle("chatlog__component-dropdown-show");
+
+            document.getElementById("dropdownMenuContent" + dropdownID).classList.toggle("chatlog__component-dropdown-show");
+            document.getElementById("dropdownMenu" + dropdownID).classList.toggle("chatlog__component-dropdown-show");
         }
 
         //  Code Block Markdown (```lang```)
@@ -1839,393 +1927,403 @@
         });
     </script>
 </head>
+
 <body>
 
-<div class="panel">
-    <img class="panel__hashtag-icon" src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-hashtag.svg" alt="Hashtag icon"/>
-    <span class="panel__channel-name">{{CHANNEL_NAME}}</span>
+    <div class="panel">
+        <img class="panel__hashtag-icon"
+            src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-hashtag.svg" alt="Hashtag icon" />
+        <span class="panel__channel-name">{{CHANNEL_NAME}}</span>
 
-    {{CHANNEL_TOPIC}}
+        {{CHANNEL_TOPIC}}
 
-    <div class="panel__summary-button" id="summary-button">
-        <svg class="panel__summary-icon" aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></svg>
-        <span>{{SUMMARY}}</span>
-    </div>
+        <div class="panel__summary-button" id="summary-button">
+            <svg class="panel__summary-icon" aria-hidden="true" role="img" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z">
+                </path>
+            </svg>
+            <span>{{SUMMARY}}</span>
+        </div>
 
-    <a href="https://discord-transcript.xouxou-hosting.fr/index" target="_blank" rel="noopener">
-        <img class="panel__logo" src="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg" alt="DiscordTranscript"/>
-    </a>
-</div>
-
-<div class="main">
-    <div class="buffer">
-        <!-- Magical space goes here -->
-    </div>
-
-    <div class="info">
-        <span class="info__title">{{WELCOME_TO}} #{{CHANNEL_NAME}}!</span>
-        {{SUBJECT}}
-    </div>
-
-    <div class="chatlog">
-        {{MESSAGES}}
-    </div>
-</div>
-
-<div class="footer">
-    <span class="footer__text">{{GENERATED_ON}} {{DATE_TIME}}</span>
-    <div class="footer__powered">
-        <span>{{POWERED_BY}}</span>
-        <a href="https://discord-transcript.xouxou-hosting.fr/index" class="footer__powered-link" target="_blank" rel="noopener">
-            <img class="footer__logo" src="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg" alt="DiscordTranscript">
-            DiscordTranscript
+        <a href="https://discord-transcript.xouxou-hosting.fr/index" target="_blank" rel="noopener">
+            <img class="panel__logo" src="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg"
+                alt="DiscordTranscript" />
         </a>
     </div>
-</div>
 
-<div id="context-menu">
-    <div class="item">{{COPY_MESSAGE_ID}}</div>
-</div>
+    <div class="main">
+        <div class="buffer">
+            <!-- Magical space goes here -->
+        </div>
 
-<div id="summary-popout" class="summary-popout">
-    <div class="meta__header">
-         <img src="{{SERVER_AVATAR_URL}}" alt="Avatar">
-    </div>
-    <div class="meta__description">
-        <div class="meta__details">
-            <div class="meta__user">{{SERVER_NAME}}</div>
+        <div class="info">
+            <span class="info__title">{{WELCOME_TO}} #{{CHANNEL_NAME}}!</span>
+            {{SUBJECT}}
         </div>
-        <div class="meta__field">
-            <div class="meta__title">{{GUILD_ID_LABEL}}</div>
-            <div class="meta__value">{{GUILD_ID}}</div>
-        </div>
-        <div class="meta__field">
-            <div class="meta__title">{{CHANNEL_ID_LABEL}}</div>
-            <div class="meta__value">{{CHANNEL_ID}}</div>
-        </div>
-        <div class="meta__field">
-            <div class="meta__title">{{CHANNEL_CREATED_AT_LABEL}}</div>
-            <div class="meta__value">{{CHANNEL_CREATED_AT}}</div>
-        </div>
-        <div class="meta__field">
-            <div class="meta__title">{{MESSAGE_COUNT_LABEL}}</div>
-            <div class="meta__value">{{MESSAGE_COUNT}}</div>
-        </div>
-        <div class="meta__field">
-            <div class="meta__title">{{MESSAGE_PARTICIPANTS_LABEL}}</div>
-            <div class="meta__value">{{MESSAGE_PARTICIPANTS}}</div>
+
+        <div class="chatlog">
+            {{MESSAGES}}
         </div>
     </div>
-</div>
-{{META_DATA}}
 
-<div id="image-modal" class="modal">
-    <span class="modal-close">&times;</span>
-    <img class="modal-content" id="modal-image">
-    <a id="modal-caption" href="#" target="_blank" rel="noopener">Ouvrir l'original</a>
-</div>
+    <div class="footer">
+        <span class="footer__text">{{GENERATED_ON}} {{DATE_TIME}}</span>
+        <div class="footer__powered">
+            <span>{{POWERED_BY}}</span>
+            <a href="https://discord-transcript.xouxou-hosting.fr/index" class="footer__powered-link" target="_blank"
+                rel="noopener">
+                <img class="footer__logo" src="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg"
+                    alt="DiscordTranscript">
+                DiscordTranscript
+            </a>
+        </div>
+    </div>
 
-<script>
-    // Right Click - Copy ID
-    let metaPopout = undefined
-    const contextMenu = document.getElementById("context-menu");
-    const scope = document.querySelector("body");
-    const messages = document.getElementsByClassName("chatlog__message-container")
-    let messageID = ""
-    const normalisePosition = (mouseX, mouseY, type) => {
-        if (type == "context") {
-            maxWidth = contextMenu.clientWidth
-            maxHeight = contextMenu.clientHeight
-        } else if (type == "user") {
-            maxWidth = metaPopout.clientWidth
-            maxHeight = metaPopout.clientHeight
+    <div id="context-menu">
+        <div class="item">{{COPY_MESSAGE_ID}}</div>
+    </div>
+
+    <div id="summary-popout" class="summary-popout">
+        <div class="meta__header">
+            <img src="{{SERVER_AVATAR_URL}}" alt="Avatar">
+        </div>
+        <div class="meta__description">
+            <div class="meta__details">
+                <div class="meta__user">{{SERVER_NAME}}</div>
+            </div>
+            <div class="meta__field">
+                <div class="meta__title">{{GUILD_ID_LABEL}}</div>
+                <div class="meta__value">{{GUILD_ID}}</div>
+            </div>
+            <div class="meta__field">
+                <div class="meta__title">{{CHANNEL_ID_LABEL}}</div>
+                <div class="meta__value">{{CHANNEL_ID}}</div>
+            </div>
+            <div class="meta__field">
+                <div class="meta__title">{{CHANNEL_CREATED_AT_LABEL}}</div>
+                <div class="meta__value">{{CHANNEL_CREATED_AT}}</div>
+            </div>
+            <div class="meta__field">
+                <div class="meta__title">{{MESSAGE_COUNT_LABEL}}</div>
+                <div class="meta__value">{{MESSAGE_COUNT}}</div>
+            </div>
+            <div class="meta__field">
+                <div class="meta__title">{{MESSAGE_PARTICIPANTS_LABEL}}</div>
+                <div class="meta__value">{{MESSAGE_PARTICIPANTS}}</div>
+            </div>
+        </div>
+    </div>
+    {{META_DATA}}
+
+    <div id="image-modal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modal-image">
+        <a id="modal-caption" href="#" target="_blank" rel="noopener">Ouvrir l'original</a>
+    </div>
+
+    <script>
+        // Right Click - Copy ID
+        let metaPopout = undefined
+        const contextMenu = document.getElementById("context-menu");
+        const scope = document.querySelector("body");
+        const messages = document.getElementsByClassName("chatlog__message-container")
+        let messageID = ""
+        const normalisePosition = (mouseX, mouseY, type) => {
+            if (type == "context") {
+                maxWidth = contextMenu.clientWidth
+                maxHeight = contextMenu.clientHeight
+            } else if (type == "user") {
+                maxWidth = metaPopout.clientWidth
+                maxHeight = metaPopout.clientHeight
+            }
+
+            let {
+                left: scopeOffsetX,
+                top: scopeOffsetY,
+            } = scope.getBoundingClientRect()
+            scopeOffsetX = scopeOffsetX < 0 ? 0 : scopeOffsetX;
+            scopeOffsetY = scopeOffsetY < 0 ? 0 : scopeOffsetY
+            const scopeX = mouseX - scopeOffsetX;
+            const scopeY = mouseY - scopeOffsetY
+
+            const outOfBoundsOnX = scopeX + maxWidth > scope.clientWidth
+            const outOfBoundsOnY = scopeY + maxHeight > scope.clientHeight
+            let normalizedX = mouseX;
+            let normalizedY = mouseY
+
+            if (outOfBoundsOnX) {
+                normalizedX = scopeOffsetX + scope.clientWidth - maxWidth;
+            }
+
+            if (outOfBoundsOnY) {
+                normalizedY = scopeOffsetY + scope.clientHeight - maxHeight;
+            }
+
+            return { normalizedX, normalizedY };
         }
 
-        let {
-            left: scopeOffsetX,
-            top: scopeOffsetY,
-        } = scope.getBoundingClientRect()
-        scopeOffsetX = scopeOffsetX < 0 ? 0 : scopeOffsetX;
-        scopeOffsetY = scopeOffsetY < 0 ? 0 : scopeOffsetY
-        const scopeX = mouseX - scopeOffsetX;
-        const scopeY = mouseY - scopeOffsetY
-
-        const outOfBoundsOnX = scopeX + maxWidth > scope.clientWidth
-        const outOfBoundsOnY = scopeY + maxHeight > scope.clientHeight
-        let normalizedX = mouseX;
-        let normalizedY = mouseY
-
-        if (outOfBoundsOnX) {
-            normalizedX = scopeOffsetX + scope.clientWidth - maxWidth;
-        }
-
-        if (outOfBoundsOnY) {
-            normalizedY = scopeOffsetY + scope.clientHeight - maxHeight;
-        }
-
-        return { normalizedX, normalizedY };
-    }
-
-    scope.addEventListener("contextmenu", (e) => {
-        event.preventDefault()
-        if (e.target.offsetParent != contextMenu) {
-          contextMenu.classList.remove("visible");
-        }
-    })
-
-    var openContextMenu = function() {
-        const { clientX: mouseX, clientY: mouseY } = event
-        const { normalizedX, normalizedY } = normalisePosition(mouseX, mouseY, "context")
-
-        contextMenu.classList.remove("visible")
-        contextMenu.style.setProperty('left', `${normalizedX}px`);
-        contextMenu.style.setProperty('top', `${normalizedY}px`);
-
-        setTimeout(() => {
-            contextMenu.classList.add("visible");
+        scope.addEventListener("contextmenu", (e) => {
+            event.preventDefault()
+            if (e.target.offsetParent != contextMenu) {
+                contextMenu.classList.remove("visible");
+            }
         })
-        messageID = this.getAttribute("data-message-id");
-    }
 
-    for (var i = 0; i < messages.length; i++) {
-        messages[i].addEventListener("contextmenu", openContextMenu)
-    }
+        var openContextMenu = function () {
+            const { clientX: mouseX, clientY: mouseY } = event
+            const { normalizedX, normalizedY } = normalisePosition(mouseX, mouseY, "context")
 
-    scope.addEventListener("click", (e) => {
-        if (e.target.offsetParent != contextMenu) {
-          contextMenu.classList.remove("visible");
-        } else {
-            navigator.clipboard.writeText(messageID)
-            contextMenu.classList.remove("visible");
-        }
-
-        if (metaPopout && e.target.offsetParent != metaPopout) {
-            metaPopout.classList.remove("mounted")
-        }
-
-        if (e.target.offsetParent != summaryPopout) {
-            summaryPopout.classList.remove("visible")
-        }
-    })
-
-    mainScroll = document.querySelector('.main')
-    mainScroll.addEventListener('scroll', (e) => {
-        if (e.target.offsetParent != contextMenu) {
-            contextMenu.classList.remove("visible");
-        } else {
-            navigator.clipboard.writeText(messageID)
-            contextMenu.classList.remove("visible");
-        }
-
-        if (metaPopout && e.target.offsetParent != metaPopout) {
-            metaPopout.classList.remove("mounted")
-        }
-    });
-
-    
-    const summaryPopout = document.getElementById('summary-popout')
-
-    window.onload = function() {
-        var author_name = document.getElementsByClassName('chatlog__author-name');
-        var followup_author =document.getElementsByClassName('chatlog__followup-author');
-        var followup_avatar = document.getElementsByClassName("chatlog__followup-avatar");
-        var avatar = document.getElementsByClassName("chatlog__avatar");
-        const element_select = [...author_name, ...followup_author, ...followup_avatar, ...avatar]
-
-        for(var i = 0; i < element_select.length; i++) {
-            var element = element_select[i];
-            element.onclick = function() {
-                authorID = this.getAttribute("data-user-id");
-
-                if (metaPopout) {
-                    metaPopout.classList.remove('mounted');
-                }
-
-                metaPopout = document.getElementById('meta-popout-' + authorID);
-
-                const subtractX = document.querySelector('.main').scrollLeft
-                const subtractY = document.querySelector('.main').scrollTop
-
-                const elementX = this.offsetLeft + this.offsetWidth + 10 - subtractX
-                const elementY = this.offsetTop - subtractY
-
-                const { normalizedX, normalizedY } = normalisePosition(elementX, elementY, "user")
-
-                metaPopout.style.setProperty('left', `${normalizedX}px`);
-                metaPopout.style.setProperty('top', `${normalizedY}px`);
-
-                setTimeout(() => {
-                    metaPopout.classList.add("mounted")
-                });
-            }
-        }
-
-        var summaryButton = document.getElementById('summary-button');
-        summaryButton.onclick = function() {
-            if (summaryPopout.classList.contains('visible')) {
-                return;
-            }
-
-            const elementX = this.offsetLeft - 135
-            const elementY = this.offsetTop + 55
-
-            summaryPopout.style.setProperty('left', `${elementX}px`);
-            summaryPopout.style.setProperty('top', `${elementY}px`);
+            contextMenu.classList.remove("visible")
+            contextMenu.style.setProperty('left', `${normalizedX}px`);
+            contextMenu.style.setProperty('top', `${normalizedY}px`);
 
             setTimeout(() => {
-                summaryPopout.classList.add("visible")
-            });
+                contextMenu.classList.add("visible");
+            })
+            messageID = this.getAttribute("data-message-id");
         }
-    }
 
-    document.addEventListener('DOMContentLoaded', () => {
-    // Timestamps: Tooltips
-    tippy('.chatlog__timestamp', {
-        placement: 'top',
-        animation: 'fade',
-        content: (reference) => reference.getAttribute('data-timestamp'),
-        theme: 'disc',
-    });
+        for (var i = 0; i < messages.length; i++) {
+            messages[i].addEventListener("contextmenu", openContextMenu)
+        }
 
-    tippy('.chatlog__short-timestamp', {
-        placement: 'top',
-        animation: 'fade',
-        content: (reference) => reference.getAttribute('data-timestamp'),
-        theme: 'disc',
-    });
+        scope.addEventListener("click", (e) => {
+            if (e.target.offsetParent != contextMenu) {
+                contextMenu.classList.remove("visible");
+            } else {
+                navigator.clipboard.writeText(messageID)
+                contextMenu.classList.remove("visible");
+            }
 
-    tippy('.chatlog__reference-edited-timestamp', {
-        placement: 'top',
-        animation: 'fade',
-        content: (reference) => reference.getAttribute('data-timestamp'),
-        theme: 'disc',
-    });
+            if (metaPopout && e.target.offsetParent != metaPopout) {
+                metaPopout.classList.remove("mounted")
+            }
 
-    // Timestamps: Tooltips
-    tippy('.unix-timestamp', {
-        placement: 'top',
-        animation: 'fade',
-        content: (reference) => reference.getAttribute('data-timestamp'),
-        theme: 'disc',
-    });
+            if (e.target.offsetParent != summaryPopout) {
+                summaryPopout.classList.remove("visible")
+            }
+        })
 
-    {{FANCY_TIME}}
-    });
-</script>
+        mainScroll = document.querySelector('.main')
+        mainScroll.addEventListener('scroll', (e) => {
+            if (e.target.offsetParent != contextMenu) {
+                contextMenu.classList.remove("visible");
+            } else {
+                navigator.clipboard.writeText(messageID)
+                contextMenu.classList.remove("visible");
+            }
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.chatlog__author-name--colored').forEach(element => {
-            const userColor = element.getAttribute('data-user-color');
-            if (userColor) {
-                element.style.setProperty('--user-color', userColor);
+            if (metaPopout && e.target.offsetParent != metaPopout) {
+                metaPopout.classList.remove("mounted")
             }
         });
 
-        document.querySelectorAll('.chatlog__embed-content-container').forEach(element => {
-            const embedColor = element.getAttribute('data-embed-color');
-            if (embedColor) {
-                element.style.setProperty('--embed-color', embedColor);
+
+        const summaryPopout = document.getElementById('summary-popout')
+
+        window.onload = function () {
+            var author_name = document.getElementsByClassName('chatlog__author-name');
+            var followup_author = document.getElementsByClassName('chatlog__followup-author');
+            var followup_avatar = document.getElementsByClassName("chatlog__followup-avatar");
+            var avatar = document.getElementsByClassName("chatlog__avatar");
+            const element_select = [...author_name, ...followup_author, ...followup_avatar, ...avatar]
+
+            for (var i = 0; i < element_select.length; i++) {
+                var element = element_select[i];
+                element.onclick = function () {
+                    authorID = this.getAttribute("data-user-id");
+
+                    if (metaPopout) {
+                        metaPopout.classList.remove('mounted');
+                    }
+
+                    metaPopout = document.getElementById('meta-popout-' + authorID);
+
+                    const subtractX = document.querySelector('.main').scrollLeft
+                    const subtractY = document.querySelector('.main').scrollTop
+
+                    const elementX = this.offsetLeft + this.offsetWidth + 10 - subtractX
+                    const elementY = this.offsetTop - subtractY
+
+                    const { normalizedX, normalizedY } = normalisePosition(elementX, elementY, "user")
+
+                    metaPopout.style.setProperty('left', `${normalizedX}px`);
+                    metaPopout.style.setProperty('top', `${normalizedY}px`);
+
+                    setTimeout(() => {
+                        metaPopout.classList.add("mounted")
+                    });
+                }
             }
-        });
 
-        document.querySelectorAll('.chatlog__component-button--colored').forEach(element => {
-            const buttonColor = element.getAttribute('data-button-color');
-            if (buttonColor) {
-                element.style.setProperty('--button-color', buttonColor);
-            }
-        });
+            var summaryButton = document.getElementById('summary-button');
+            summaryButton.onclick = function () {
+                if (summaryPopout.classList.contains('visible')) {
+                    return;
+                }
 
-        document.querySelectorAll('.chatlog__component-button-link--styled').forEach(element => {
-            const linkStyle = element.getAttribute('data-link-style');
-            if (linkStyle) {
-                element.style.setProperty('--link-style', linkStyle);
-            }
-        });
+                const elementX = this.offsetLeft - 135
+                const elementY = this.offsetTop + 55
 
-        // Image Modal Logic
-        const modal = document.getElementById("image-modal");
-        const modalImg = document.getElementById("modal-image");
-        const captionText = document.getElementById("modal-caption");
+                summaryPopout.style.setProperty('left', `${elementX}px`);
+                summaryPopout.style.setProperty('top', `${elementY}px`);
 
-        document.querySelectorAll('.chatlog__attachment-thumbnail, .chatlog__embed-image, .chatlog__embed-thumbnail').forEach(img => {
-            const parentLink = img.closest('a');
-            if (parentLink) {
-                parentLink.style.cursor = 'default';
-                parentLink.addEventListener('click', function(e) {
-                    e.preventDefault();
+                setTimeout(() => {
+                    summaryPopout.classList.add("visible")
                 });
             }
-            img.onclick = function(e) {
-                // If inside a hidden spoiler, do not open
-                if (this.closest('.spoiler--hidden')) return;
-                
-                // If image is not loaded, do not open
-                if (this.naturalHeight === 0) return;
-                
-                // Check if click is on the image content (handling object-fit: contain)
-                if (this.naturalHeight > 0) {
-                    const ratio = this.naturalWidth / this.naturalHeight;
-                    const domRatio = this.clientWidth / this.clientHeight;
-                    
-                    let renderHeight, renderWidth, xOffset, yOffset;
+        }
 
-                    if (ratio < domRatio) {
-                        renderHeight = this.clientHeight;
-                        renderWidth = renderHeight * ratio;
-                        xOffset = (this.clientWidth - renderWidth) / 2;
-                        yOffset = 0;
-                    } else {
-                        renderWidth = this.clientWidth;
-                        renderHeight = renderWidth / ratio;
-                        xOffset = 0;
-                        yOffset = (this.clientHeight - renderHeight) / 2;
-                    }
-                    
-                    const rect = this.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left - this.clientLeft;
-                    const clickY = e.clientY - rect.top - this.clientTop;
+        document.addEventListener('DOMContentLoaded', () => {
+            // Timestamps: Tooltips
+            tippy('.chatlog__timestamp', {
+                placement: 'top',
+                animation: 'fade',
+                content: (reference) => reference.getAttribute('data-timestamp'),
+                theme: 'disc',
+            });
 
-                    if (clickX < xOffset || clickX > xOffset + renderWidth || clickY < yOffset || clickY > yOffset + renderHeight) {
+            tippy('.chatlog__short-timestamp', {
+                placement: 'top',
+                animation: 'fade',
+                content: (reference) => reference.getAttribute('data-timestamp'),
+                theme: 'disc',
+            });
+
+            tippy('.chatlog__reference-edited-timestamp', {
+                placement: 'top',
+                animation: 'fade',
+                content: (reference) => reference.getAttribute('data-timestamp'),
+                theme: 'disc',
+            });
+
+            // Timestamps: Tooltips
+            tippy('.unix-timestamp', {
+                placement: 'top',
+                animation: 'fade',
+                content: (reference) => reference.getAttribute('data-timestamp'),
+                theme: 'disc',
+            });
+
+            { { FANCY_TIME } }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.chatlog__author-name--colored').forEach(element => {
+                const userColor = element.getAttribute('data-user-color');
+                if (userColor) {
+                    element.style.setProperty('--user-color', userColor);
+                }
+            });
+
+            document.querySelectorAll('.chatlog__embed-content-container').forEach(element => {
+                const embedColor = element.getAttribute('data-embed-color');
+                if (embedColor) {
+                    element.style.setProperty('--embed-color', embedColor);
+                }
+            });
+
+            document.querySelectorAll('.chatlog__component-button--colored').forEach(element => {
+                const buttonColor = element.getAttribute('data-button-color');
+                if (buttonColor) {
+                    element.style.setProperty('--button-color', buttonColor);
+                }
+            });
+
+            document.querySelectorAll('.chatlog__component-button-link--styled').forEach(element => {
+                const linkStyle = element.getAttribute('data-link-style');
+                if (linkStyle) {
+                    element.style.setProperty('--link-style', linkStyle);
+                }
+            });
+
+            // Image Modal Logic
+            const modal = document.getElementById("image-modal");
+            const modalImg = document.getElementById("modal-image");
+            const captionText = document.getElementById("modal-caption");
+
+            document.querySelectorAll('.chatlog__attachment-thumbnail, .chatlog__embed-image, .chatlog__embed-thumbnail').forEach(img => {
+                const parentLink = img.closest('a');
+                if (parentLink) {
+                    parentLink.style.cursor = 'default';
+                    parentLink.addEventListener('click', function (e) {
                         e.preventDefault();
-                        e.stopPropagation();
-                        return;
+                    });
+                }
+                img.onclick = function (e) {
+                    // If inside a hidden spoiler, do not open
+                    if (this.closest('.spoiler--hidden')) return;
+
+                    // If image is not loaded, do not open
+                    if (this.naturalHeight === 0) return;
+
+                    // Check if click is on the image content (handling object-fit: contain)
+                    if (this.naturalHeight > 0) {
+                        const ratio = this.naturalWidth / this.naturalHeight;
+                        const domRatio = this.clientWidth / this.clientHeight;
+
+                        let renderHeight, renderWidth, xOffset, yOffset;
+
+                        if (ratio < domRatio) {
+                            renderHeight = this.clientHeight;
+                            renderWidth = renderHeight * ratio;
+                            xOffset = (this.clientWidth - renderWidth) / 2;
+                            yOffset = 0;
+                        } else {
+                            renderWidth = this.clientWidth;
+                            renderHeight = renderWidth / ratio;
+                            xOffset = 0;
+                            yOffset = (this.clientHeight - renderHeight) / 2;
+                        }
+
+                        const rect = this.getBoundingClientRect();
+                        const clickX = e.clientX - rect.left - this.clientLeft;
+                        const clickY = e.clientY - rect.top - this.clientTop;
+
+                        if (clickX < xOffset || clickX > xOffset + renderWidth || clickY < yOffset || clickY > yOffset + renderHeight) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return;
+                        }
                     }
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                    modal.style.display = "flex";
+
+                    const parentLink = this.closest('a');
+                    if (parentLink && !this.classList.contains('chatlog__embed-thumbnail')) {
+                        modalImg.src = parentLink.href;
+                    } else {
+                        modalImg.src = this.src;
+                    }
+                    captionText.href = parentLink ? parentLink.href : this.src;
                 }
+            });
 
-                e.preventDefault();
-                e.stopPropagation();
-                modal.style.display = "flex";
-
-                const parentLink = this.closest('a');
-                if (parentLink && !this.classList.contains('chatlog__embed-thumbnail')) {
-                    modalImg.src = parentLink.href;
-                } else {
-                    modalImg.src = this.src;
-                }
-                captionText.href = parentLink ? parentLink.href : this.src;
-            }
-        });
-
-        // Close button logic
-        const closeBtn = document.querySelector('.modal-close');
-        closeBtn.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        modal.onclick = function(e) {
-            if (e.target !== modalImg && e.target !== captionText && e.target !== closeBtn) {
+            // Close button logic
+            const closeBtn = document.querySelector('.modal-close');
+            closeBtn.onclick = function () {
                 modal.style.display = "none";
             }
-        }
 
-        document.addEventListener('keydown', function(event) {
-            if (event.key === "Escape" && modal.style.display === "flex") {
-                modal.style.display = "none";
+            modal.onclick = function (e) {
+                if (e.target !== modalImg && e.target !== captionText && e.target !== closeBtn) {
+                    modal.style.display = "none";
+                }
             }
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === "Escape" && modal.style.display === "flex") {
+                    modal.style.display = "none";
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 </body>
+
 </html>
