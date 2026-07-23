@@ -548,7 +548,7 @@ class MessageConstruct:
         """Checks if a message divider should be generated."""
         return bool(
             self.previous_message is None
-            or self.message.reference != ""
+            or self.message_reference
             or self.previous_message.type is not discord.MessageType.default
             or self.interaction != ""
             or self.previous_message.author.id != self.message.author.id
@@ -597,7 +597,7 @@ class MessageConstruct:
                 else DiscordUtils.default_avatar
             )
 
-            if self.message.reference != "" or self.interaction:
+            if self.message_reference or self.interaction:
                 followup_symbol = "<div class='chatlog__followup-symbol'></div>"
 
             time = self.message.created_at
