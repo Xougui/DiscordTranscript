@@ -16,6 +16,12 @@ jobs:
         with:
           script: |
             const actor = context.actor;
+
+            if (actor.endsWith('[bot]')) {
+              console.log(`Bypass du contrôle collaborateur pour le bot: ${actor}`);
+              return;
+            }
+
             let isCollab = false;
             try {
               const res = await github.rest.repos.checkCollaborator({
