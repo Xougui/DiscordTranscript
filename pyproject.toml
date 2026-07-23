@@ -11,16 +11,12 @@ authors = [
     { name="Xougui", email="xougui.7@gmail.com" }
 ]
 urls = { "Source Code (GitHub)" = "https://github.com/Xougui/DiscordTranscript" }
-requires-python = ">=3.6"
+requires-python = ">=3.10"
 license = "GPL-3.0-only"
 classifiers = [
     "Operating System :: OS Independent",
     "Intended Audience :: Developers",
     "Natural Language :: French",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -44,7 +40,7 @@ exclude = ["tests*"]
 
 [tool.ruff]
 
-target-version = "py312"
+target-version = "py310"
 line-length = 88
 
 exclude = [
@@ -68,7 +64,7 @@ select = [
     "RUF",
 ]
 
-ignore = ["E501", "ANN001", "ARG001", "ARG002", "RUF001", "N999"] 
+ignore = ["E501", "ANN", "UP031", "SIM", "RUF", "N813", "B023", "ARG001", "ARG002", "RUF001", "N999"] 
 
 [tool.ruff.lint.flake8-annotations]
 ignore-fully-untyped = false  

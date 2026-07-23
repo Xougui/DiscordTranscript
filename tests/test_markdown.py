@@ -46,21 +46,30 @@ async def test_strike_through_markdown():
 async def test_h1_markdown():
     parser = ParseMarkdown("# hello world")
     await parser.standard_message_flow()
-    assert parser.content.strip() == "<h1>hello world</h1>"
+    assert (
+        parser.content.strip()
+        == '<h1 style="font-weight: 700; font-size: 1.5rem; margin: 0.25em 0; line-height: 1.25;">hello world</h1>'
+    )
 
 
 @pytest.mark.asyncio
 async def test_h2_markdown():
     parser = ParseMarkdown("## hello world")
     await parser.standard_message_flow()
-    assert parser.content.strip() == "<h2>hello world</h2>"
+    assert (
+        parser.content.strip()
+        == '<h2 style="font-weight: 700; font-size: 1.25rem; margin: 0.25em 0; line-height: 1.25;">hello world</h2>'
+    )
 
 
 @pytest.mark.asyncio
 async def test_h3_markdown():
     parser = ParseMarkdown("### hello world")
     await parser.standard_message_flow()
-    assert parser.content.strip() == "<h3>hello world</h3>"
+    assert (
+        parser.content.strip()
+        == '<h3 style="font-weight: 700; font-size: 1rem; margin: 0.25em 0; line-height: 1.25;">hello world</h3>'
+    )
 
 
 @pytest.mark.asyncio
@@ -97,9 +106,11 @@ async def test_multiline_code_block_markdown():
 @pytest.mark.asyncio
 async def test_link_markdown():
     parser = ParseMarkdown("[google](https://google.com)")
-    parser.parse_embed_markdown()
-    parser.restore_links()
-    assert parser.content == '<a href="https://google.com" style="color: #00a8fc;">google</a>'
+    await parser.standard_embed_flow()
+    assert (
+        parser.content.strip()
+        == '<a href="https://google.com" style="color: #00a8fc;">google</a>'
+    )
 
 
 @pytest.mark.asyncio

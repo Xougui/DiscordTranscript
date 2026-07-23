@@ -23,7 +23,7 @@ async def fill_out(
     guild,
     base,
     replacements,
-    placeholders: dict = None,
+    placeholders: dict | None = None,
     bot=None,
     timezone: str = "UTC",
 ):

@@ -13,7 +13,7 @@ class ParseMarkdown:
         placeholders (dict): A dictionary of placeholders to replace.
     """
 
-    def __init__(self, content, placeholders: dict = None):
+    def __init__(self, content, placeholders: dict | None = None):
         """Initializes the ParseMarkdown class.
 
         Args:
@@ -221,7 +221,7 @@ class ParseMarkdown:
                     html += f'<{list_type} class="markup"{style}{start_attr}>\n'
                     list_stack.append((indent, list_type))
                 else:
-                    last_indent, last_type = list_stack[-1]
+                    last_indent, _last_type = list_stack[-1]
 
                     if indent > last_indent:
                         style = (

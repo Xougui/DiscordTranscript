@@ -95,7 +95,7 @@ class MessageConstruct:
         message_dict: dict,
         attachment_handler: AttachmentHandler | None,
         bot: discord_typings.Client | None = None,
-        translations: dict = None,
+        translations: dict | None = None,
     ):
         """Initializes the MessageConstruct.
 
@@ -879,7 +879,7 @@ async def gather_messages(
     military_time,
     attachment_handler: AttachmentHandler | None,
     bot: discord_typings.Client | None = None,
-    translations: dict = None,
+    translations: dict | None = None,
 ) -> tuple[str, dict]:
     """Gathers all messages in a channel and returns the HTML and metadata.
 
