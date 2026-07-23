@@ -53,6 +53,8 @@ exclude = [
     "__pycache__",
     "docs",
     "tests",
+    "README.md",
+    "*.md",
 ]
 
 [tool.ruff.lint]
@@ -86,5 +88,5 @@ force-sort-within-sections = true
 
 line-ending = "lf"
 quote-style = "double"
-docstring-code-format = true
+docstring-code-format = false
 skip-magic-trailing-comma = false
