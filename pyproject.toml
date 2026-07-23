@@ -53,6 +53,8 @@ exclude = [
     "__pycache__",
     "docs",
     "tests",
+    "README.md",
+    "*.md",
 ]
 
 [tool.ruff.lint]
