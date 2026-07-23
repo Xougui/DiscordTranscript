@@ -21,6 +21,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Internet",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -83,7 +84,7 @@ force-sort-within-sections = true
 
 [tool.ruff.format]
 
-line-ending = "lf"
+line-ending = "auto"
 quote-style = "double"
 docstring-code-format = true
 skip-magic-trailing-comma = false

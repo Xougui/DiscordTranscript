@@ -12,7 +12,7 @@ tests:
 
 configuration:
   - changed-files:
-      - any-glob-to-any-file: ['pyproject.toml', 'setup.py', 'MANIFEST.in', '.gitignore', '.vscode/**/*']
+      - any-glob-to-any-file: ['pyproject.toml', 'setup.py', 'MANIFEST.in', '.gitignore', '.gitattributes', '.vscode/**/*']
 
 github_actions:
   - changed-files:
