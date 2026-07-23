@@ -1,6 +1,7 @@
-import pytest
-from unittest.mock import MagicMock, AsyncMock
 import datetime
+from unittest.mock import AsyncMock, MagicMock
+
+import pytest
 
 from DiscordTranscript.construct.transcript import Transcript
 
