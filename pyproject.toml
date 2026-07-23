@@ -84,7 +84,7 @@ force-sort-within-sections = true
 
 [tool.ruff.format]
 
-line-ending = "auto"
+line-ending = "lf"
 quote-style = "double"
 docstring-code-format = true
 skip-magic-trailing-comma = false
