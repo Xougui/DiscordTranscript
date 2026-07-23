@@ -398,14 +398,10 @@ class Embed:
                 and not self.author
                 and not self.footer
                 and not self.provider
-            ):
-                if self.image or self.thumbnail or self.video:
-                    is_image_only = True
+            ) and (self.image or self.thumbnail or self.video):
+                is_image_only = True
 
-        if is_image_only:
-            template = embed_body_image_only
-        else:
-            template = embed_body
+        template = embed_body_image_only if is_image_only else embed_body
 
         self.embed = await fill_out(
             self.guild,

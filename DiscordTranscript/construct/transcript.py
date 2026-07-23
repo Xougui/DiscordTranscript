@@ -244,10 +244,7 @@ class TranscriptDAO:
         _fancy_time = ""
 
         if self.fancy_times:
-            if self.military_time:
-                time_format = "HH:mm"
-            else:
-                time_format = "hh:mm A"
+            time_format = "HH:mm" if self.military_time else "hh:mm A"
 
             _fancy_time = await fill_out(
                 self.channel.guild,

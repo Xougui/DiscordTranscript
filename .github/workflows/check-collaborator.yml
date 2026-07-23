@@ -1,0 +1,37 @@
+name: Check Collaborator Authorization
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  pull_request_target:
+    branches: [ main ]
+
+jobs:
+  verify-collaborator:
+    name: Verify Collaborator Status
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify Collaborator
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const actor = context.actor;
+            let isCollab = false;
+            try {
+              const res = await github.rest.repos.checkCollaborator({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: actor,
+              });
+              if (res.status === 204) {
+                isCollab = true;
+              }
+            } catch (error) {
+              isCollab = false;
+            }
+
+            if (!isCollab) {
+              core.setFailed(`Accès refusé : Seuls les collaborateurs du dépôt sont autorisés à committer ou à proposer des PRs. Utilisateur : ${actor}`);
+            }

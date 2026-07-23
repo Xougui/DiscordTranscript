@@ -1,0 +1,22 @@
+name: Demande de fonctionnalité / Amélioration
+description: Proposer une nouvelle fonctionnalité ou une amélioration pour DiscordTranscript
+title: "[FEATURE] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: Proposez une nouvelle fonctionnalité ou une amélioration du rendu HTML/exporter.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description de la fonctionnalité
+      placeholder: Expliquez ce que vous aimeriez ajouter ou améliorer...
+    validations:
+      required: true
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Cas d'usage / Motivation
+      placeholder: Quel problème cette fonctionnalité permet-elle de résoudre ?
+    validations:
+      required: false

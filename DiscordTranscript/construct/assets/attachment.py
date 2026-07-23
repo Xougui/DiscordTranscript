@@ -146,7 +146,7 @@ class Attachment:
         if file_size == 0:
             return "0 bytes"
         size_name = ("bytes", "KB", "MB")
-        i = int(math.floor(math.log(file_size, 1024)))
+        i = math.floor(math.log(file_size, 1024))
         p = math.pow(1024, i)
         s = round(file_size / p, 2)
         return "%s %s" % (s, size_name[i])

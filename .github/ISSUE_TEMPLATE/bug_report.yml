@@ -1,0 +1,43 @@
+name: Rapport de Bug
+description: Signaler un dysfonctionnement ou une erreur dans la bibliothèque DiscordTranscript
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Signalez un bug de génération, un problème de rendu HTML ou un crash de la librairie.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description du problème
+      placeholder: Décrivez le problème rencontré...
+    validations:
+      required: true
+  - type: input
+    id: python_version
+    attributes:
+      label: Version de Python
+      placeholder: ex: Python 3.11.2
+    validations:
+      required: true
+  - type: input
+    id: discord_lib
+    attributes:
+      label: Librairie Discord et Version
+      placeholder: ex: discord.py v2.3.2 / disnake / nextcord / pycord
+    validations:
+      required: false
+  - type: textarea
+    id: code_snippet
+    attributes:
+      label: Code d'exemple / Reproduction
+      placeholder: Colle un extrait de code minimal permettant de reproduire le bug...
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Traceback
+      placeholder: Collez l'erreur ou la stacktrace complète si disponible...
+    validations:
+      required: false
