@@ -59,7 +59,7 @@ jobs:
           pip install -e .
 
       - name: Check formatting with Ruff
-        run: ruff format --check .
+        run: ruff format --check --diff .
 
       - name: Lint with Ruff
         run: ruff check .
