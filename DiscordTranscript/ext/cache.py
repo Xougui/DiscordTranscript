@@ -77,8 +77,8 @@ def cache():
             else:
                 return _wrap_new_coroutine(value)
 
-        wrapper.cache = _internal_cache
-        wrapper.clear_cache = _internal_cache.clear()
+        setattr(wrapper, "cache", _internal_cache)  # noqa: B010
+        setattr(wrapper, "clear_cache", _internal_cache.clear)  # noqa: B010
         return wrapper
 
     return decorator

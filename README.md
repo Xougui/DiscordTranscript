@@ -65,7 +65,7 @@ A Python library for creating HTML transcripts of Discord channels. This is usef
 
 ## <a id="prérequis"></a>Prérequis
 
--   Python 3.6 ou plus récent
+-   Python 3.10 ou plus récent
 -   `discord.py` v2.4.0 ou plus récent (ou un fork compatible comme `nextcord` ou `disnake`)
 
 ---
@@ -359,7 +359,7 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
 
 ## <a id="prerequisites-en"></a>Prerequisites
 
--   Python 3.6 or newer
+-   Python 3.10 or newer
 -   `discord.py` v2.4.0 or newer (or a compatible fork like `nextcord` or `disnake`)
 
 ---

@@ -1,6 +1,7 @@
-import pytest
-from unittest.mock import MagicMock, AsyncMock
 import datetime
+from unittest.mock import AsyncMock, MagicMock
+
+import pytest
 
 from DiscordTranscript.construct.transcript import Transcript
 
@@ -72,6 +73,7 @@ async def test_message_order_with_before_only(mock_channel):
 
     exported_messages = transcript.messages
 
+    assert exported_messages is not None
     assert len(exported_messages) == 2
     assert exported_messages[0].created_at < exported_messages[1].created_at
 
@@ -108,6 +110,7 @@ async def test_message_order_with_after_only(mock_channel):
 
     exported_messages = transcript.messages
 
+    assert exported_messages is not None
     assert len(exported_messages) == 2
     assert exported_messages[0].created_at < exported_messages[1].created_at
 
@@ -144,5 +147,6 @@ async def test_message_order_with_before_and_after(mock_channel):
 
     exported_messages = transcript.messages
 
+    assert exported_messages is not None
     assert len(exported_messages) == 2
     assert exported_messages[0].created_at < exported_messages[1].created_at

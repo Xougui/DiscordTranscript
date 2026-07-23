@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     import discord as discord_typings
 
 
-def _gather_user_bot(author: discord_typings.Member):
+def _gather_user_bot(author: discord_typings.Member | discord_typings.User):
     if author.bot and author.public_flags.verified_bot:
         return bot_tag_verified
     elif author.bot:
@@ -127,6 +127,7 @@ class MessageConstruct:
 
         self.message_created_at, self.message_edited_at = self.set_time()
         self.meta_data = meta_data
+        self.message_reference: str = ""
 
         self.suppressed_embed_links = []
         if self.message.content:
@@ -283,26 +284,25 @@ class MessageConstruct:
 
     async def build_reference(self):
         """Builds the HTML for a message reference."""
-        if not self.message.reference:
-            self.message.reference = ""
+        if not self.message.reference or not self.message.reference.message_id:
+            self.message_reference = ""
             return
 
-        message: discord_typings.Message = self.message_dict.get(
-            self.message.reference.message_id
-        )
+        ref_msg_id = self.message.reference.message_id
+        message: discord_typings.Message | None = self.message_dict.get(ref_msg_id)
+
+        if not message and hasattr(self.message.channel, "fetch_message"):
+            try:
+                message = await self.message.channel.fetch_message(ref_msg_id)
+            except Exception as e:
+                self.message_reference = ""
+                if type(e).__name__ == "NotFound":
+                    self.message_reference = message_reference_unknown
+                return
 
         if not message:
-            try:
-                message: discord_typings.Message = (
-                    await self.message.channel.fetch_message(
-                        self.message.reference.message_id
-                    )
-                )
-            except (discord.NotFound, discord.HTTPException) as e:
-                self.message.reference = ""
-                if isinstance(e, discord.NotFound):
-                    self.message.reference = message_reference_unknown
-                return
+            self.message_reference = message_reference_unknown
+            return
 
         is_bot = _gather_user_bot(message.author)
         user_colour = await self._gather_user_colour(message.author)
@@ -336,7 +336,7 @@ class MessageConstruct:
             if message.author.display_avatar
             else DiscordUtils.default_avatar
         )
-        self.message.reference = await fill_out(
+        self.message_reference = await fill_out(
             self.guild,
             message_reference,
             [
@@ -359,7 +359,7 @@ class MessageConstruct:
                 ("EDIT", message_edited_at, PARSE_MODE_NONE),
                 ("ICON", icon, PARSE_MODE_NONE),
                 ("USER_ID", str(message.author.id), PARSE_MODE_NONE),
-                ("MESSAGE_ID", str(self.message.reference.message_id), PARSE_MODE_NONE),
+                ("MESSAGE_ID", str(ref_msg_id), PARSE_MODE_NONE),
             ],
             bot=self.bot,
             timezone=self.pytz_timezone,
@@ -460,7 +460,8 @@ class MessageConstruct:
 
         if sticker_image_url.endswith(".json"):
             sticker = await self.message.stickers[0].fetch()
-            sticker_image_url = f"https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/stickers/{sticker.pack_id}/{sticker.id}.gif"
+            pack_id = getattr(sticker, "pack_id", "0")
+            sticker_image_url = f"https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/stickers/{pack_id}/{sticker.id}.gif"
 
         sticker_template = '<div class="chatlog__attachment"><img class="chatlog__sticker" src="{{ATTACH_URL}}" alt="Sticker" title="Sticker"></div>'
 
@@ -619,8 +620,8 @@ class MessageConstruct:
                     ("REFERENCE_SYMBOL", followup_symbol, PARSE_MODE_NONE),
                     (
                         "REFERENCE",
-                        self.message.reference
-                        if self.message.reference
+                        self.message_reference
+                        if self.message_reference
                         else self.interaction,
                         PARSE_MODE_NONE,
                     ),
@@ -713,7 +714,9 @@ class MessageConstruct:
 
     async def build_remove(self):
         """Builds the HTML for a message about a user being removed from a thread."""
-        removed_member: discord_typings.Member = self.message.mentions[0]
+        removed_member: discord_typings.Member | discord_typings.User = (
+            self.message.mentions[0]
+        )
         self.message_html += await fill_out(
             self.guild,
             message_thread_remove,
@@ -748,7 +751,9 @@ class MessageConstruct:
 
     async def build_add(self):
         """Builds the HTML for a message about a user being added to a thread."""
-        removed_member: discord_typings.Member = self.message.mentions[0]
+        removed_member: discord_typings.Member | discord_typings.User = (
+            self.message.mentions[0]
+        )
         self.message_html += await fill_out(
             self.guild,
             message_thread_add,
@@ -782,11 +787,13 @@ class MessageConstruct:
         )
 
     @cache()
-    async def _gather_member(self, author: discord_typings.Member):
+    async def _gather_member(
+        self, author: discord_typings.Member | discord_typings.User
+    ):
         """Gathers a member from the guild.
 
         Args:
-            author (discord.Member): The member to gather.
+            author (discord.Member | discord.User): The user to gather the member from.
 
         Returns:
             Optional[discord.Member]: The gathered member, or None if not found.
@@ -801,26 +808,32 @@ class MessageConstruct:
         except Exception:
             return None
 
-    async def _gather_user_colour(self, author: discord_typings.Member):
+    async def _gather_user_colour(
+        self, author: discord_typings.Member | discord_typings.User
+    ):
         """Gathers a user's colour.
 
         Args:
-            author (discord.Member): The user to gather the colour from.
+            author (discord.Member | discord.User): The user to gather the colour from.
 
         Returns:
             str: The user's colour.
         """
         member = await self._gather_member(author)
         user_colour = (
-            member.colour if member and str(member.colour) != "#000000" else "#FFFFFF"
+            member.colour
+            if member and hasattr(member, "colour") and str(member.colour) != "#000000"
+            else "#FFFFFF"
         )
         return str(user_colour)
 
-    async def _gather_user_icon(self, author: discord_typings.Member):
+    async def _gather_user_icon(
+        self, author: discord_typings.Member | discord_typings.User
+    ):
         """Gathers a user's icon.
 
         Args:
-            author (discord.Member): The user to gather the icon from.
+            author (discord.Member | discord.User): The user to gather the icon from.
 
         Returns:
             str: The user's icon.
@@ -901,15 +914,24 @@ async def gather_messages(
 
     message_dict = {message.id: message for message in messages}
 
-    if messages and "thread" in str(messages[0].channel.type) and messages[0].reference:
-        channel = guild.get_channel(messages[0].reference.channel_id)
+    if (
+        messages
+        and "thread" in str(messages[0].channel.type)
+        and messages[0].reference
+        and messages[0].reference.channel_id
+        and messages[0].reference.message_id
+    ):
+        ref_channel_id = messages[0].reference.channel_id
+        ref_msg_id = messages[0].reference.message_id
+        channel = guild.get_channel(ref_channel_id)
 
         if not channel:
-            channel = await guild.fetch_channel(messages[0].reference.channel_id)
+            channel = await guild.fetch_channel(ref_channel_id)
 
-        message = await channel.fetch_message(messages[0].reference.message_id)
-        messages[0] = message
-        messages[0].reference = None
+        if hasattr(channel, "fetch_message"):
+            message = await channel.fetch_message(ref_msg_id)
+            messages[0] = message
+            messages[0].reference = None
 
     for message in messages:
         mc = MessageConstruct(

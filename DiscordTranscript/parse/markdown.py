@@ -1,5 +1,6 @@
 import html
 import re
+from typing import overload
 
 from DiscordTranscript.ext.emoji_convert import convert_emoji
 
@@ -13,7 +14,7 @@ class ParseMarkdown:
         placeholders (dict): A dictionary of placeholders to replace.
     """
 
-    def __init__(self, content, placeholders: dict | None = None):
+    def __init__(self, content: str, placeholders: dict | None = None):
         """Initializes the ParseMarkdown class.
 
         Args:
@@ -25,7 +26,25 @@ class ParseMarkdown:
         self.placeholders = placeholders or {}
         self.links_placeholders = {}
 
-    def add_link_placeholder(self, full_tag=None, start_tag=None, end_tag=None):
+    @overload
+    def add_link_placeholder(self, *, full_tag: str) -> str: ...
+    @overload
+    def add_link_placeholder(
+        self, *, start_tag: str, end_tag: str
+    ) -> tuple[str, str]: ...
+    @overload
+    def add_link_placeholder(
+        self,
+        full_tag: str | None = None,
+        start_tag: str | None = None,
+        end_tag: str | None = None,
+    ) -> str | tuple[str, str]: ...
+    def add_link_placeholder(
+        self,
+        full_tag: str | None = None,
+        start_tag: str | None = None,
+        end_tag: str | None = None,
+    ) -> str | tuple[str, str]:
         """Adds a link placeholder.
 
         Args:
@@ -160,7 +179,7 @@ class ParseMarkdown:
             ],
         )
 
-        self.content = await convert_emoji([word for word in self.content])
+        self.content = await convert_emoji(self.content)
 
         for x in holder:
             p, r = x
@@ -562,12 +581,13 @@ class ParseMarkdown:
         """Parses https and http links."""
         regex = r"(&lt;https?:\/\/.*?&gt;)|((?<!\]\()https?:\/\/(?:[^\s<&]|&(?!lt;|gt;|quot;))+)"
 
-        def replace_link(match):
+        def replace_link(match: re.Match[str]) -> str:
             if match.group(1):
                 full_match = match.group(1)
                 url = full_match[4:-4]
                 full_tag = f'<a href="{url}" style="color: #00a8fc;">{url}</a>'
-                return self.add_link_placeholder(full_tag=full_tag)
+                ph = self.add_link_placeholder(full_tag=full_tag)
+                return ph if isinstance(ph, str) else ph[0]
 
             url = match.group(2)
 
@@ -594,6 +614,8 @@ class ParseMarkdown:
             full_tag = (
                 f'<a href="{cleaned_url}" style="color: #00a8fc;">{cleaned_url}</a>'
             )
-            return self.add_link_placeholder(full_tag=full_tag) + suffix
+            ph = self.add_link_placeholder(full_tag=full_tag)
+            placeholder_str = ph if isinstance(ph, str) else ph[0]
+            return placeholder_str + suffix
 
         self.content = re.sub(regex, replace_link, self.content)

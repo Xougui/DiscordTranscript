@@ -1,4 +1,5 @@
 import pytest
+
 from DiscordTranscript.parse.markdown import ParseMarkdown
 
 
