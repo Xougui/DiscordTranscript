@@ -69,7 +69,8 @@ class Reaction:
             emoji_type (str): The type of emoji (e.g. "gif", "png").
         """
         pattern = r":.*:(\d*)"
-        emoji_id = re.search(pattern, str(self.reaction.emoji)).group(1)
+        match = re.search(pattern, str(self.reaction.emoji))
+        emoji_id = match.group(1) if match else ""
         self.reaction = await fill_out(
             self.guild,
             custom_emoji,

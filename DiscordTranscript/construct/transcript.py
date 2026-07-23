@@ -10,7 +10,6 @@ from DiscordTranscript.construct.assets.component import Component
 from DiscordTranscript.construct.attachment_handler import AttachmentHandler
 from DiscordTranscript.construct.message import gather_messages
 from DiscordTranscript.ext.cache import clear_cache
-from DiscordTranscript.ext.discord_import import discord
 from DiscordTranscript.ext.discord_utils import DiscordUtils
 from DiscordTranscript.ext.html_generator import (
     PARSE_MODE_HTML_SAFE,
@@ -96,7 +95,7 @@ class TranscriptDAO:
         """
         translations = TRANSLATIONS.get(self.language, TRANSLATIONS["en"])
         message_html, meta_data = await gather_messages(
-            self.messages,
+            self.messages or [],
             self.channel.guild,
             self.pytz_timezone,
             self.military_time,
@@ -109,7 +108,7 @@ class TranscriptDAO:
         Component.menu_div_id = 0
         return self
 
-    async def export_transcript(self, message_html: str, meta_data: str):
+    async def export_transcript(self, message_html: str, meta_data: dict):
         """Exports the transcript to HTML.
 
         Args:
@@ -204,7 +203,7 @@ class TranscriptDAO:
 
         raw_channel_topic = (
             self.channel.topic
-            if isinstance(self.channel, discord.TextChannel) and self.channel.topic
+            if hasattr(self.channel, "topic") and self.channel.topic
             else ""
         )
 
@@ -265,7 +264,7 @@ class TranscriptDAO:
                 ("GUILD_ID", str(self.channel.guild.id), PARSE_MODE_NONE),
                 ("SERVER_AVATAR_URL", str(guild_icon), PARSE_MODE_NONE),
                 ("CHANNEL_NAME", f"{self.channel.name}"),
-                ("MESSAGE_COUNT", str(len(self.messages))),
+                ("MESSAGE_COUNT", str(len(self.messages or []))),
                 ("MESSAGES", message_html, PARSE_MODE_NONE),
                 ("META_DATA", meta_data_html, PARSE_MODE_NONE),
                 ("DATE_TIME", str(time_now)),
@@ -337,13 +336,13 @@ class Transcript(TranscriptDAO):
 
         try:
             return await super().build_transcript()
-        except discord.errors.Forbidden:
-            self.html = "Whoops! I don't have permission to see this channel."
-            return self
-        except discord.errors.HTTPException:
-            self.html = "Whoops! Something went wrong while fetching the messages."
-            return self
-        except Exception:
+        except Exception as e:
+            if type(e).__name__ == "Forbidden":
+                self.html = "Whoops! I don't have permission to see this channel."
+                return self
+            if type(e).__name__ == "HTTPException":
+                self.html = "Whoops! Something went wrong while fetching the messages."
+                return self
             self.html = "Whoops! Something went wrong..."
             traceback.print_exc()
             print(

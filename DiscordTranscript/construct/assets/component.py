@@ -326,7 +326,7 @@ class Component:
 
         return content
 
-    async def flow(self):
+    async def flow(self) -> str:
         """Builds the components and returns the HTML.
 
         Returns:

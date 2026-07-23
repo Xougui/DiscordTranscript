@@ -43,7 +43,7 @@ class Attachment:
         self.bot = bot
         self.timezone = timezone
 
-    async def flow(self):
+    async def flow(self) -> str:
         """Builds the attachment and returns the HTML.
 
         Returns:

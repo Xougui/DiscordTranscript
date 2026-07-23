@@ -1,11 +1,13 @@
+from typing import Any
+
 discord_modules = ["nextcord", "disnake", "discord"]
-discord = None
-discord_errors = None
+discord: Any = None
+discord_errors: Any = None
 
 for module in discord_modules:
     try:
         discord = __import__(module)
-        discord.module = module
+        setattr(discord, "module", module)  # noqa: B010
 
         if hasattr(discord, "DiscordException"):
             discord_errors = discord.DiscordException

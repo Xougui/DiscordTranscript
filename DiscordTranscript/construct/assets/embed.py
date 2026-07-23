@@ -61,9 +61,9 @@ class Embed:
         guild (discord.Guild): The guild the embed is in.
     """
 
-    r: str
-    g: str
-    b: str
+    r: int
+    g: int
+    b: int
     title: str
     description: str
     author: str
@@ -99,7 +99,7 @@ class Embed:
         self.provider = ""
         self.video = ""
 
-    async def flow(self):
+    async def flow(self) -> str:
         """Builds the embed and returns the HTML.
 
         Returns:
@@ -119,13 +119,15 @@ class Embed:
         await self.build_footer()
         await self.build_embed()
 
-        return self.embed
+        return self.embed_html
 
     def build_colour(self):
         """Builds the color of the embed."""
         self.r, self.g, self.b = (
             (self.embed.colour.r, self.embed.colour.g, self.embed.colour.b)
-            if self.embed.colour != self.check_against
+            if self.embed.colour
+            and self.embed.colour != self.check_against
+            and hasattr(self.embed.colour, "r")
             else (0x20, 0x22, 0x25)
         )
 
@@ -162,7 +164,7 @@ class Embed:
         """Builds the title of the embed."""
         self.title = (
             html.escape(self.embed.title)
-            if self.embed.title != self.check_against
+            if self.embed.title and self.embed.title != self.check_against
             else ""
         )
 
@@ -179,7 +181,7 @@ class Embed:
         """Builds the description of the embed."""
         self.description = (
             html.escape(self.embed.description)
-            if self.embed.description != self.check_against
+            if self.embed.description and self.embed.description != self.check_against
             else ""
         )
 
@@ -200,16 +202,16 @@ class Embed:
             return
 
         for field in self.embed.fields:
-            field.name = html.escape(field.name)
-            field.value = html.escape(field.value)
+            field_name = html.escape(field.name) if field.name else ""
+            field_value = html.escape(field.value) if field.value else ""
 
             if field.inline:
                 self.fields += await fill_out(
                     self.guild,
                     embed_field_inline,
                     [
-                        ("FIELD_NAME", field.name, PARSE_MODE_SPECIAL_EMBED),
-                        ("FIELD_VALUE", field.value, PARSE_MODE_EMBED),
+                        ("FIELD_NAME", field_name, PARSE_MODE_SPECIAL_EMBED),
+                        ("FIELD_VALUE", field_value, PARSE_MODE_EMBED),
                     ],
                     bot=self.bot,
                     timezone=self.timezone,
@@ -219,8 +221,8 @@ class Embed:
                     self.guild,
                     embed_field,
                     [
-                        ("FIELD_NAME", field.name, PARSE_MODE_SPECIAL_EMBED),
-                        ("FIELD_VALUE", field.value, PARSE_MODE_EMBED),
+                        ("FIELD_NAME", field_name, PARSE_MODE_SPECIAL_EMBED),
+                        ("FIELD_VALUE", field_value, PARSE_MODE_EMBED),
                     ],
                     bot=self.bot,
                     timezone=self.timezone,
@@ -230,7 +232,11 @@ class Embed:
         """Builds the author of the embed."""
         self.author = (
             html.escape(self.embed.author.name)
-            if (self.embed.author and self.embed.author.name != self.check_against)
+            if (
+                self.embed.author
+                and self.embed.author.name
+                and self.embed.author.name != self.check_against
+            )
             else ""
         )
 
@@ -347,7 +353,11 @@ class Embed:
         """Builds the footer of the embed."""
         self.footer = (
             html.escape(self.embed.footer.text)
-            if (self.embed.footer and self.embed.footer.text != self.check_against)
+            if (
+                self.embed.footer
+                and self.embed.footer.text
+                and self.embed.footer.text != self.check_against
+            )
             else ""
         )
 
@@ -403,7 +413,7 @@ class Embed:
 
         template = embed_body_image_only if is_image_only else embed_body
 
-        self.embed = await fill_out(
+        self.embed_html = await fill_out(
             self.guild,
             template,
             [
