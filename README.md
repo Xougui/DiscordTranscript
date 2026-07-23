@@ -254,7 +254,7 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
 
   transcript = await DiscordTranscript.raw_export(
       ctx.channel,
-      messages=my_messages, # Fournit la liste de messages
+      messages=my_messages,  # Fournit la liste de messages
       bot=bot,
   )
   ```
@@ -263,7 +263,7 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      limit=100, # Limite à 100 messages
+      limit=100,  # Limite à 100 messages
       bot=bot,
   )
   ```
@@ -276,7 +276,7 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
       ctx.channel,
       # Exportera les messages envoyés entre le 10 et le 20 juin 2023
       after=datetime.datetime(2023, 6, 10),  # Après le 10 juin 2023
-      before=datetime.datetime(2023, 6, 20), # Avant le 20 juin 2023
+      before=datetime.datetime(2023, 6, 20),  # Avant le 20 juin 2023
       bot=bot,
   )
   ```
@@ -285,7 +285,7 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      tz_info="Europe/Paris", # Fuseau horaire de Paris
+      tz_info="Europe/Paris",  # Fuseau horaire de Paris
       bot=bot,
   )
   ```
@@ -294,7 +294,7 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      military_time=False, # Affiche 1:00 PM au lieu de 13:00
+      military_time=False,  # Affiche 1:00 PM au lieu de 13:00
       bot=bot,
   )
   ```
@@ -303,7 +303,7 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      fancy_times=False, # Affiche la date complète (ex: 23/09/2025)
+      fancy_times=False,  # Affiche la date complète (ex: 23/09/2025)
       bot=bot,
   )
   ```
@@ -312,7 +312,7 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      bot=bot, # Fournit l'instance du bot
+      bot=bot,  # Fournit l'instance du bot
   )
   ```
 
@@ -320,7 +320,7 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      guild=ctx.guild, # Fournit l'instance du serveur
+      guild=ctx.guild,  # Fournit l'instance du serveur
       bot=bot,
   )
   ```
@@ -549,7 +549,7 @@ Here’s how you can use the parameters to customize your transcripts.
 
   transcript = await DiscordTranscript.raw_export(
       ctx.channel,
-      messages=my_messages, # Provide the list of messages
+      messages=my_messages,  # Provide the list of messages
       bot=bot,
   )
   ```
@@ -558,7 +558,7 @@ Here’s how you can use the parameters to customize your transcripts.
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      limit=100, # Limit to 100 messages
+      limit=100,  # Limit to 100 messages
       bot=bot,
   )
   ```
@@ -571,7 +571,7 @@ Here’s how you can use the parameters to customize your transcripts.
       ctx.channel,
       # Will export messages sent between June 10th and June 20th, 2023
       after=datetime.datetime(2023, 6, 10),  # After June 10, 2023
-      before=datetime.datetime(2023, 6, 20), # Before June 20, 2023
+      before=datetime.datetime(2023, 6, 20),  # Before June 20, 2023
       bot=bot,
   )
   ```
@@ -580,7 +580,7 @@ Here’s how you can use the parameters to customize your transcripts.
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      tz_info="America/New_York", # New York timezone
+      tz_info="America/New_York",  # New York timezone
       bot=bot,
   )
   ```
@@ -589,7 +589,7 @@ Here’s how you can use the parameters to customize your transcripts.
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      military_time=False, # Displays 1:00 PM instead of 13:00
+      military_time=False,  # Displays 1:00 PM instead of 13:00
       bot=bot,
   )
   ```
@@ -598,7 +598,7 @@ Here’s how you can use the parameters to customize your transcripts.
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      fancy_times=False, # Displays the full date (e.g., 09/23/2025)
+      fancy_times=False,  # Displays the full date (e.g., 09/23/2025)
       bot=bot,
   )
   ```
@@ -607,7 +607,7 @@ Here’s how you can use the parameters to customize your transcripts.
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      bot=bot, # Provide the bot instance
+      bot=bot,  # Provide the bot instance
   )
   ```
 
@@ -615,7 +615,7 @@ Here’s how you can use the parameters to customize your transcripts.
   ```python
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      guild=ctx.guild, # Provide the guild instance
+      guild=ctx.guild,  # Provide the guild instance
       bot=bot,
   )
   ```
