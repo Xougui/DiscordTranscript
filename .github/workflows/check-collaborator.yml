@@ -3,11 +3,10 @@ name: Check Collaborator Authorization
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
   pull_request_target:
     branches: [ main ]
-
-permissions:
-  contents: read
 
 jobs:
   verify-collaborator:
