@@ -1,0 +1,19 @@
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ['README.md', 'docs/**/*', 'LICENSE', '*.md']
+
+core:
+  - changed-files:
+      - any-glob-to-any-file: ['DiscordTranscript/**/*', 'generate_sample.py']
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file: 'tests/**/*'
+
+configuration:
+  - changed-files:
+      - any-glob-to-any-file: ['pyproject.toml', 'setup.py', 'MANIFEST.in', '.gitignore', '.vscode/**/*']
+
+github_actions:
+  - changed-files:
+      - any-glob-to-any-file: '.github/**/*'

@@ -1,0 +1,45 @@
+name: "Pull Request Labeler"
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  verify-collaborator:
+    name: Verify Repository Collaborator
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Collaborator Status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const actor = context.actor;
+            let isCollab = false;
+            try {
+              const res = await github.rest.repos.checkCollaborator({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: actor,
+              });
+              if (res.status === 204) {
+                isCollab = true;
+              }
+            } catch (error) {
+              isCollab = false;
+            }
+
+            if (!isCollab) {
+              core.setFailed(`Accès refusé : Seuls les collaborateurs du dépôt sont autorisés à ouvrir une PR. Utilisateur : ${actor}`);
+            }
+
+  label:
+    name: Apply PR Labels
+    needs: verify-collaborator
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/labeler@v5
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
