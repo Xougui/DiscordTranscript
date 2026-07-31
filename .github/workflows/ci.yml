@@ -63,10 +63,10 @@ jobs:
           pip install -e .
 
       - name: Check formatting with Ruff
-        run: ruff format --check --diff DiscordTranscript tests setup.py generate_sample.py
+        run: ruff format --check --diff DiscordTranscript tests setup.py examples
 
       - name: Lint with Ruff
-        run: ruff check DiscordTranscript tests setup.py generate_sample.py
+        run: ruff check DiscordTranscript tests setup.py examples
 
       - name: Run tests with pytest
         run: pytest

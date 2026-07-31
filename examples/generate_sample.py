@@ -953,8 +953,9 @@ async def main():
 
     print(f"Hostname détecté : {hostname}")
 
-    output_filename = "test_render.html"
-    local_path = Path(output_filename)
+    output_dir = Path(__file__).parent
+    output_dir.mkdir(exist_ok=True)
+    local_path = output_dir / "test_render.html"
 
     local_path.write_text(html, encoding="utf-8")
     print(f"Generated local file: {local_path.absolute()}")

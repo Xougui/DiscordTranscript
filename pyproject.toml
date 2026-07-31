@@ -40,7 +40,7 @@ include-package-data = true
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["DiscordTranscript*"]
-exclude = ["tests*"]
+exclude = ["tests*", "examples*", "generate_sample*"]
 
 [tool.ruff]
 
