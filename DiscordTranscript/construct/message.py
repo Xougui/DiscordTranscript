@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from datetime import timedelta
 import html
 import re
@@ -491,29 +492,54 @@ class MessageConstruct:
                 if not (embed.url and embed.url in self.suppressed_embed_links)
             ]
 
-        for e in self.message.embeds:
-            self.embeds += await Embed(
-                e, self.guild, bot=self.bot, timezone=self.pytz_timezone
-            ).flow()
+        if self.message.embeds:
+            embed_results = await asyncio.gather(
+                *(
+                    Embed(
+                        e, self.guild, bot=self.bot, timezone=self.pytz_timezone
+                    ).flow()
+                    for e in self.message.embeds
+                )
+            )
+            self.embeds += "".join(embed_results)
 
-        for a in self.message.attachments:
-            if self.attachment_handler and isinstance(
-                self.attachment_handler, AttachmentHandler
-            ):
-                a = await self.attachment_handler.process_asset(a)
-            self.attachments += await Attachment(
-                a, self.guild, bot=self.bot, timezone=self.pytz_timezone
-            ).flow()
+        if self.message.attachments:
 
-        for c in self.message.components:
-            self.components += await Component(
-                c, self.guild, bot=self.bot, timezone=self.pytz_timezone
-            ).flow()
+            async def _process_att(att):
+                if self.attachment_handler and isinstance(
+                    self.attachment_handler, AttachmentHandler
+                ):
+                    att = await self.attachment_handler.process_asset(att)
+                return await Attachment(
+                    att, self.guild, bot=self.bot, timezone=self.pytz_timezone
+                ).flow()
 
-        for r in self.message.reactions:
-            self.reactions += await Reaction(
-                r, self.guild, bot=self.bot, timezone=self.pytz_timezone
-            ).flow()
+            att_results = await asyncio.gather(
+                *(_process_att(a) for a in self.message.attachments)
+            )
+            self.attachments += "".join(att_results)
+
+        if self.message.components:
+            comp_results = await asyncio.gather(
+                *(
+                    Component(
+                        c, self.guild, bot=self.bot, timezone=self.pytz_timezone
+                    ).flow()
+                    for c in self.message.components
+                )
+            )
+            self.components += "".join(comp_results)
+
+        if self.message.reactions:
+            react_results = await asyncio.gather(
+                *(
+                    Reaction(
+                        r, self.guild, bot=self.bot, timezone=self.pytz_timezone
+                    ).flow()
+                    for r in self.message.reactions
+                )
+            )
+            self.reactions += "".join(react_results)
 
         if self.reactions:
             self.reactions = f'<div class="chatlog__reactions">{self.reactions}</div>'
