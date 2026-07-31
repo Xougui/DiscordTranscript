@@ -1,3 +1,4 @@
+import asyncio
 import unicodedata
 
 import aiohttp
@@ -12,20 +13,29 @@ cdn_fmt = (
 
 
 @cache()
-async def valid_src(src: str) -> bool:
+async def valid_src(src: str, session: aiohttp.ClientSession | None = None) -> bool:
     """Checks if a URL is valid.
 
     Args:
         src (str): The URL to check.
+        session (Optional[aiohttp.ClientSession]): Shared HTTP session.
 
     Returns:
         bool: Whether the URL is valid.
     """
+    close_session = False
+    if session is None:
+        session = aiohttp.ClientSession()
+        close_session = True
+
     try:
-        async with aiohttp.ClientSession() as session, session.get(src) as resp:
+        async with session.get(src) as resp:
             return resp.status == 200
-    except aiohttp.ClientConnectorError:
+    except (aiohttp.ClientConnectorError, aiohttp.ClientError):
         return False
+    finally:
+        if close_session:
+            await session.close()
 
 
 def valid_category(char: str) -> bool:
@@ -57,11 +67,12 @@ async def codepoint(codes: list) -> str:
     return "-".join(codes)
 
 
-async def convert(char: str) -> str:
+async def convert(char: str, session: aiohttp.ClientSession | None = None) -> str:
     """Converts a character to an emoji image.
 
     Args:
         char (str): The character to convert.
+        session (Optional[aiohttp.ClientSession]): Shared HTTP session.
 
     Returns:
         str: The HTML for the emoji image.
@@ -82,22 +93,38 @@ async def convert(char: str) -> str:
 
     src = cdn_fmt.format(codepoint=await codepoint([f"{ord(c):x}" for c in char]))
 
-    if await valid_src(src):
+    if await valid_src(src, session=session):
         return f'<img class="emoji emoji--small" src="{src}" alt="{char}" title="{name}" aria-label="Emoji: {name}">'
     else:
         return char
 
 
-async def convert_emoji(string: str) -> str:
-    """Converts a string of emojis to a string of emoji images.
+async def convert_emoji(
+    string: str, session: aiohttp.ClientSession | None = None
+) -> str:
+    """Converts a string of emojis to a string of emoji images concurrently.
 
     Args:
         string (str): The string to convert.
+        session (Optional[aiohttp.ClientSession]): Shared HTTP session.
 
     Returns:
         str: The converted string.
     """
-    x = []
-    for ch in graphemes(string):
-        x.append(await convert(ch))
-    return "".join(x)
+    grapheme_list = list(graphemes(string))
+    if not grapheme_list:
+        return ""
+
+    close_session = False
+    if session is None:
+        session = aiohttp.ClientSession()
+        close_session = True
+
+    try:
+        results = await asyncio.gather(
+            *(convert(ch, session=session) for ch in grapheme_list)
+        )
+        return "".join(results)
+    finally:
+        if close_session:
+            await session.close()
