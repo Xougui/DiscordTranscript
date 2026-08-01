@@ -7,67 +7,67 @@
   {
     "id": "v1.4.1",
     "name": "Version Stable v1.4.1",
-    "url": "exemples/versions/v1.4.1.html",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.4.1.html",
     "isDefault": true
   },
   {
     "id": "v1.4.0",
     "name": "Version Stable v1.4.0",
-    "url": "exemples/versions/v1.4.0.html",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.4.0.html",
     "isDefault": false
   },
   {
     "id": "v1.3.1",
     "name": "Version Stable v1.3.1",
-    "url": "exemples/versions/v1.3.1.html",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.3.1.html",
     "isDefault": false
   },
   {
     "id": "v1.3.0",
     "name": "Version Stable v1.3.0",
-    "url": "exemples/versions/v1.3.0.html",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.3.0.html",
     "isDefault": false
   },
   {
     "id": "v1.2.1",
     "name": "Version Stable v1.2.1",
-    "url": "exemples/versions/v1.2.1.html",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.2.1.html",
     "isDefault": false
   },
   {
     "id": "v1.2.0",
     "name": "Version Stable v1.2.0",
-    "url": "exemples/versions/v1.2.0.html",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.2.0.html",
     "isDefault": false
   },
   {
     "id": "v1.1.0",
     "name": "Version Stable v1.1.0",
-    "url": "exemples/versions/v1.1.0.html",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.1.0.html",
     "isDefault": false
   },
   {
     "id": "v1.0.3",
     "name": "Version Stable v1.0.3",
-    "url": "exemples/versions/v1.0.3.html",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.0.3.html",
     "isDefault": false
   },
   {
     "id": "v1.0.2",
     "name": "Version Stable v1.0.2",
-    "url": "exemples/versions/v1.0.2.html",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.0.2.html",
     "isDefault": false
   },
   {
     "id": "v1.0.1",
     "name": "Version Stable v1.0.1",
-    "url": "exemples/versions/v1.0.1.html",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.0.1.html",
     "isDefault": false
   },
   {
     "id": "v1.0.0",
     "name": "Version Stable v1.0.0",
-    "url": "exemples/versions/v1.0.0.html",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.0.0.html",
     "isDefault": false
   }
 ]
