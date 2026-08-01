@@ -1,18 +1,20 @@
-name: Update Site Examples
+name: Update Examples & Versions
 
 on:
   push:
     branches:
       - main
-  release:
-    types: [published]
+    tags:
+      - 'v*'
 
 jobs:
-  update-site:
+  update-examples:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout DiscordTranscript
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,29 +26,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install .
 
-      - name: Generate test_render.html
-        run: |
-          python examples/generate_sample.py
-
-      - name: Checkout Transcript_Site repo
-        uses: actions/checkout@v4
-        with:
-          repository: 'Xougui/Transcript_Site'
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-          path: 'site_repo'
-
-      - name: Copy generated files & versions
+      - name: Process Examples Generation
         run: |
           mkdir -p examples/versions
-          mkdir -p site_repo/exemples/versions
 
-          # Si c'est une Release/Tag, enregistrer l'exemple de la version dans DiscordTranscript/examples/versions/
-          if [ "${{ github.event_name }}" = "release" ]; then
-            TAG_NAME="${{ github.event.release.tag_name }}"
+          # 1. Toujours générer le rendu actuel
+          python examples/generate_sample.py
+
+          # 2. Si c'est un push sur une Release / Tag (ex: v1.4.2), créer l'archive de version
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+            echo "Nouveau Tag détecté : ${TAG_NAME}"
             cp examples/test_render.html "examples/versions/${TAG_NAME}.html"
           fi
 
-          # Génération et mise à jour dynamique de versions.json dans DiscordTranscript/examples/versions/
+          # 3. Reconstruire dynamiquement versions.json avec toutes les versions archivées dans examples/versions/
           python -c "
           import json, os
 
@@ -61,7 +55,9 @@ jobs:
               }
           ]
 
+          # Lister tous les fichiers .html de version
           files = sorted([f for f in os.listdir(vdir) if f.endswith('.html')], reverse=True)
+          
           for idx, filename in enumerate(files):
               ver_id = filename[:-5]
               raw_url = f'https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/{filename}'
@@ -69,33 +65,23 @@ jobs:
                   'id': ver_id,
                   'name': f'Version Stable {ver_id}',
                   'url': raw_url,
-                  'isDefault': idx == 0
+                  'isDefault': idx == 0  # La version archivée la plus récente est la version stable par défaut
               })
 
           with open(os.path.join(vdir, 'versions.json'), 'w', encoding='utf-8') as f:
               json.dump(data, f, indent=2, ensure_ascii=False)
           "
 
-          # Synchroniser vers Transcript_Site
-          cp -r examples/versions/* site_repo/exemples/versions/
-
-      - name: Commit and Push to DiscordTranscript
+      - name: Commit & Push changes to main
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add examples/versions/
+          
+          # Se placer sur la branche main si on est sur un checkout de tag
+          git checkout main || git checkout -b main
+          git add examples/test_render.html examples/versions/
+          
           if ! git diff --staged --quiet; then
-            git commit -m "auto: update versions archive & versions.json [skip ci]"
-            git push
-          fi
-
-      - name: Commit and Push to Transcript_Site
-        run: |
-          cd site_repo
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          if ! git diff --staged --quiet; then
-            git commit -m "auto: update mocked example & version archives [skip ci]"
-            git push
+            git commit -m "auto: update preview (test_render.html) and version archives [skip ci]"
+            git push origin main
           fi
