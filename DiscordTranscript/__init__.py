@@ -1,3 +1,5 @@
+from importlib.metadata import PackageNotFoundError, version
+
 from DiscordTranscript.chat_exporter import (
     AttachmentHandler,
     AttachmentToDataURIHandler,
@@ -7,7 +9,13 @@ from DiscordTranscript.chat_exporter import (
     raw_export,
 )
 
-__version__ = "1.4.0"
+try:
+    __version__ = version("DiscordTranscript")
+except PackageNotFoundError:
+    try:
+        from DiscordTranscript._version import __version__  # type: ignore
+    except ImportError:
+        __version__ = "0.0.0-dev"
 
 __all__ = (
     export,

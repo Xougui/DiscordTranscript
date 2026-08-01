@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "DiscordTranscript"
 description = "A Discord chat exporter that is easy to use and customizable. // Un exporteur de chat Discord facile à utiliser et personnalisable."
-version = "1.4.0"
+dynamic = ["version"]
 readme = "README.md"
 authors = [
     { name="Xougui", email="xougui.7@gmail.com" }
@@ -41,6 +41,9 @@ include-package-data = true
 where = ["."]
 include = ["DiscordTranscript*"]
 exclude = ["tests*", "examples*", "generate_sample*"]
+
+[tool.setuptools_scm]
+version_file = "DiscordTranscript/_version.py"
 
 [tool.ruff]
 
