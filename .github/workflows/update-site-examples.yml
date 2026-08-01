@@ -1,0 +1,101 @@
+name: Update Site Examples
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [published]
+
+jobs:
+  update-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout DiscordTranscript
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Generate test_render.html
+        run: |
+          python examples/generate_sample.py
+
+      - name: Checkout Transcript_Site repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'Xougui/Transcript_Site'
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          path: 'site_repo'
+
+      - name: Copy generated files & versions
+        run: |
+          mkdir -p examples/versions
+          mkdir -p site_repo/exemples/versions
+
+          # Si c'est une Release/Tag, enregistrer l'exemple de la version dans DiscordTranscript/examples/versions/
+          if [ "${{ github.event_name }}" = "release" ]; then
+            TAG_NAME="${{ github.event.release.tag_name }}"
+            cp examples/test_render.html "examples/versions/${TAG_NAME}.html"
+          fi
+
+          # Génération et mise à jour dynamique de versions.json dans DiscordTranscript/examples/versions/
+          python -c "
+          import json, os
+
+          vdir = 'examples/versions'
+          os.makedirs(vdir, exist_ok=True)
+
+          data = [
+              {
+                  'id': 'preview',
+                  'name': 'Preview Build (main)',
+                  'url': 'https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/test_render.html'
+              }
+          ]
+
+          files = sorted([f for f in os.listdir(vdir) if f.endswith('.html')], reverse=True)
+          for idx, filename in enumerate(files):
+              ver_id = filename[:-5]
+              raw_url = f'https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/{filename}'
+              data.append({
+                  'id': ver_id,
+                  'name': f'Version Stable {ver_id}',
+                  'url': raw_url,
+                  'isDefault': idx == 0
+              })
+
+          with open(os.path.join(vdir, 'versions.json'), 'w', encoding='utf-8') as f:
+              json.dump(data, f, indent=2, ensure_ascii=False)
+          "
+
+          # Synchroniser vers Transcript_Site
+          cp -r examples/versions/* site_repo/exemples/versions/
+
+      - name: Commit and Push to DiscordTranscript
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add examples/versions/
+          if ! git diff --staged --quiet; then
+            git commit -m "auto: update versions archive & versions.json [skip ci]"
+            git push
+          fi
+
+      - name: Commit and Push to Transcript_Site
+        run: |
+          cd site_repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          if ! git diff --staged --quiet; then
+            git commit -m "auto: update mocked example & version archives [skip ci]"
+            git push
+          fi
