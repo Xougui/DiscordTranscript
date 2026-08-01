@@ -69,14 +69,13 @@ jobs:
                   'id': ver_id,
                   'name': f'Version Stable {ver_id}',
                   'url': raw_url,
-                  'isDefault': idx == 0  # La version archivée la plus récente est la version stable par défaut
+                  'isDefault': idx == 0
               })
 
           with open(os.path.join(vdir, 'versions.json'), 'w', encoding='utf-8') as f:
               json.dump(data, f, indent=2, ensure_ascii=False)
           "
-
-      - name: Commit & Push changes to main
+      - name: Commit & Push changes to DiscordTranscript
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -87,5 +86,10 @@ jobs:
           
           if ! git diff --staged --quiet; then
             git commit -m "auto: update preview (test_render.html) and version archives [skip ci]"
-            git push origin main
+            # Utiliser le PAT (Personal Access Token) pour contourner la règle de protection si configuré
+            if [ -n "${{ secrets.GH_PAT }}" ]; then
+              git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/Xougui/DiscordTranscript.git main
+            else
+              git push origin main
+            fi
           fi
