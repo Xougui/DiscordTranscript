@@ -807,7 +807,7 @@ async def main():
     )
     att_img = MockAttachment(
         "screenshot.png",
-        "https://png.pngtree.com/thumb_back/fh260/background/20240522/pngtree-abstract-cloudy-background-beautiful-natural-streaks-of-sky-and-clouds-red-image_15684333.jpg",
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800",
         5000,
         "image/png",
     )
