@@ -1,5 +1,7 @@
 name: "Pull Request Labeler"
 
+permissions: {}
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -11,34 +13,7 @@ jobs:
     name: Verify Repository Collaborator
     runs-on: ubuntu-latest
     steps:
-      - name: Check Collaborator Status
-        uses: actions/github-script@v9
-        with:
-          script: |
-            const actor = context.actor;
-
-            if (actor.endsWith('[bot]')) {
-              console.log(`Bypass du contrôle collaborateur pour le bot: ${actor}`);
-              return;
-            }
-
-            let isCollab = false;
-            try {
-              const res = await github.rest.repos.checkCollaborator({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                username: actor,
-              });
-              if (res.status === 204) {
-                isCollab = true;
-              }
-            } catch (error) {
-              isCollab = false;
-            }
-
-            if (!isCollab) {
-              core.setFailed(`Accès refusé : Seuls les collaborateurs du dépôt sont autorisés à ouvrir une PR. Utilisateur : ${actor}`);
-            }
+      - uses: ./.github/actions/check-collaborator
 
   label:
     name: Apply PR Labels
@@ -48,8 +23,8 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/labeler@v7
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           configuration-path: .github/labeler.yml

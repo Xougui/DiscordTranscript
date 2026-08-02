@@ -1,0 +1,32 @@
+name: Check Collaborator
+description: Vérifie que l'acteur est un collaborateur du dépôt. Les bots sont exemptés.
+
+runs:
+  using: composite
+  steps:
+    - name: Verify Collaborator Status
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+        script: |
+          const actor = context.actor;
+
+          if (actor.endsWith('[bot]')) {
+            console.log(`Bypass collaborateur pour le bot : ${actor}`);
+            return;
+          }
+
+          let isCollab = false;
+          try {
+            const res = await github.rest.repos.checkCollaborator({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: actor,
+            });
+            isCollab = res.status === 204;
+          } catch {
+            isCollab = false;
+          }
+
+          if (!isCollab) {
+            core.setFailed(`Accès refusé : seuls les collaborateurs sont autorisés. Utilisateur : ${actor}`);
+          }
