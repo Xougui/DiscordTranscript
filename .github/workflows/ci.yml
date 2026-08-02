@@ -42,13 +42,13 @@ jobs:
             uv-${{ runner.os }}-${{ matrix.python-version }}-
 
       - name: Install dependencies
-        run: uv sync --group dev
+        run: uv pip install --system -e ".[dev]"
 
       - name: Check formatting with Ruff
-        run: uv run ruff format --check --diff DiscordTranscript tests setup.py examples
+        run: ruff format --check --diff DiscordTranscript tests setup.py examples
 
       - name: Lint with Ruff
-        run: uv run ruff check DiscordTranscript tests setup.py examples
+        run: ruff check DiscordTranscript tests setup.py examples
 
       - name: Run tests with pytest
-        run: uv run pytest
+        run: pytest
