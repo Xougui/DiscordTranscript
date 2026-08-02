@@ -54,7 +54,7 @@ jobs:
           data = [
               {
                   'id': 'preview',
-                  'name': 'Preview Build (main)',
+                  'name': 'Preview Build',
                   'url': 'https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/test_render.html'
               }
           ]
