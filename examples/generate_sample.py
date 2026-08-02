@@ -33,7 +33,7 @@ class MockGuild:
     def __init__(self):
         self.id = 123456789
         self.name = "Serveur de Démonstration"
-        self.icon = "https://images-ext-1.discordapp.net/external/eWd-a9CcVDoj8a-UH3tcpShBjAHE9pcuAhI7lWv_u6o/%3Fsize%3D1024/https/cdn.discordapp.com/icons/1449148933732306976/c15c158e4c693ad4294f35f8253610b6.png?format=webp&quality=lossless&width=921&height=921"
+        self.icon = "https://cdn.discordapp.com/embed/avatars/0.png"
         self.roles = [
             MockRole(999, "Admin", MockColor(0xE91E63)),
             MockRole(888, "Modérateur", MockColor(0x9B59B6)),
@@ -416,7 +416,7 @@ async def main():
 
     attachment = MockAttachment(
         "photo_vacances.png",
-        "https://images.freeimages.com/images/large-previews/e69/wadi-rum-desert-4-1058229.jpg?fmt=webp&h=350",
+        "https://picsum.photos/id/1018/800/600",
         1024,
     )
     msg4 = MockMessage(
@@ -524,7 +524,7 @@ async def main():
 
     sticker = MockSticker(
         "Cool Sticker",
-        "https://images.freeimages.com/images/large-previews/003/sushi-roll-1321056.jpg?fmt=webp&h=350",
+        "https://picsum.photos/id/1025/300/300",
     )
     msg8 = MockMessage(
         1008,
@@ -665,7 +665,7 @@ async def main():
 
     spoiler_att = MockAttachment(
         "SPOILER_secret.png",
-        "https://images.freeimages.com/variants/nDv5dLEb1auNuDied29fLkGp/f4a36f6589a0e50e702740b15352bc00e4bfaf6f58bd4db850e167794d05993d?fmt=webp&h=350",
+        "https://picsum.photos/id/1069/800/600",
         1024,
     )
     msg20 = MockMessage(
@@ -800,7 +800,10 @@ async def main():
     )
 
     att_text = MockAttachment(
-        "notes.txt", "https://example.com/notes.txt", 1024, "text/plain"
+        "notes.txt",
+        "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/README.md",
+        1024,
+        "text/plain",
     )
     att_img = MockAttachment(
         "screenshot.png",
