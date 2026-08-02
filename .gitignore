@@ -221,3 +221,7 @@ __marimo__/
 
 .vscode/
 DiscordTranscript/_version.py
+
+# Node / Playwright
+node_modules/
+package-lock.json
