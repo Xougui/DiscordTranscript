@@ -4,7 +4,7 @@ documentation:
 
 core:
   - changed-files:
-      - any-glob-to-any-file: ['DiscordTranscript/**/*', 'generate_sample.py']
+      - any-glob-to-any-file: ['DiscordTranscript/**/*', 'examples/generate_sample.py']
 
 tests:
   - changed-files:
