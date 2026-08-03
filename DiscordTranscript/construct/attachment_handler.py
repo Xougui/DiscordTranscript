@@ -50,6 +50,15 @@ class AttachmentToDataURIHandler(AttachmentHandler):
         max_image_dimension: int = 1280,
         quality: int = 80,
     ):
+        """Initializes AttachmentToDataURIHandler.
+
+        Args:
+            session (Optional[aiohttp.ClientSession]): The shared HTTP session to use.
+            only_expiring (bool): Whether to only convert expiring Discord URLs to Data URIs. Defaults to True.
+            optimize_images (bool): Whether to resize and compress images before Base64 encoding. Defaults to True.
+            max_image_dimension (int): Maximum width/height in pixels for compressed images. Defaults to 1280.
+            quality (int): Compression quality (1-100) for JPEG/WebP images. Defaults to 80.
+        """
         self.session = session
         self.only_expiring = only_expiring
         self.optimize_images = optimize_images
