@@ -155,7 +155,9 @@ async def test_message_order_with_before_and_after(mock_channel):
 @pytest.mark.asyncio
 async def test_attachment_data_uri_handler_image_optimization():
     import io
+
     from PIL import Image
+
     from DiscordTranscript.construct.attachment_handler import (
         AttachmentToDataURIHandler,
     )
