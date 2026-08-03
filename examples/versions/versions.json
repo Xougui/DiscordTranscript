@@ -5,10 +5,16 @@
     "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/test_render.html"
   },
   {
+    "id": "v1.5.0",
+    "name": "Version Stable v1.5.0",
+    "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.5.0.html",
+    "isDefault": true
+  },
+  {
     "id": "v1.4.1",
     "name": "Version Stable v1.4.1",
     "url": "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/examples/versions/v1.4.1.html",
-    "isDefault": true
+    "isDefault": false
   },
   {
     "id": "v1.4.0",
