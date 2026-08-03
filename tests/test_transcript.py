@@ -156,7 +156,9 @@ async def test_message_order_with_before_and_after(mock_channel):
 async def test_attachment_data_uri_handler_image_optimization():
     import io
     from PIL import Image
-    from DiscordTranscript.construct.attachment_handler import AttachmentToDataURIHandler
+    from DiscordTranscript.construct.attachment_handler import (
+        AttachmentToDataURIHandler,
+    )
 
     handler = AttachmentToDataURIHandler(optimize_images=True, max_image_dimension=100)
 
@@ -169,6 +171,3 @@ async def test_attachment_data_uri_handler_image_optimization():
     opt_data, opt_type = handler._optimize_image(raw_data, "image/png")
     assert len(opt_data) < len(raw_data)
     assert opt_type in ("image/jpeg", "image/webp")
-
-
-
