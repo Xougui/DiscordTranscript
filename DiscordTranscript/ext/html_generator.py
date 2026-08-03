@@ -71,10 +71,9 @@ async def fill_out(
     return base
 
 
-def read_file(filename):
-    with open(filename) as f:
-        s = f.read()
-    return s
+def read_file(filename: str, minify: bool = False) -> str:
+    with open(filename, encoding="utf-8") as f:
+        return f.read()
 
 
 start_message = read_file(dir_path + "/html/message/start.html")

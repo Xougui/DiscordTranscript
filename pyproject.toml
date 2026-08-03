@@ -28,7 +28,7 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
-dependencies = ["aiohttp", "pytz", "grapheme", "emoji", "discord.py"]
+dependencies = ["aiohttp", "pytz", "grapheme", "emoji", "discord.py", "Pillow"]
 keywords = ["archive", "backup", "channel-exporter", "chat", "chat-archive", "chat exporter", "chat-logs", "discord", "discord-api", "discord-archive", "discord-backup", "discord-bot", "discord-channel", "discord-channel-exporter", "discord-channel-history", "discord-channel-logs", "discord-chat", "discord chat exporter", "discord-export", "discord-history", "discord-html", "discord-logs", "discord-message-export", "discord-messages", "discord-transcript", "discordpy", "disnake", "export", "export-chat", "export-discord", "file", "html", "html-generator", "html transcript", "logs", "message-archive", "nextcord", "pycord", "transcript"]
 
 [project.optional-dependencies]
