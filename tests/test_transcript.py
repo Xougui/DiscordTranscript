@@ -153,15 +153,22 @@ async def test_message_order_with_before_and_after(mock_channel):
 
 
 @pytest.mark.asyncio
-async def test_attachment_data_uri_handler_expiring_filter():
+async def test_attachment_data_uri_handler_image_optimization():
+    import io
+    from PIL import Image
     from DiscordTranscript.construct.attachment_handler import AttachmentToDataURIHandler
 
-    handler = AttachmentToDataURIHandler(only_expiring=True)
+    handler = AttachmentToDataURIHandler(optimize_images=True, max_image_dimension=100)
 
-    # Non expiring attachment should be skipped
-    non_expiring = MagicMock()
-    non_expiring.url = "https://example.com/static.png"
-    result = await handler.process_asset(non_expiring)
-    assert result.url == "https://example.com/static.png"
+    # Create a dummy large image in memory (500x500 PNG)
+    img = Image.new("RGB", (500, 500), color="red")
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    raw_data = buf.getvalue()
+
+    opt_data, opt_type = handler._optimize_image(raw_data, "image/png")
+    assert len(opt_data) < len(raw_data)
+    assert opt_type in ("image/jpeg", "image/webp")
+
 
 
