@@ -1,7 +1,6 @@
 import html
 import json
 import os
-import re
 
 from DiscordTranscript.parse.markdown import ParseMarkdown
 from DiscordTranscript.parse.mention import ParseMention
@@ -72,25 +71,9 @@ async def fill_out(
     return base
 
 
-def minify_html(content: str) -> str:
-    """Minifies an HTML template string by stripping indentation, empty lines, and HTML comments."""
-    content = re.sub(
-        r"<!--(?!\s*(?:\[if [^\]]+]|<!|>)).*?-->", "", content, flags=re.DOTALL
-    )
-    lines = [line.strip() for line in content.splitlines() if line.strip()]
-    return "".join(lines)
-
-
-def read_file(filename: str, minify: bool = True) -> str:
+def read_file(filename: str, minify: bool = False) -> str:
     with open(filename, encoding="utf-8") as f:
-        s = f.read()
-    if minify:
-        if filename.endswith("base.html"):
-            lines = [line.strip() for line in s.splitlines() if line.strip()]
-            s = "\n".join(lines)
-        else:
-            s = minify_html(s)
-    return s
+        return f.read()
 
 
 start_message = read_file(dir_path + "/html/message/start.html")
