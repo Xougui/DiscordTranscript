@@ -113,5 +113,6 @@ jobs:
 
           if ! git diff --staged --quiet; then
             git commit -m "auto: update preview (test_render.html) and version archives [skip ci]"
+            git pull --rebase origin main
             git push origin main
           fi
