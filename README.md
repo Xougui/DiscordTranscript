@@ -204,9 +204,17 @@ from discord.ext import commands
 
 @bot.command()
 async def save_with_embedded_attachments(ctx: commands.Context):
+    # Optionnel: personnaliser l'optimisation des images et l'encodage DataURI
+    handler = AttachmentToDataURIHandler(
+        only_expiring=True,        # Convertit seulement les liens Discord expirants
+        optimize_images=True,      # Redimensionne et compresse les images
+        max_image_dimension=1280,  # Dimension maximale (px)
+        quality=80,                # Qualité de compression (1-100)
+    )
+
     transcript = await DiscordTranscript.export(
         ctx.channel,
-        attachment_handler=AttachmentToDataURIHandler(),
+        attachment_handler=handler,
         bot=bot,
     )
 
@@ -325,14 +333,19 @@ Voici comment vous pouvez utiliser les paramètres pour personnaliser vos transc
   )
   ```
 
-- **`attachment_handler`**: Pour intégrer les pièces jointes directement dans le fichier HTML.
+- **`attachment_handler`**: Pour intégrer les pièces jointes directement dans le fichier HTML (avec options de compression et d'optimisation des images).
   ```python
   from DiscordTranscript.construct.attachment_handler import AttachmentToDataURIHandler
 
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      # Intègre les pièces jointes en tant que Data URIs
-      attachment_handler=AttachmentToDataURIHandler(),
+      # Intègre les pièces jointes en tant que Data URIs avec optimisation d'images
+      attachment_handler=AttachmentToDataURIHandler(
+          only_expiring=True,        # Ne convertit que les URLs Discord expirantes
+          optimize_images=True,      # Compresse et redimensionne les images
+          max_image_dimension=1280,  # Taille max (px)
+          quality=80                 # Qualité (1-100)
+      ),
       bot=bot,
   )
   ```
@@ -498,9 +511,17 @@ from discord.ext import commands
 
 @bot.command()
 async def save_with_embedded_attachments(ctx: commands.Context):
+    # Optional: Customize image optimization & DataURI encoding
+    handler = AttachmentToDataURIHandler(
+        only_expiring=True,        # Convert only expiring Discord URLs to Data URIs
+        optimize_images=True,      # Resize & compress images before Base64 encoding
+        max_image_dimension=1280,  # Maximum width/height in pixels
+        quality=80,                # Compression quality (1-100)
+    )
+
     transcript = await DiscordTranscript.export(
         ctx.channel,
-        attachment_handler=AttachmentToDataURIHandler(),
+        attachment_handler=handler,
         bot=bot,
     )
 
@@ -620,14 +641,19 @@ Here’s how you can use the parameters to customize your transcripts.
   )
   ```
 
-- **`attachment_handler`**: To embed attachments directly into the HTML file.
+- **`attachment_handler`**: To embed attachments directly into the HTML file (with image compression and optimization options).
   ```python
   from DiscordTranscript.construct.attachment_handler import AttachmentToDataURIHandler
 
   transcript = await DiscordTranscript.export(
       ctx.channel,
-      # Embeds attachments as Data URIs
-      attachment_handler=AttachmentToDataURIHandler(),
+      # Embeds attachments as Data URIs with image optimization
+      attachment_handler=AttachmentToDataURIHandler(
+          only_expiring=True,        # Convert only expiring Discord URLs
+          optimize_images=True,      # Compress and resize images
+          max_image_dimension=1280,  # Max dimension (px)
+          quality=80                 # Quality (1-100)
+      ),
       bot=bot,
   )
   ```
