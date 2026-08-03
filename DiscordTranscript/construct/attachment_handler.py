@@ -35,8 +35,22 @@ class AttachmentHandler:
 class AttachmentToDataURIHandler(AttachmentHandler):
     """Saves assets to a data URI and embeds them in the transcript."""
 
-    def __init__(self, session: aiohttp.ClientSession | None = None):
+    def __init__(
+        self,
+        session: aiohttp.ClientSession | None = None,
+        only_expiring: bool = True,
+    ):
         self.session = session
+        self.only_expiring = only_expiring
+        self._cache: dict[str, str] = {}
+
+    def is_expiring_url(self, url: str) -> bool:
+        """Checks if a URL is a Discord expiring URL."""
+        return (
+            "ex=" in url
+            or "cdn.discordapp.com/attachments/" in url
+            or "media.discordapp.net/attachments/" in url
+        )
 
     async def process_asset(
         self, attachment: discord_typings.Attachment
@@ -49,6 +63,15 @@ class AttachmentToDataURIHandler(AttachmentHandler):
         Returns:
             discord.Attachment: The processed attachment with a new URL.
         """
+        if self.only_expiring and not self.is_expiring_url(attachment.url):
+            return attachment
+
+        if attachment.url in self._cache:
+            data_uri = self._cache[attachment.url]
+            attachment.url = data_uri
+            attachment.proxy_url = data_uri
+            return attachment
+
         try:
             close_session = False
             session = self.session
@@ -63,6 +86,7 @@ class AttachmentToDataURIHandler(AttachmentHandler):
                     data = await res.read()
                     encoded_data = base64.b64encode(data).decode("utf-8")
                     data_uri = f"data:{attachment.content_type};base64,{encoded_data}"
+                    self._cache[attachment.url] = data_uri
                     attachment.url = data_uri
                     attachment.proxy_url = data_uri
                     return attachment

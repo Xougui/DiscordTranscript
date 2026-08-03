@@ -150,3 +150,18 @@ async def test_message_order_with_before_and_after(mock_channel):
     assert exported_messages is not None
     assert len(exported_messages) == 2
     assert exported_messages[0].created_at < exported_messages[1].created_at
+
+
+@pytest.mark.asyncio
+async def test_attachment_data_uri_handler_expiring_filter():
+    from DiscordTranscript.construct.attachment_handler import AttachmentToDataURIHandler
+
+    handler = AttachmentToDataURIHandler(only_expiring=True)
+
+    # Non expiring attachment should be skipped
+    non_expiring = MagicMock()
+    non_expiring.url = "https://example.com/static.png"
+    result = await handler.process_asset(non_expiring)
+    assert result.url == "https://example.com/static.png"
+
+
