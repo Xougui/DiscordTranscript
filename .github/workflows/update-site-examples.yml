@@ -34,22 +34,51 @@ jobs:
         run: |
           mkdir -p examples/versions
 
-          # 1. Toujours générer le rendu actuel
+          # 1. Générer le rendu de preview actuel
           python examples/generate_sample.py
 
-          # 2. Si c'est un push sur une Release / Tag (ex: v1.4.2), créer l'archive de version
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            TAG_NAME="${GITHUB_REF#refs/tags/}"
-            echo "Nouveau Tag détecté : ${TAG_NAME}"
-            cp examples/test_render.html "examples/versions/${TAG_NAME}.html"
-          fi
-
-          # 3. Reconstruire dynamiquement versions.json avec toutes les versions archivées
+          # 2. Régénérer toutes les archives de version à partir de leur tag Git avec le script d'exemple actuel
           python -c "
-          import json, os
+          import subprocess, os, sys, json
+
+          tags_output = subprocess.check_output(['git', 'tag', '-l'], text=True).strip().splitlines()
+          tags = [t for t in tags_output if t.startswith('v') and '-' not in t]
+
+          with open('examples/generate_sample.py', 'r', encoding='utf-8') as f:
+              sample_script = f.read()
+
+          results = {}
+
+          for tag in tags:
+              print(f'Régénération de la version {tag}...')
+              subprocess.run(['git', 'checkout', tag, '-f'], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+              subprocess.run([sys.executable, '-m', 'pip', 'install', '-e', '.', '--no-deps'], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+              
+              script_content = sample_script.replace(', language=\"fr\"', '')
+              sample_path = 'examples/generate_sample.py' if os.path.exists('examples/generate_sample.py') else 'generate_sample.py'
+              with open(sample_path, 'w', encoding='utf-8') as f:
+                  f.write(script_content)
+                  
+              proc = subprocess.run([sys.executable, sample_path], capture_output=True, text=True)
+              
+              if os.path.exists('examples/test_render.html'):
+                  with open('examples/test_render.html', 'r', encoding='utf-8') as f:
+                      results[tag] = f.read()
+              elif os.path.exists('test_render.html'):
+                  with open('test_render.html', 'r', encoding='utf-8') as f:
+                      results[tag] = f.read()
+                  os.remove('test_render.html')
+
+          subprocess.run(['git', 'checkout', 'main', '-f'], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+          subprocess.run([sys.executable, '-m', 'pip', 'install', '-e', '.', '--no-deps'], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
           vdir = 'examples/versions'
           os.makedirs(vdir, exist_ok=True)
+
+          for tag, content in results.items():
+              dest = f'{vdir}/{tag}.html'
+              with open(dest, 'w', encoding='utf-8') as f:
+                  f.write(content)
 
           data = [
               {
