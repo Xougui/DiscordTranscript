@@ -26,6 +26,7 @@ async def fill_out(
     placeholders: dict | None = None,
     bot=None,
     timezone: str = "UTC",
+    language: str = "en",
 ):
     """Fills out an HTML template with the given replacements.
 
@@ -36,6 +37,7 @@ async def fill_out(
         placeholders (dict, optional): A dictionary of placeholders to use. Defaults to None.
         bot (Optional[discord.Client]): The bot instance. Defaults to None.
         timezone (str): The timezone to use. Defaults to "UTC".
+        language (str): The language code to use. Defaults to "en".
 
     Returns:
         str: The filled out HTML template.
@@ -48,7 +50,9 @@ async def fill_out(
         k, v, mode = r
 
         if mode != PARSE_MODE_NONE:
-            v = await ParseMention(v, guild, bot=bot, timezone=timezone).flow()
+            v = await ParseMention(
+                v, guild, bot=bot, timezone=timezone, language=language
+            ).flow()
         if mode == PARSE_MODE_MARKDOWN:
             v = await ParseMarkdown(
                 v, placeholders=placeholders

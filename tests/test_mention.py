@@ -101,6 +101,14 @@ async def test_time_mention(mock_guild):
 
 
 @pytest.mark.asyncio
+async def test_time_mention_translated(mock_guild):
+    parser = ParseMention("&lt;t:1622548800:f&gt;", mock_guild, timezone="UTC", language="fr")
+    await parser.time_mention()
+    assert "juin 2021 11:59" in parser.content
+
+
+
+@pytest.mark.asyncio
 async def test_slash_command_mention(mock_guild):
     parser = ParseMention("&lt;/test command:123456789&gt;", mock_guild)
     await parser.slash_command_mention()

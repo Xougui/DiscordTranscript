@@ -28,7 +28,7 @@ try:
     __version__ = version("DiscordTranscript")
 except Exception:
     __version__ = "0.0.0-dev"
-from DiscordTranscript.i18n import TRANSLATIONS
+from DiscordTranscript.i18n import TRANSLATIONS, format_date
 
 if TYPE_CHECKING:
     import discord as discord_typings
@@ -133,23 +133,25 @@ class TranscriptDAO:
         guild_name = html.escape(self.channel.guild.name)
 
         timezone = pytz.timezone(self.pytz_timezone)
-        if self.military_time:
-            time_now = datetime.datetime.now(timezone).strftime(
-                "%e %B %Y at %H:%M:%S (%Z)"
-            )
-        else:
-            time_now = datetime.datetime.now(timezone).strftime(
-                "%e %B %Y at %I:%M:%S %p (%Z)"
-            )
+        fmt_key_now = (
+            "DATE_FORMAT_NOW_MILITARY"
+            if self.military_time
+            else "DATE_FORMAT_NOW_STANDARD"
+        )
+        time_now = format_date(
+            datetime.datetime.now(timezone), fmt_key_now, self.language
+        )
 
         meta_data_html: str = ""
         for data in meta_data:
-            creation_time = (
-                meta_data[int(data)][1].astimezone(timezone).strftime("%b %d, %Y")
-            )
+            creation_dt = meta_data[int(data)][1].astimezone(timezone)
+            creation_time = format_date(creation_dt, "DATE_FORMAT_META", self.language)
+            joined_dt = meta_data[int(data)][5]
             joined_time = (
-                meta_data[int(data)][5].astimezone(timezone).strftime("%b %d, %Y")
-                if meta_data[int(data)][5]
+                format_date(
+                    joined_dt.astimezone(timezone), "DATE_FORMAT_META", self.language
+                )
+                if joined_dt
                 else "Unknown"
             )
 
@@ -197,16 +199,19 @@ class TranscriptDAO:
                 ],
                 bot=self.bot,
                 timezone=self.pytz_timezone,
+                language=self.language,
             )
 
-        if self.military_time:
-            channel_creation_time = self.channel.created_at.astimezone(
-                timezone
-            ).strftime("%b %d, %Y (%H:%M:%S)")
-        else:
-            channel_creation_time = self.channel.created_at.astimezone(
-                timezone
-            ).strftime("%b %d, %Y (%I:%M:%S %p)")
+        fmt_key_channel = (
+            "DATE_FORMAT_CHANNEL_MILITARY"
+            if self.military_time
+            else "DATE_FORMAT_CHANNEL_STANDARD"
+        )
+        channel_creation_time = format_date(
+            self.channel.created_at.astimezone(timezone),
+            fmt_key_channel,
+            self.language,
+        )
 
         raw_channel_topic = (
             self.channel.topic
