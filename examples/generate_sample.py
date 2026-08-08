@@ -912,7 +912,7 @@ async def main():
 
     messages.sort(key=lambda x: x.created_at, reverse=True)
 
-    html = await raw_export(channel, messages, guild=guild, language="fr")
+    html = await raw_export(channel, messages, guild=guild, language="en")
 
     html = re.sub(
         r"<script>\s*document\.write\s*\(\s*['\"]\s*<script\s+src=['\"]([^'\"]+)['\"]\s*>\s*<\\/script>\s*['\"]\s*\)\s*;?\s*</script>",
