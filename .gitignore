@@ -226,3 +226,4 @@ DiscordTranscript/_version.py
 node_modules/
 package-lock.json
 .agents/
+uv.lock

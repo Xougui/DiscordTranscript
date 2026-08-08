@@ -1120,7 +1120,6 @@
             padding: 4px 8px;
             border-radius: 4px;
             margin-left: auto;
-            margin-right: 16px;
             color: #949ba4;
             transition: background-color 0.2s ease, color 0.2s ease;
         }
@@ -1135,11 +1134,6 @@
             margin-right: 6px;
             width: 20px;
             height: 20px;
-        }
-
-        .panel__logo {
-            width: 24px;
-            height: 24px;
         }
 
         .summary-popout.visible {
@@ -1945,11 +1939,6 @@
             </svg>
             <span>{{SUMMARY}}</span>
         </div>
-
-        <a href="https://discord-transcript.xouxou-hosting.fr/index" target="_blank" rel="noopener">
-            <img class="panel__logo" src="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg"
-                alt="DiscordTranscript" />
-        </a>
     </div>
 
     <div class="main">
@@ -1969,7 +1958,7 @@
 
     <div class="footer">
         <span class="footer__text">{{GENERATED_ON}} {{DATE_TIME}}</span>
-        <div class="footer__powered">
+        <div class="footer__powered" data-version="{{VERSION}}">
             <span>{{POWERED_BY}}</span>
             <a href="https://discord-transcript.xouxou-hosting.fr/index" class="footer__powered-link" target="_blank"
                 rel="noopener">
@@ -2203,6 +2192,14 @@
                 placement: 'top',
                 animation: 'fade',
                 content: (reference) => reference.getAttribute('data-timestamp'),
+                theme: 'disc',
+            });
+
+            // Version: Tooltip
+            tippy('.footer__powered', {
+                placement: 'top',
+                animation: 'fade',
+                content: (reference) => reference.getAttribute('data-version'),
                 theme: 'disc',
             });
 

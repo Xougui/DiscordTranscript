@@ -21,6 +21,13 @@ from DiscordTranscript.ext.html_generator import (
     meta_data_temp,
     total,
 )
+
+try:
+    from importlib.metadata import version
+
+    __version__ = version("DiscordTranscript")
+except Exception:
+    __version__ = "0.0.0-dev"
 from DiscordTranscript.i18n import TRANSLATIONS
 
 if TYPE_CHECKING:
@@ -306,6 +313,11 @@ class TranscriptDAO:
                     PARSE_MODE_NONE,
                 ),
                 ("POWERED_BY", translations["POWERED_BY"], PARSE_MODE_NONE),
+                (
+                    "VERSION",
+                    translations["GENERATED_WITH"].format(version=__version__),
+                    PARSE_MODE_NONE,
+                ),
             ],
             bot=self.bot,
             timezone=self.pytz_timezone,
