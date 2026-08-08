@@ -32,6 +32,7 @@ TRANSLATIONS = {
         "SLASH_COMMAND": "a slash command",
         "EDITED": "(edited)",
         "POWERED_BY": "Powered by",
+        "GENERATED_WITH": "Generated with v{version}",
     },
     "fr": {
         "TRANSCRIPT_OF_CHANNEL": "Transcript du salon",
@@ -66,6 +67,7 @@ TRANSLATIONS = {
         "SLASH_COMMAND": "une commande slash",
         "EDITED": "(modifié)",
         "POWERED_BY": "Propulsé par",
+        "GENERATED_WITH": "Généré avec la v{version}",
     },
     "es": {
         "TRANSCRIPT_OF_CHANNEL": "Transcripción del canal",
@@ -100,5 +102,6 @@ TRANSLATIONS = {
         "SLASH_COMMAND": "un comando de barra",
         "EDITED": "(editado)",
         "POWERED_BY": "Impulsado por",
+        "GENERATED_WITH": "Generado con la v{version}",
     },
 }
