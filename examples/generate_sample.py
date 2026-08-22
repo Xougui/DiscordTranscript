@@ -916,9 +916,9 @@ async def main():
         channel,
         messages,
         guild=guild,
-        military_time=False,
+        military_time=True,
         tz_info="UTC",
-        language="en",
+        language="fr",
     )
 
     html = re.sub(

@@ -109,6 +109,7 @@ class TranscriptDAO:
             self.attachment_handler,
             bot=self.bot,
             translations=translations,
+            language=self.language,
         )
         await self.export_transcript(message_html, meta_data)
         clear_cache()
@@ -263,6 +264,22 @@ class TranscriptDAO:
                 [
                     ("TIME_FORMAT", time_format, PARSE_MODE_NONE),
                     ("TIMEZONE", str(self.pytz_timezone), PARSE_MODE_NONE),
+                    (
+                        "TODAY_AT",
+                        translations.get("TODAY_AT", "Today at"),
+                        PARSE_MODE_NONE,
+                    ),
+                    (
+                        "YESTERDAY_AT",
+                        translations.get("YESTERDAY_AT", "Yesterday at"),
+                        PARSE_MODE_NONE,
+                    ),
+                    (
+                        "TOMORROW_AT",
+                        translations.get("TOMORROW_AT", "Tomorrow at"),
+                        PARSE_MODE_NONE,
+                    ),
+                    ("AT", translations.get("AT", "at"), PARSE_MODE_NONE),
                 ],
                 bot=self.bot,
                 timezone=self.pytz_timezone,

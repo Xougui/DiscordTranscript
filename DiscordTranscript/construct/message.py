@@ -34,6 +34,7 @@ from DiscordTranscript.ext.html_generator import (
     start_message,
     system_notification,
 )
+from DiscordTranscript.i18n import format_date
 
 if TYPE_CHECKING:
     import discord as discord_typings
@@ -97,6 +98,7 @@ class MessageConstruct:
         attachment_handler: AttachmentHandler | None,
         bot: discord_typings.Client | None = None,
         translations: dict | None = None,
+        language: str = "en",
     ):
         """Initializes the MessageConstruct.
 
@@ -122,9 +124,12 @@ class MessageConstruct:
         self.processed_tenor_links = []
         self.bot = bot
         self.translations = translations or {}
-        self.time_format = "%A, %e %B %Y %I:%M %p"
-        if self.military_time:
-            self.time_format = "%A, %e %B %Y %H:%M"
+        self.language = language
+        self.time_fmt_key = (
+            "DATE_FORMAT_MESSAGE_MILITARY"
+            if self.military_time
+            else "DATE_FORMAT_MESSAGE_STANDARD"
+        )
 
         self.message_created_at, self.message_edited_at = self.set_time()
         self.meta_data = meta_data
@@ -420,20 +425,24 @@ class MessageConstruct:
     async def build_join(self):
         """Builds the HTML for a join message."""
         await self.generate_message_divider(channel_audit=True)
+        joined_text = self.translations.get("JOINED_THE_SERVER", "joined the server.")
         content = (
             f'<span style="color: {await self._gather_user_colour(self.message.author)}; cursor: pointer;" '
             f'title="{await discriminator(self.message.author.name, self.message.author.discriminator)}">'
-            f"{html.escape(self.message.author.display_name)}</span> joined the server."
+            f"{html.escape(self.message.author.display_name)}</span> {joined_text}"
         )
         await self.build_system_notification(content, DiscordUtils.system_join_icon)
 
     async def build_boost(self):
         """Builds the HTML for a boost message."""
         await self.generate_message_divider(channel_audit=True)
+        boosted_text = self.translations.get(
+            "BOOSTED_THE_SERVER", "boosted the server!"
+        )
         content = (
             f'<span style="color: {await self._gather_user_colour(self.message.author)}; cursor: pointer;" '
             f'title="{await discriminator(self.message.author.name, self.message.author.discriminator)}">'
-            f"{html.escape(self.message.author.display_name)}</span> boosted the server!"
+            f"{html.escape(self.message.author.display_name)}</span> {boosted_text}"
         )
         if self.message.content:
             content = self.message.content
@@ -903,12 +912,12 @@ class MessageConstruct:
         Returns:
             str: The converted time.
         """
-        if not self.message.created_at.tzinfo:
+        if not time.tzinfo:
             time = timezone("UTC").localize(time)
 
         local_time = time.astimezone(timezone(self.pytz_timezone))
 
-        return local_time.strftime(self.time_format)
+        return format_date(local_time, self.time_fmt_key, self.language)
 
 
 async def gather_messages(
@@ -919,6 +928,7 @@ async def gather_messages(
     attachment_handler: AttachmentHandler | None,
     bot: discord_typings.Client | None = None,
     translations: dict | None = None,
+    language: str = "en",
 ) -> tuple[str, dict]:
     """Gathers all messages in a channel and returns the HTML and metadata.
 
@@ -930,6 +940,7 @@ async def gather_messages(
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
         bot (Optional[discord.Client]): The bot instance.
         translations (dict): A dictionary of translations.
+        language (str): The language code to use.
 
     Returns:
         Tuple[str, dict]: A tuple containing the HTML and metadata.
@@ -971,6 +982,7 @@ async def gather_messages(
             attachment_handler,
             bot=bot,
             translations=translations,
+            language=language,
         )
         content_html, meta_data = await mc.construct_message()
 
