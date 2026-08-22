@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Optional
 
 import pytz
 
+from DiscordTranscript.i18n import format_date
 from DiscordTranscript.parse.markdown import ParseMarkdown
 
 if TYPE_CHECKING:
@@ -52,6 +53,7 @@ class ParseMention:
         guild,
         bot: Optional["discord_typings.Client"] = None,
         timezone: str = "UTC",
+        language: str = "en",
     ):
         """Initializes the ParseMention class.
 
@@ -60,11 +62,13 @@ class ParseMention:
             guild (discord.Guild): The guild the message is in.
             bot (Optional[discord.Client]): The bot instance. Defaults to None.
             timezone (str): The timezone to use. Defaults to "UTC".
+            language (str): The language code to use. Defaults to "en".
         """
         self.content = content
         self.guild = guild
         self.bot = bot
         self.timezone = timezone
+        self.language = language
         self.code_blocks_content = []
 
     async def flow(self):
@@ -256,14 +260,41 @@ class ParseMention:
             while match is not None:
                 timestamp = int(match.group(1)) - 1
                 time_stamp = time.gmtime(timestamp)
+                actual_year = time_stamp[0]
                 datetime_stamp = datetime.datetime(
                     2010, *time_stamp[1:6], tzinfo=pytz.utc
                 )
                 ui_time = datetime_stamp.strftime(strf)
-                ui_time = ui_time.replace(str(datetime_stamp.year), str(time_stamp[0]))
-                tooltip_time = datetime_stamp.strftime("%A, %e %B %Y at %H:%M")
-                tooltip_time = tooltip_time.replace(
-                    str(datetime_stamp.year), str(time_stamp[0])
+                ui_time = ui_time.replace(str(datetime_stamp.year), str(actual_year))
+                # Translate months/days in ui_time
+                dt_for_translation = datetime_stamp.replace(year=actual_year)
+                ui_time = (
+                    format_date(
+                        dt_for_translation, "DATE_FORMAT_UNIX_TOOLTIP", self.language
+                    )
+                    if strf == "%A, %e %B %Y at %H:%M"
+                    else ui_time
+                )
+                if "%B" in strf or "%b" in strf or "%A" in strf or "%a" in strf:
+                    # Translate month/day words in ui_time
+                    from DiscordTranscript.i18n import TRANSLATIONS
+
+                    translations = TRANSLATIONS.get(self.language, TRANSLATIONS["en"])
+                    eng_months = TRANSLATIONS["en"]["MONTHS"]
+                    months = translations.get("MONTHS", eng_months)
+                    eng_days = TRANSLATIONS["en"]["DAYS"]
+                    days = translations.get("DAYS", eng_days)
+                    ui_time = ui_time.replace(
+                        eng_months[dt_for_translation.month],
+                        months[dt_for_translation.month],
+                    )
+                    ui_time = ui_time.replace(
+                        eng_days[dt_for_translation.weekday()],
+                        days[dt_for_translation.weekday()],
+                    )
+
+                tooltip_time = format_date(
+                    dt_for_translation, "DATE_FORMAT_UNIX_TOOLTIP", self.language
                 )
                 original = match.group().replace("&lt;", "<").replace("&gt;", ">")
                 replacement = (

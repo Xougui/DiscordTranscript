@@ -15,12 +15,12 @@ for(var i = 0; i < timeStamps.length; i++) {
     const diff = date_2.diff(date_1, 'day', true)
 
     if (date_1.isTomorrow()) {
-        timeStamps[i].innerText = "Tomorrow at " + date_1.format('{{TIME_FORMAT}}')
+        timeStamps[i].innerText = "{{TOMORROW_AT}} " + date_1.format('{{TIME_FORMAT}}')
     } else if (date_1.isToday()) {
-        timeStamps[i].innerText = "Today at " + date_1.format('{{TIME_FORMAT}}')
+        timeStamps[i].innerText = "{{TODAY_AT}} " + date_1.format('{{TIME_FORMAT}}')
     } else if (date_1.add(1, 'day').isToday()) {
-        timeStamps[i].innerText = "Yesterday at " + date_1.format('{{TIME_FORMAT}}')
+        timeStamps[i].innerText = "{{YESTERDAY_AT}} " + date_1.format('{{TIME_FORMAT}}')
     } else if (date_1.isBetween(date_2, date_2.subtract(7, 'day'))) {
-        timeStamps[i].innerText = date_1.day(date_1.day()).format("dddd [at] {{TIME_FORMAT}}")
+        timeStamps[i].innerText = date_1.day(date_1.day()).format("dddd [{{AT}}] {{TIME_FORMAT}}")
     }
 }

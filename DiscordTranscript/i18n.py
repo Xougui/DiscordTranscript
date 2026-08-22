@@ -31,8 +31,59 @@ TRANSLATIONS = {
         "USED": "used",
         "SLASH_COMMAND": "a slash command",
         "EDITED": "(edited)",
+        "JOINED_THE_SERVER": "joined the server.",
+        "BOOSTED_THE_SERVER": "boosted the server!",
         "POWERED_BY": "Powered by",
         "GENERATED_WITH": "Generated with v{version}",
+        "TODAY_AT": "Today at",
+        "YESTERDAY_AT": "Yesterday at",
+        "TOMORROW_AT": "Tomorrow at",
+        "AT": "at",
+        "DATE_FORMAT_NOW_MILITARY": "%e %B %Y at %H:%M:%S (%Z)",
+        "DATE_FORMAT_NOW_STANDARD": "%e %B %Y at %I:%M:%S %p (%Z)",
+        "DATE_FORMAT_META": "%b %d, %Y",
+        "DATE_FORMAT_CHANNEL_MILITARY": "%b %d, %Y (%H:%M:%S)",
+        "DATE_FORMAT_CHANNEL_STANDARD": "%b %d, %Y (%I:%M:%S %p)",
+        "DATE_FORMAT_MESSAGE_MILITARY": "%A, %e %B %Y %H:%M",
+        "DATE_FORMAT_MESSAGE_STANDARD": "%A, %e %B %Y %I:%M %p",
+        "DATE_FORMAT_UNIX_TOOLTIP": "%A, %e %B %Y at %H:%M",
+        "MONTHS": {
+            1: "January",
+            2: "February",
+            3: "March",
+            4: "April",
+            5: "May",
+            6: "June",
+            7: "July",
+            8: "August",
+            9: "September",
+            10: "October",
+            11: "November",
+            12: "December",
+        },
+        "MONTHS_ABBR": {
+            1: "Jan",
+            2: "Feb",
+            3: "Mar",
+            4: "Apr",
+            5: "May",
+            6: "Jun",
+            7: "Jul",
+            8: "Aug",
+            9: "Sep",
+            10: "Oct",
+            11: "Nov",
+            12: "Dec",
+        },
+        "DAYS": {
+            0: "Monday",
+            1: "Tuesday",
+            2: "Wednesday",
+            3: "Thursday",
+            4: "Friday",
+            5: "Saturday",
+            6: "Sunday",
+        },
     },
     "fr": {
         "TRANSCRIPT_OF_CHANNEL": "Transcript du salon",
@@ -66,8 +117,59 @@ TRANSLATIONS = {
         "USED": "a utilisé",
         "SLASH_COMMAND": "une commande slash",
         "EDITED": "(modifié)",
+        "JOINED_THE_SERVER": "a rejoint le serveur.",
+        "BOOSTED_THE_SERVER": "a boosté le serveur !",
         "POWERED_BY": "Propulsé par",
         "GENERATED_WITH": "Généré avec la v{version}",
+        "TODAY_AT": "Aujourd'hui à",
+        "YESTERDAY_AT": "Hier à",
+        "TOMORROW_AT": "Demain à",
+        "AT": "à",
+        "DATE_FORMAT_NOW_MILITARY": "%e %B %Y à %H:%M:%S (%Z)",
+        "DATE_FORMAT_NOW_STANDARD": "%e %B %Y à %I:%M:%S %p (%Z)",
+        "DATE_FORMAT_META": "%d %b %Y",
+        "DATE_FORMAT_CHANNEL_MILITARY": "%d %b %Y (%H:%M:%S)",
+        "DATE_FORMAT_CHANNEL_STANDARD": "%d %b %Y (%I:%M:%S %p)",
+        "DATE_FORMAT_MESSAGE_MILITARY": "%A %e %B %Y %H:%M",
+        "DATE_FORMAT_MESSAGE_STANDARD": "%A %e %B %Y %I:%M %p",
+        "DATE_FORMAT_UNIX_TOOLTIP": "%A %e %B %Y à %H:%M",
+        "MONTHS": {
+            1: "janvier",
+            2: "février",
+            3: "mars",
+            4: "avril",
+            5: "mai",
+            6: "juin",
+            7: "juillet",
+            8: "août",
+            9: "septembre",
+            10: "octobre",
+            11: "novembre",
+            12: "décembre",
+        },
+        "MONTHS_ABBR": {
+            1: "janv.",
+            2: "févr.",
+            3: "mars",
+            4: "avr.",
+            5: "mai",
+            6: "juin",
+            7: "juil.",
+            8: "août",
+            9: "sept.",
+            10: "oct.",
+            11: "nov.",
+            12: "déc.",
+        },
+        "DAYS": {
+            0: "lundi",
+            1: "mardi",
+            2: "mercredi",
+            3: "jeudi",
+            4: "vendredi",
+            5: "samedi",
+            6: "dimanche",
+        },
     },
     "es": {
         "TRANSCRIPT_OF_CHANNEL": "Transcripción del canal",
@@ -101,7 +203,88 @@ TRANSLATIONS = {
         "USED": "usó",
         "SLASH_COMMAND": "un comando de barra",
         "EDITED": "(editado)",
+        "JOINED_THE_SERVER": "se unió al servidor.",
+        "BOOSTED_THE_SERVER": "¡mejoró el servidor!",
         "POWERED_BY": "Impulsado por",
         "GENERATED_WITH": "Generado con la v{version}",
+        "TODAY_AT": "Hoy a las",
+        "YESTERDAY_AT": "Ayer a las",
+        "TOMORROW_AT": "Mañana a las",
+        "AT": "a las",
+        "DATE_FORMAT_NOW_MILITARY": "%e de %B de %Y a las %H:%M:%S (%Z)",
+        "DATE_FORMAT_NOW_STANDARD": "%e de %B de %Y a las %I:%M:%S %p (%Z)",
+        "DATE_FORMAT_META": "%d de %b de %Y",
+        "DATE_FORMAT_CHANNEL_MILITARY": "%d de %b de %Y (%H:%M:%S)",
+        "DATE_FORMAT_CHANNEL_STANDARD": "%d de %b de %Y (%I:%M:%S %p)",
+        "DATE_FORMAT_MESSAGE_MILITARY": "%A, %e de %B de %Y %H:%M",
+        "DATE_FORMAT_MESSAGE_STANDARD": "%A, %e de %B de %Y %I:%M %p",
+        "DATE_FORMAT_UNIX_TOOLTIP": "%A, %e de %B de %Y a las %H:%M",
+        "MONTHS": {
+            1: "enero",
+            2: "febrero",
+            3: "marzo",
+            4: "abril",
+            5: "mayo",
+            6: "junio",
+            7: "julio",
+            8: "agosto",
+            9: "septiembre",
+            10: "octubre",
+            11: "noviembre",
+            12: "diciembre",
+        },
+        "MONTHS_ABBR": {
+            1: "ene.",
+            2: "feb.",
+            3: "mar.",
+            4: "abr.",
+            5: "may.",
+            6: "jun.",
+            7: "jul.",
+            8: "ago.",
+            9: "sep.",
+            10: "oct.",
+            11: "nov.",
+            12: "dic.",
+        },
+        "DAYS": {
+            0: "lunes",
+            1: "martes",
+            2: "miércoles",
+            3: "jueves",
+            4: "viernes",
+            5: "sábado",
+            6: "domingo",
+        },
     },
 }
+
+
+def format_date(dt, fmt_key: str, lang: str = "en") -> str:
+    """Formats a datetime object with translated month and day names."""
+    translations = TRANSLATIONS.get(lang, TRANSLATIONS["en"])
+    fmt = translations.get(fmt_key, TRANSLATIONS["en"][fmt_key])
+
+    formatted = dt.strftime(fmt)
+
+    months = translations.get("MONTHS", TRANSLATIONS["en"]["MONTHS"])
+    months_abbr = translations.get("MONTHS_ABBR", TRANSLATIONS["en"]["MONTHS_ABBR"])
+    days = translations.get("DAYS", TRANSLATIONS["en"]["DAYS"])
+
+    month_name = months.get(dt.month, dt.strftime("%B"))
+    month_abbr = months_abbr.get(dt.month, dt.strftime("%b"))
+    day_name = days.get(dt.weekday(), dt.strftime("%A"))
+
+    english_months = TRANSLATIONS["en"]["MONTHS"]
+    english_abbr = TRANSLATIONS["en"]["MONTHS_ABBR"]
+    english_days = TRANSLATIONS["en"]["DAYS"]
+
+    eng_month_name = english_months.get(dt.month, dt.strftime("%B"))
+    eng_month_abbr = english_abbr.get(dt.month, dt.strftime("%b"))
+    eng_day_name = english_days.get(dt.weekday(), dt.strftime("%A"))
+
+    formatted = formatted.replace(eng_month_name, month_name)
+    formatted = formatted.replace(eng_month_abbr, month_abbr)
+    formatted = formatted.replace(eng_day_name, day_name)
+
+    return formatted
