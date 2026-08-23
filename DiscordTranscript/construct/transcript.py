@@ -1,5 +1,7 @@
 import datetime
 import html
+import os
+from pathlib import Path
 import re
 import traceback
 from typing import TYPE_CHECKING, Optional
@@ -8,6 +10,7 @@ import pytz
 
 from DiscordTranscript.construct.assets.component import Component
 from DiscordTranscript.construct.attachment_handler import AttachmentHandler
+from DiscordTranscript.construct.custom_colors import parse_custom_colors_file
 from DiscordTranscript.construct.message import gather_messages
 from DiscordTranscript.ext.cache import clear_cache
 from DiscordTranscript.ext.discord_utils import DiscordUtils
@@ -66,6 +69,7 @@ class TranscriptDAO:
         bot: Optional["discord_typings.Client"],
         attachment_handler: AttachmentHandler | None,
         language: str = "en",
+        custom_colors_file: str | Path | os.PathLike | None = None,
     ):
         """Initializes the TranscriptDAO.
 
@@ -81,6 +85,7 @@ class TranscriptDAO:
             bot (Optional['discord.Client']): The bot to use for fetching members.
             attachment_handler (Optional[AttachmentHandler]): The attachment handler to use.
             language (str): The language to use for the transcript. Defaults to "en".
+            custom_colors_file (Optional[Union[str, Path, os.PathLike]]): Path to custom colors text file.
         """
         self.channel = channel
         self.messages = messages
@@ -93,6 +98,7 @@ class TranscriptDAO:
         self.attachment_handler = attachment_handler
         self.bot = bot
         self.language = language
+        self.custom_colors_file = custom_colors_file
 
     async def build_transcript(self) -> "TranscriptDAO":
         """Builds the transcript.
@@ -232,7 +238,7 @@ class TranscriptDAO:
 
         limit = translations["START_OF_TRANSCRIPT"]
         if self.limit:
-            limit = translations["LATEST_MESSAGES"].format(limit=self.limit)
+            limit = str(translations["LATEST_MESSAGES"]).format(limit=self.limit)
 
         subject = await fill_out(
             self.channel.guild,
@@ -243,7 +249,7 @@ class TranscriptDAO:
                 ("RAW_CHANNEL_TOPIC", str(raw_channel_topic)),
                 (
                     "SUBJECT_INTRO",
-                    translations["SUBJECT_INTRO"].format(
+                    str(translations["SUBJECT_INTRO"]).format(
                         limit=limit, channel=self.channel.name
                     ),
                     PARSE_MODE_NONE,
@@ -285,10 +291,17 @@ class TranscriptDAO:
                 timezone=self.pytz_timezone,
             )
 
+        custom_root_css = (
+            parse_custom_colors_file(self.custom_colors_file)
+            if self.custom_colors_file
+            else ""
+        )
+
         self.html = await fill_out(
             self.channel.guild,
             total,
             [
+                ("CUSTOM_ROOT_CSS", custom_root_css, PARSE_MODE_NONE),
                 ("SERVER_NAME", f"{guild_name}"),
                 ("GUILD_ID", str(self.channel.guild.id), PARSE_MODE_NONE),
                 ("SERVER_AVATAR_URL", str(guild_icon), PARSE_MODE_NONE),
@@ -337,7 +350,7 @@ class TranscriptDAO:
                 ("POWERED_BY", translations["POWERED_BY"], PARSE_MODE_NONE),
                 (
                     "VERSION",
-                    translations["GENERATED_WITH"].format(version=__version__),
+                    str(translations["GENERATED_WITH"]).format(version=__version__),
                     PARSE_MODE_NONE,
                 ),
             ],

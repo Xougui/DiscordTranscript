@@ -1,5 +1,7 @@
 import datetime
 import io
+import os
+from pathlib import Path
 from typing import TYPE_CHECKING, Optional
 
 from DiscordTranscript.construct.attachment_handler import (
@@ -27,6 +29,7 @@ async def quick_export(
     channel: "discord_typings.TextChannel",
     guild: Optional["discord_typings.Guild"] = None,
     bot: Optional["discord_typings.Client"] = None,
+    custom_colors_file: str | Path | os.PathLike | None = None,
 ):
     """Creates a quick export of a Discord channel.
 
@@ -36,6 +39,7 @@ async def quick_export(
         channel (discord.TextChannel): The Discord channel to export.
         guild (Optional[discord.Guild]): The guild the channel belongs to. Defaults to None.
         bot (Optional[discord.Client]): The bot instance. Defaults to None.
+        custom_colors_file (Optional[Union[str, Path, os.PathLike]]): The path to a custom colors text file. Defaults to None.
 
     Returns:
         discord.Message: The message containing the transcript.
@@ -56,6 +60,7 @@ async def quick_export(
             after=None,
             bot=bot,
             attachment_handler=None,
+            custom_colors_file=custom_colors_file,
         ).export()
     ).html
 
@@ -85,6 +90,7 @@ async def export(
     after: datetime.datetime | None = None,
     attachment_handler: AttachmentHandler | None = None,
     language: str = "en",
+    custom_colors_file: str | Path | os.PathLike | None = None,
 ):
     """Creates a customized transcript of a Discord channel.
 
@@ -102,6 +108,7 @@ async def export(
         after (Optional[datetime.datetime]): The date to fetch messages after. Defaults to None.
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use. Defaults to None.
         language (str): The language to use for the transcript. Defaults to "en".
+        custom_colors_file (Optional[Union[str, Path, os.PathLike]]): The path to a custom colors text file. Defaults to None.
 
     Returns:
         str: The transcript HTML.
@@ -122,6 +129,7 @@ async def export(
             bot=bot,
             attachment_handler=attachment_handler,
             language=language,
+            custom_colors_file=custom_colors_file,
         ).export()
     ).html
 
@@ -136,6 +144,7 @@ async def raw_export(
     fancy_times: bool = True,
     attachment_handler: AttachmentHandler | None = None,
     language: str = "en",
+    custom_colors_file: str | Path | os.PathLike | None = None,
 ):
     """Creates a customized transcript with your own captured Discord messages.
 
@@ -151,6 +160,7 @@ async def raw_export(
         fancy_times (bool): Whether to use fancy times. Defaults to True.
         attachment_handler (Optional[AttachmentHandler]): The attachment handler to use. Defaults to None.
         language (str): The language to use for the transcript. Defaults to "en".
+        custom_colors_file (Optional[Union[str, Path, os.PathLike]]): The path to a custom colors text file. Defaults to None.
 
     Returns:
         str: The transcript HTML.
@@ -171,5 +181,6 @@ async def raw_export(
             bot=bot,
             attachment_handler=attachment_handler,
             language=language,
+            custom_colors_file=custom_colors_file,
         ).export()
     ).html
