@@ -4,7 +4,12 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from DiscordTranscript import export, raw_export
+from DiscordTranscript import (
+    DEFAULT_CUSTOM_COLORS,
+    export,
+    generate_custom_colors_file,
+    raw_export,
+)
 from DiscordTranscript.construct.custom_colors import parse_custom_colors_file
 from DiscordTranscript.construct.transcript import Transcript
 
@@ -147,3 +152,33 @@ async def test_export_and_raw_export_with_custom_colors(mock_channel, tmp_path: 
 
     html_raw = await raw_export(mock_channel, [msg], custom_colors_file=colors_file)
     assert "--background-primary: #010203;" in html_raw
+
+
+def test_default_custom_colors_dict():
+    assert isinstance(DEFAULT_CUSTOM_COLORS, dict)
+    assert "background-primary" in DEFAULT_CUSTOM_COLORS
+    assert "discord-blurple" in DEFAULT_CUSTOM_COLORS
+    assert DEFAULT_CUSTOM_COLORS["background-primary"] == "#313338"
+
+
+def test_generate_custom_colors_file(tmp_path: Path):
+    target = tmp_path / "subdir" / "my_custom_theme.txt"
+    created = generate_custom_colors_file(target)
+    assert created.exists()
+    assert created.is_file()
+
+    # Verify that the generated template is directly parsable
+    css = parse_custom_colors_file(created)
+    assert "--background-primary: #313338;" in css
+    assert "--discord-blurple: #5865F2;" in css
+
+    # Test overwrite protection
+    with pytest.raises(FileExistsError):
+        generate_custom_colors_file(target, overwrite=False)
+
+    # Test overwrite success
+    target.write_text("dummy", encoding="utf-8")
+    generate_custom_colors_file(target, overwrite=True)
+    assert "dummy" not in target.read_text(encoding="utf-8")
+    assert "background-primary: #313338" in target.read_text(encoding="utf-8")
+

@@ -230,6 +230,44 @@ async def save_with_embedded_attachments(ctx: commands.Context):
 ```
 </details>
 
+### Personnaliser les couleurs du thème (Custom Colors)
+
+<details>
+<summary>Exemple</summary>
+
+Vous pouvez générer un fichier modèle prêt à l'emploi contenant toutes les variables de couleurs modifiables :
+
+```python
+import io
+import discord
+import DiscordTranscript
+from discord.ext import commands
+
+# Génère un fichier modèle de configuration des couleurs (si besoin)
+DiscordTranscript.generate_custom_colors_file("my_colors.txt")
+
+@bot.command()
+async def save_themed(ctx: commands.Context):
+    transcript = await DiscordTranscript.export(
+        ctx.channel,
+        custom_colors_file="my_colors.txt",
+        bot=bot,
+    )
+
+    if transcript is None:
+        return
+
+    transcript_file = discord.File(
+        io.BytesIO(transcript.encode()),
+        filename=f"transcript-{ctx.channel.name}.html",
+    )
+
+    await ctx.send(file=transcript_file)
+```
+
+Un exemple de fichier est également disponible dans [`examples/custom_colors.example.txt`](examples/custom_colors.example.txt).
+</details>
+
 ---
 ## <a id="paramètres"></a>Paramètres
 
@@ -247,6 +285,7 @@ Voici une liste des paramètres que vous pouvez utiliser dans les fonctions `exp
 | `bot` | `discord.Client` | L'instance de votre bot. Nécessaire pour résoudre les informations des utilisateurs qui ont quitté le serveur. | `None` |
 | `guild`| `discord.Guild` | L'instance de votre serveur. Nécessaire pour résoudre les informations des membres (rôles, couleurs, etc.). | `None` |
 | `attachment_handler` | `AttachmentHandler` | Un gestionnaire pour contrôler la façon dont les pièces jointes sont traitées. Voir l'exemple [Intégrer les pièces jointes dans le HTML](#intégrer-les-pièces-jointes-dans-le-html). | `None` (les liens des pièces jointes pointent vers le CDN de Discord) |
+| `custom_colors_file` | `str \| Path \| os.PathLike` | Le chemin vers un fichier texte de configuration des couleurs personnalisées. | `None` |
 | `language` | `str` | La langue à utiliser pour la transcription. | `"en"` |
 
 **Note :** Le paramètre `messages` est uniquement disponible pour la fonction `raw_export()`.
@@ -537,6 +576,44 @@ async def save_with_embedded_attachments(ctx: commands.Context):
 ```
 </details>
 
+### Customizing Theme Colors (Custom Colors)
+
+<details>
+<summary>Example</summary>
+
+You can generate a ready-to-use template file containing all customizable color variables:
+
+```python
+import io
+import discord
+import DiscordTranscript
+from discord.ext import commands
+
+# Generate a color configuration template file (if needed)
+DiscordTranscript.generate_custom_colors_file("my_colors.txt")
+
+@bot.command()
+async def save_themed(ctx: commands.Context):
+    transcript = await DiscordTranscript.export(
+        ctx.channel,
+        custom_colors_file="my_colors.txt",
+        bot=bot,
+    )
+
+    if transcript is None:
+        return
+
+    transcript_file = discord.File(
+        io.BytesIO(transcript.encode()),
+        filename=f"transcript-{ctx.channel.name}.html",
+    )
+
+    await ctx.send(file=transcript_file)
+```
+
+An example template is also available in [`examples/custom_colors.example.txt`](examples/custom_colors.example.txt).
+</details>
+
 ---
 
 ## <a id="parameters-en"></a>Parameters
@@ -555,6 +632,7 @@ Here is a list of parameters you can use in the `export()` and `raw_export()` fu
 | `bot` | `discord.Client` | Your bot's instance. Necessary to resolve user information for members who have left the server. | `None` |
 | `guild`| `discord.Guild` | Your server's instance. Necessary to resolve member information (roles, colors, etc.). | `None` |
 | `attachment_handler`| `AttachmentHandler` | A handler to control how attachments are processed. See the [Embedding Attachments in HTML](#embedding-attachments-in-html) example. | `None` (attachment links point to Discord's CDN) |
+| `custom_colors_file` | `str \| Path \| os.PathLike` | Path to a custom colors configuration text file. | `None` |
 | `language` | `str` | The language to use for the transcript. | `"en"` |
 
 **Note:** The `messages` parameter is only available for the `raw_export()` function.
