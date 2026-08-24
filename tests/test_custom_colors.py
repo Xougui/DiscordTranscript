@@ -181,4 +181,3 @@ def test_generate_custom_colors_file(tmp_path: Path):
     generate_custom_colors_file(target, overwrite=True)
     assert "dummy" not in target.read_text(encoding="utf-8")
     assert "background-primary: #313338" in target.read_text(encoding="utf-8")
-
