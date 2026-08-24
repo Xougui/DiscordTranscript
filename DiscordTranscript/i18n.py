@@ -271,17 +271,33 @@ def format_date(dt, fmt_key: str, lang: str = "en") -> str:
     months_abbr = translations.get("MONTHS_ABBR", TRANSLATIONS["en"]["MONTHS_ABBR"])
     days = translations.get("DAYS", TRANSLATIONS["en"]["DAYS"])
 
-    month_name = months.get(dt.month, dt.strftime("%B"))
-    month_abbr = months_abbr.get(dt.month, dt.strftime("%b"))
-    day_name = days.get(dt.weekday(), dt.strftime("%A"))
+    months_map: dict[int, str] = months if isinstance(months, dict) else {}
+    months_abbr_map: dict[int, str] = (
+        months_abbr if isinstance(months_abbr, dict) else {}
+    )
+    days_map: dict[int, str] = days if isinstance(days, dict) else {}
+
+    month_name = months_map.get(dt.month, dt.strftime("%B"))
+    month_abbr = months_abbr_map.get(dt.month, dt.strftime("%b"))
+    day_name = days_map.get(dt.weekday(), dt.strftime("%A"))
 
     english_months = TRANSLATIONS["en"]["MONTHS"]
     english_abbr = TRANSLATIONS["en"]["MONTHS_ABBR"]
     english_days = TRANSLATIONS["en"]["DAYS"]
 
-    eng_month_name = english_months.get(dt.month, dt.strftime("%B"))
-    eng_month_abbr = english_abbr.get(dt.month, dt.strftime("%b"))
-    eng_day_name = english_days.get(dt.weekday(), dt.strftime("%A"))
+    eng_months_map: dict[int, str] = (
+        english_months if isinstance(english_months, dict) else {}
+    )
+    eng_abbr_map: dict[int, str] = (
+        english_abbr if isinstance(english_abbr, dict) else {}
+    )
+    eng_days_map: dict[int, str] = (
+        english_days if isinstance(english_days, dict) else {}
+    )
+
+    eng_month_name = eng_months_map.get(dt.month, dt.strftime("%B"))
+    eng_month_abbr = eng_abbr_map.get(dt.month, dt.strftime("%b"))
+    eng_day_name = eng_days_map.get(dt.weekday(), dt.strftime("%A"))
 
     formatted = formatted.replace(eng_month_name, month_name)
     formatted = formatted.replace(eng_month_abbr, month_abbr)

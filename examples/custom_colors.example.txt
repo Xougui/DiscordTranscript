@@ -1,0 +1,33 @@
+# ==============================================================================
+# Fichier de configuration des couleurs personnalisees - DiscordTranscript
+# ==============================================================================
+# Syntaxe : cle: valeur (hexadecimal, rgb, etc.)
+# Les tirets (-) et les underscores (_) sont interchangeables.
+# Le prefixe '--' est optionnel.
+# ==============================================================================
+
+# -- Couleurs d'accentuation / Boutons Discord --
+discord-blurple: #5865F2
+discord-blurple-hover: #4752C4
+discord-green: #23A55A
+discord-green-hover: #1A7F42
+discord-red: #F23F43
+discord-red-hover: #A1282C
+discord-grey: #4E5058
+discord-grey-hover: #6D6F78
+
+# -- Arriere-plans --
+background-primary: #313338
+background-secondary: #2b2d31
+background-tertiary: #1e1f22
+background-floating: #232428
+
+# -- Textes et Composants UI --
+text-white: #FFFFFF
+text-normal: #dbdee1
+text-muted: #949ba4
+discord-text-placeholder: #dbdee1
+discord-icon-color: #dbdee1
+discord-component-bg: #2B2D31
+discord-component-hover: #404249
+discord-border-color: #1E1F22

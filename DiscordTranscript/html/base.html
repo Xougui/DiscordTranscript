@@ -45,7 +45,7 @@
             --background-tertiary: #1e1f22;
             --background-floating: #232428;
             --text-normal: #dbdee1;
-            --text-muted: #949ba4;
+            --text-muted: #949ba4;{{CUSTOM_ROOT_CSS}}
         }
 
         @font-face {
@@ -267,7 +267,7 @@
         }
 
         .chatlog__message:hover {
-            background-color: #2e3035;
+            background-color: var(--discord-component-hover);
             border-radius: 4px;
         }
 
@@ -277,7 +277,7 @@
 
         .chatlog__short-timestamp {
             display: none;
-            color: #949ba4;
+            color: var(--text-muted);
             font-size: 0.75rem;
             font-weight: 500;
             direction: ltr;
@@ -293,7 +293,7 @@
             display: flex;
             margin-bottom: 0.15rem;
             align-items: center;
-            color: #949ba4;
+            color: var(--text-muted);
             font-size: 0.875rem;
             white-space: nowrap;
             overflow: hidden;
@@ -500,8 +500,8 @@
             padding: 10px;
             border-radius: 8px;
             overflow: hidden;
-            background-color: #2b2d31;
-            border: 1px solid #1e1f22;
+            background-color: var(--background-secondary);
+            border: 1px solid var(--discord-border-color);
         }
 
         .chatlog__attachment-audio-container audio {
@@ -516,12 +516,12 @@
             padding: 10px;
             border-radius: 8px;
             overflow: hidden;
-            background-color: #2b2d31;
-            border: 1px solid #1e1f22;
+            background-color: var(--background-secondary);
+            border: 1px solid var(--discord-border-color);
         }
 
         .chatlog__attachment-filesize {
-            color: #949ba4;
+            color: var(--text-muted);
             font-size: 12px;
         }
 
@@ -803,13 +803,13 @@
             margin: 0.35em 0.1em 0.1em 0.1em;
             padding: 0.15em 0.35em;
             border-radius: 8px;
-            background-color: #2b2d31;
-            border: 1px solid #1e1f22;
+            background-color: var(--background-secondary);
+            border: 1px solid var(--discord-border-color);
         }
 
         .chatlog__reaction:hover {
-            background-color: #373a40;
-            border-color: #373a40;
+            background-color: var(--discord-component-hover);
+            border-color: var(--discord-component-hover);
             cursor: pointer;
         }
 
@@ -825,8 +825,8 @@
         }
 
         .chatlog__bot-tag {
-            background: #5865f2;
-            color: #ffffff;
+            background: var(--discord-blurple);
+            color: var(--text-white);
             padding: 0 0.2rem;
             margin-top: 0.5em;
             border-radius: 0.1875rem;
@@ -901,10 +901,10 @@
         body {
             height: 100%;
             width: 100%;
-            background-color: #313338;
-            font-family: "gg sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--background-primary);
+            font-family: var(--font-stack);
             font-size: 16px;
-            color: #dbdee1;
+            color: var(--text-normal);
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -941,7 +941,7 @@
         }
 
         .spoiler--hidden .spoiler-text {
-            background-color: #111214;
+            background-color: var(--background-floating);
         }
 
         .spoiler--hidden:hover .spoiler-text {
@@ -953,21 +953,21 @@
         }
 
         .pre {
-            background-color: #2b2d31 !important;
+            background-color: var(--background-secondary) !important;
         }
 
         .pre--multiline {
-            border-color: #1e1f22 !important;
-            color: #949ba4 !important;
+            border-color: var(--discord-border-color) !important;
+            color: var(--text-muted) !important;
         }
 
         .inline {
             padding: 2px 4px;
             border-radius: 3px;
             font-size: 0.85em;
-            background-color: #2b2d31;
-            color: #dbdee1;
-            border: 1px solid #1e1f22;
+            background-color: var(--background-secondary);
+            color: var(--text-normal);
+            border: 1px solid var(--discord-border-color);
             font-family: "Consolas", "Courier New", Courier, monospace;
         }
 
@@ -1012,11 +1012,11 @@
         }
 
         .chatlog__reference-link {
-            color: #949ba4;
+            color: var(--text-muted);
         }
 
         .chatlog__interaction-filler {
-            color: #949ba4;
+            color: var(--text-muted);
         }
 
         .chatlog__interaction-link {
@@ -1046,10 +1046,10 @@
         }
 
         .chatlog__embed-content-container {
-            background-color: #2b2d31;
-            border: 1px solid #1e1f22;
+            background-color: var(--background-secondary);
+            border: 1px solid var(--discord-border-color);
             /* Fallback */
-            border-left: 4px solid var(--embed-color, #1e1f22);
+            border-left: 4px solid var(--embed-color, var(--discord-border-color));
             border-radius: 4px;
             padding: 0.5rem 1rem 1rem 0.75rem;
         }
@@ -1078,6 +1078,8 @@
             align-items: center;
             padding: 0 16px;
             height: 48px;
+            background-color: var(--background-primary);
+            border-bottom: 1px solid var(--discord-border-color);
             -webkit-user-select: none;
             user-select: none;
             font-weight: 700;
@@ -1096,7 +1098,7 @@
             border-left-style: solid;
             border-color: #383a40;
             border-width: 1px;
-            color: #949ba4;
+            color: var(--text-muted);
             margin-left: 10px;
             padding-left: 10px;
             font-size: 14px;
@@ -1143,7 +1145,7 @@
         .summary-popout {
             position: absolute;
             z-index: 6969;
-            background-color: #313338;
+            background-color: var(--background-primary);
             box-shadow:
                 0 2px 10px 0 rgb(0 0 0 / 20%),
                 0 0 0 1px rgb(32 34 37 / 60%);
@@ -1156,7 +1158,7 @@
         }
 
         .summary-popout .meta__header {
-            background-color: #2b2d31;
+            background-color: var(--background-secondary);
             height: 100px;
             position: relative;
             margin-bottom: 40px;
@@ -1172,9 +1174,9 @@
             transform: translateX(-50%);
             width: 80px;
             height: 80px;
-            border: 6px solid #313338;
+            border: 6px solid var(--background-primary);
             border-radius: 50%;
-            background-color: #313338;
+            background-color: var(--background-primary);
             margin-bottom: 0;
         }
 
@@ -1188,7 +1190,7 @@
         .summary-popout .meta__details {
             justify-content: center;
             margin-bottom: 16px;
-            border-bottom: 1px solid #2b2d31;
+            border-bottom: 1px solid var(--background-secondary);
             padding-bottom: 16px;
         }
 
@@ -1203,7 +1205,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #2b2d31;
+            background-color: var(--background-secondary);
             padding: 8px 12px;
             border-radius: 4px;
             margin-bottom: 4px;
@@ -1237,8 +1239,8 @@
 
         /* Add a thumb */
         .main::-webkit-scrollbar-thumb {
-            background-color: #1e1f22;
-            border: 0 #313338 solid;
+            background-color: var(--background-tertiary);
+            border: 0 var(--background-primary) solid;
             border-left-width: 1px;
             border-right-width: 1px;
         }
@@ -1265,7 +1267,7 @@
         }
 
         .info__subject {
-            color: #949ba4;
+            color: var(--text-muted);
             font-size: 16px;
             line-height: 20px;
         }
@@ -1282,7 +1284,8 @@
             border-radius: 5px;
             margin: 0 16px 16px;
             padding: 16px;
-            background-color: #1e1f22;
+            background-color: var(--background-tertiary);
+            color: var(--text-muted);
             position: relative;
             z-index: 10;
             -webkit-user-select: none;
@@ -1303,14 +1306,14 @@
             align-items: center;
             margin-left: auto;
             font-size: 14px;
-            color: #949ba4;
+            color: var(--text-muted);
         }
 
         .footer__powered-link {
             display: flex;
             align-items: center;
             margin-left: 6px;
-            color: #dbdee1;
+            color: var(--text-normal);
             font-weight: 600;
             text-decoration: none;
         }
@@ -1332,12 +1335,12 @@
             width: 188px;
             border-radius: 4px;
             padding: 6px 8px;
-            background-color: #111214;
+            background-color: var(--background-floating);
             box-shadow: 0 8px 16px rgba(0, 0, 0, .24);
             font-weight: 500;
             font-size: 14px;
             line-height: 18px;
-            color: #949ba4;
+            color: var(--text-muted);
             transform: scale(0);
             transform-origin: top left;
             z-index: 6969;
@@ -1365,7 +1368,7 @@
         .meta-popout {
             position: absolute;
             z-index: 6969;
-            background-color: #2b2d31;
+            background-color: var(--background-secondary);
             box-shadow:
                 0 2px 10px 0 rgb(0 0 0 / 20%),
                 0 0 0 1px rgb(32 34 37 / 60%);
@@ -1409,7 +1412,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: #1e1f22;
+            background-color: var(--background-tertiary);
             padding-top: 10px;
         }
 
@@ -1457,7 +1460,7 @@
 
         .meta__description {
             padding: 10px;
-            background-color: #111214;
+            background-color: var(--background-floating);
             margin: 10px;
             border-radius: 5%;
         }
@@ -1468,7 +1471,7 @@
 
         .meta__title {
             font-weight: 700;
-            color: #949ba4;
+            color: var(--text-muted);
             text-transform: uppercase;
             font-size: 12px;
             line-height: 16px;

@@ -88,9 +88,9 @@ class AttachmentToDataURIHandler(AttachmentHandler):
                 img = ImageOps.exif_transpose(img)
 
                 if self.max_image_dimension:
-                    resample = getattr(Image, "Resampling", Image).LANCZOS
                     img.thumbnail(
-                        (self.max_image_dimension, self.max_image_dimension), resample
+                        (self.max_image_dimension, self.max_image_dimension),
+                        Image.Resampling.LANCZOS,
                     )
 
                 output = io.BytesIO()
