@@ -4,11 +4,17 @@ import datetime
 from pathlib import Path
 import platform
 import re
+import sys
 from unittest.mock import MagicMock
 
-import discord
+# Prioritize workspace directory over site-packages
+repo_root = Path(__file__).resolve().parent.parent
+if str(repo_root) not in sys.path:
+    sys.path.insert(0, str(repo_root))
 
-from DiscordTranscript import raw_export
+import discord  # noqa: E402
+
+from DiscordTranscript import raw_export  # noqa: E402
 
 for cls_name in [
     "SectionComponent",
@@ -134,7 +140,7 @@ class MockChannel:
 
 
 class MockAttachment:
-    def __init__(self, filename, url, size, content_type="image/png"):
+    def __init__(self, filename, url, size, content_type="image/png", text=None):
         self.filename = filename
         self.url = url
         self.proxy_url = url
@@ -142,6 +148,7 @@ class MockAttachment:
         self.content_type = content_type
         self.height = 100
         self.width = 100
+        self.text = text
         self.is_spoiler = lambda: False
 
 
@@ -814,11 +821,39 @@ async def main():
         channel=channel,
     )
 
+    text_sample_content = (
+        "De tout temps, l'homme a tenté de comprendre puis de reproduire l'extraordinaire machine qu'est l'être humain. "
+        "Les premiers automates nous font sourire aujourd'hui. Les premiers ordinateurs également, mais un peu moins. "
+        "Et lorsqu'un certain McCullogn, aidé de Pitts, invente en 1943 le premier neurone formel, on ne rigole plus. "
+        'L\'ordinateur est devenu capable de reproduire des neurones artificiels. Le "complexe de Frankenstein" va alors freiner les recherches. '
+        "On commence à entendre parler du concept d'Intelligence Artificielle, plus connu sous les termes d'IA. Cela fait peur.\n\n"
+        "De tout temps, l'homme a tenté de comprendre puis de reproduire l'extraordinaire machine qu'est l'être humain. "
+        "Les premiers automates nous font sourire aujourd'hui. Les premiers ordinateurs également, mais un peu moins. "
+        "Et lorsqu'un certain McCullogn, aidé de Pitts, invente en 1943 le premier neurone formel, on ne rigole plus. "
+        'L\'ordinateur est devenu capable de reproduire des neurones artificiels. Le "complexe de Frankenstein" va alors freiner les recherches. '
+        "On commence à entendre parler du concept d'Intelligence Artificielle, plus connu sous les termes d'IA. Cela fait peur.\n\n"
+        "Cela ressemblait aux gros ordinateurs que David avait pu voir dans des films de science fiction. Beaucoup de petites lumières "
+        "indiquaient qu'il était en fonction. À la base, une sorte d'aquarium avait été installé tout autour. Certainement le système de "
+        "refroidissement car des bulles montaient sans cesse, preuve que l'eau était en ébullition. Soudain, David resta bouche bée. "
+        "Une voix caverneuse sortie des écrans où venait de s'afficher le mot « Prélude ».\n\n"
+        "David comprenait très bien où voulait en venir Prélude. Lorsqu'il l'avait créé, il détestait ce monde. S'il avait eu la possibilité "
+        "de le changer, il l'aurait certainement fait. Il l'aurait fait en pensé, mais pas en geste. David n'était pas du genre méchant. "
+        "Jamais il n'aurait fait de mal à qui que ce soit, mais il avait certainement mis cette idée dans la programmation de Prélude sans le vouloir.\n\n"
+        "Le seul moyen de le stopper serait d'arrêter tous les ordinateurs, ce qui aurait les mêmes conséquences que de laisser Prélude lancer "
+        "les bombes. Depuis longtemps, toutes les installations à risque étaient contrôlées par des ordinateurs. Si l'on stoppait les "
+        "ordinateurs, les centrales nucléaires s'emballeraient, les silos nucléaires cracheraient leur mort sur toute la planète. "
+        "Bien entendu, l'économie mondiale dirigée par la bourse, s'effondrerait. David ne savait plus quoi faire et, manifestement, "
+        "tous les militaires présents dans la salle comptaient sur lui pour résoudre cette crise.\n\n"
+        "En 1975, John Holland construisit un système artificiel qui s'appuyait sur les principes de sélection de Darwin et sur les méthodes "
+        "de combinaison des gènes de Mendel. L'Algorithme Génétique, ou GA, était né. Un renouveau de l'Intelligence Artificielle allait voir"
+    )
+
     att_text = MockAttachment(
-        "notes.txt",
+        "message.txt",
         "https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/README.md",
-        1024,
+        9216,
         "text/plain",
+        text=text_sample_content,
     )
     att_img = MockAttachment(
         "screenshot.png",

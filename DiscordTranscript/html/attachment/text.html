@@ -1,0 +1,44 @@
+<div class="chatlog__attachment">
+    <div class="chatlog__attachment-text-container{{ATTACH_EXTRA_CLASSES}}">
+        <div class="chatlog__attachment-text-content">
+            <pre class="chatlog__attachment-text-pre">{{ATTACH_TEXT_CONTENT}}</pre>
+            <div class="chatlog__attachment-text-remaining-bar">{{ATTACH_REMAINING_NOTICE}}</div>
+        </div>
+        <div class="chatlog__attachment-text-footer">
+            <div class="chatlog__attachment-text-footer-left">
+                <button type="button" class="chatlog__attachment-text-toggle" onclick="toggleTextAttachment(this)" title="Toggle" aria-label="Toggle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                </button>
+                <div class="chatlog__attachment-text-meta">
+                    <span class="chatlog__attachment-text-filename">{{ATTACH_FILE}}</span>
+                    <span class="chatlog__attachment-text-filesize">{{ATTACH_BYTES}}</span>
+                </div>
+            </div>
+            <div class="chatlog__attachment-text-footer-right">
+                <a href="{{ATTACH_URL}}" target="_blank" rel="noopener noreferrer" class="chatlog__attachment-text-action-btn" title="Open original" aria-label="Open original">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                </a>
+                <a href="{{ATTACH_URL}}" target="_blank" rel="noopener noreferrer" class="chatlog__attachment-text-action-btn" title="Fullscreen" aria-label="Fullscreen" onclick="openTextModal(event, this)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <polyline points="9 21 3 21 3 15"></polyline>
+                        <line x1="21" y1="3" x2="14" y2="10"></line>
+                        <line x1="3" y1="21" x2="10" y2="14"></line>
+                    </svg>
+                </a>
+                <a href="{{ATTACH_URL}}" download="{{ATTACH_FILE}}" target="_blank" rel="noopener noreferrer" class="chatlog__attachment-text-action-btn" title="Download" aria-label="Download">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
