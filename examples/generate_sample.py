@@ -21,6 +21,21 @@ for cls_name in [
         setattr(discord, cls_name, type(cls_name, (), {}))
 
 
+LYXIOS_LOGO = (
+    "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='512'%20height='512'%20fill='none'%3e"
+    "%3cg%20clip-path='url(%23a)'%3e%3cmask%20id='b'%20width='512'%20height='512'%20x='0'%20y='0'%20maskUnits='userSpaceOnUse'%20style='mask-type:alpha'%3e"
+    "%3ccircle%20cx='256'%20cy='256'%20r='256'%20fill='%23d9d9d9'/%3e%3c/mask%3e%3cg%20mask='url(%23b)'%3e"
+    "%3cpath%20fill='url(%23c)'%20d='M512%200H0v512h512z'/%3e%3c/g%3e"
+    "%3cpath%20fill='%23fff'%20d='M80.407%20202.868c3.557-9.307%2014.056-14.037%2022.887-9.423%2028.304%2014.791%2052.918%2038.269%2071.222%2068.184%2018.781%2030.696%2030.085%2066.807%2032.829%20104.386C208.069%20375.93%20199.941%20384%20190%20384h-27.754c-9.942%200-17.907-8.079-18.886-17.971-2.583-26.092-10.72-50.525-23.157-70.852-11.256-18.396-25.229-32.203-40.164-41.394-8.447-5.198-13.175-15.478-9.634-24.743zm351.186%200c-3.557-9.307-14.056-14.037-22.887-9.423-28.304%2014.791-52.918%2038.269-71.222%2068.184-18.781%2030.696-30.085%2066.807-32.829%20104.386C303.931%20375.93%20312.059%20384%20322%20384h27.754c9.942%200%2017.907-8.079%2018.886-17.971%202.583-26.092%2010.72-50.525%2023.157-70.852%2011.256-18.396%2025.229-32.203%2040.164-41.394%208.447-5.198%2013.175-15.478%209.634-24.743zM251.504%20359.164c-68.934-135.535-78.89-159.768-.054-227.3%202.587-2.217%206.513-2.217%209.1%200%2078.836%2067.532%2068.88%2091.765-.054%20227.3-1.853%203.643-7.139%203.643-8.992%200'/%3e%3c/g%3e"
+    "%3cdefs%3e%3clinearGradient%20id='c'%20x1='211.558'%20x2='300.442'%20y1='508.109'%20y2='3.891'%20gradientUnits='userSpaceOnUse'%3e"
+    "%3cstop%20stop-color='%23105666'/%3e%3cstop%20offset='.1'%20stop-color='%2317595f'/%3e%3cstop%20offset='.2'%20stop-color='%231e5d5a'/%3e"
+    "%3cstop%20offset='.3'%20stop-color='%23236055'/%3e%3cstop%20offset='.4'%20stop-color='%23286250'/%3e%3cstop%20offset='.5'%20stop-color='%232d654d'/%3e"
+    "%3cstop%20offset='.6'%20stop-color='%2330664a'/%3e%3cstop%20offset='.7'%20stop-color='%23336847'/%3e%3cstop%20offset='.8'%20stop-color='%23356946'/%3e"
+    "%3cstop%20offset='.9'%20stop-color='%23366945'/%3e%3cstop%20offset='1'%20stop-color='%23376a45'/%3e%3c/linearGradient%3e"
+    "%3cclipPath%20id='a'%3e%3cpath%20fill='%23fff'%20d='M0%200h512v512H0z'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+)
+
+
 @dataclass
 class MockAsset:
     url: str
@@ -372,7 +387,7 @@ async def main():
         3,
         "Lyxios",
         "4628",
-        "https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp",
+        LYXIOS_LOGO,
         bot=True,
         verified_bot=True,
         color=MockColor(0x5865F2),
@@ -439,7 +454,7 @@ async def main():
         ],
         author=MockEmbedProxy(
             name="Système",
-            icon_url="https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp",
+            icon_url=LYXIOS_LOGO,
             url="https://github.com/Xougui/DiscordTranscript",
         ),
         footer=MockEmbedProxy(
@@ -681,7 +696,7 @@ async def main():
         "**Panel de Configuration**\n"
         "Gérez vos paramètres utilisateur et vos préférences directement depuis ce message interactif."
     )
-    thumb = MockThumbnail("https://lyxios.xouxou-hosting.fr/images/PDP_Lyxios.webp")
+    thumb = MockThumbnail(LYXIOS_LOGO)
     section_header = MockSection([text_header], accessory=thumb)
 
     separator = MockSeparator()
