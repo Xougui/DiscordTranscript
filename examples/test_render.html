@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width" />
     <meta name="title" content="Serveur de Démonstration - général">
     <meta name="description"
-        content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 28 messages. Ce transcript a été généré le 15 novembre 2026 à 17:42:00 (UTC).">
+        content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 28 messages. Ce transcript a été généré le 15 novembre 2026 à 18:19:01 (UTC).">
 
     <link rel="icon" type="image/svg+xml" href="https://discord-transcript.xouxou-hosting.fr/assets/img/clair/logo.svg">
 
@@ -15,13 +15,13 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Serveur de Démonstration - général" />
     <meta property="og:description"
-        content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 28 messages. Ce transcript a été généré le 15 novembre 2026 à 17:42:00 (UTC)." />
+        content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 28 messages. Ce transcript a été généré le 15 novembre 2026 à 18:19:01 (UTC)." />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary" />
     <meta name='twitter:title' content="Serveur de Démonstration - général" />
     <meta name='twitter:description'
-        content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 28 messages. Ce transcript a été généré le 15 novembre 2026 à 17:42:00 (UTC)." />
+        content="Transcript du salon général (987654321) de Serveur de Démonstration (123456789) avec 28 messages. Ce transcript a été généré le 15 novembre 2026 à 18:19:01 (UTC)." />
 
     <style>
         :root {
@@ -518,6 +518,269 @@
             overflow: hidden;
             background-color: var(--background-secondary);
             border: 1px solid var(--discord-border-color);
+        }
+
+        .chatlog__attachment-text-container {
+            width: 100%;
+            max-width: 950px;
+            background-color: #393a41;
+            border: 1px solid var(--discord-border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-top: 0.375rem;
+        }
+
+        .chatlog__attachment-text-content {
+            max-height: 280px;
+            overflow-y: auto;
+            overflow-x: auto;
+            padding: 12px 14px;
+            background-color: #323339;
+            transition: max-height 0.2s ease;
+            scrollbar-width: thin;
+            scrollbar-color: #767780 #323339;
+        }
+
+        .chatlog__attachment-text-remaining-bar {
+            display: none;
+        }
+
+        /* Fichiers texte (.txt, .log) : plié = max-height avec scrollbar active */
+        .chatlog__attachment-text-container:not(.chatlog__attachment-code-container).chatlog__attachment-text-container--collapsed .chatlog__attachment-text-content {
+            max-height: calc(6 * 1.4 * 13px + 24px);
+            overflow-y: auto;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .chatlog__attachment-text-container:not(.chatlog__attachment-code-container).chatlog__attachment-text-container--collapsed .chatlog__attachment-text-pre {
+            display: block;
+            height: auto;
+            overflow: visible;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* Fichiers code (.html, .py, .js, etc.) : plié = 5 lignes + 6ème ligne "... (X Ko restants)" non scrollable */
+        .chatlog__attachment-code-container.chatlog__attachment-text-container--collapsed .chatlog__attachment-text-content {
+            position: relative;
+            max-height: calc(6 * 1.4 * 13px + 24px);
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .chatlog__attachment-code-container.chatlog__attachment-text-container--collapsed .chatlog__attachment-text-pre {
+            display: block;
+            height: calc(5 * 1.4 * 13px);
+            overflow: hidden;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .chatlog__attachment-code-container.chatlog__attachment-text-container--collapsed .chatlog__attachment-text-remaining-bar {
+            display: block;
+            height: calc(1.4 * 13px);
+            line-height: calc(1.4 * 13px);
+            font-family: "Consolas", "Courier New", Courier, monospace;
+            font-size: 13px;
+            color: #dbdee1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chatlog__attachment-code-container.chatlog__attachment-text-container--collapsed .chatlog__attachment-text-content::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        .chatlog__attachment-text-content::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .chatlog__attachment-text-content::-webkit-scrollbar-button {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        .chatlog__attachment-text-content::-webkit-scrollbar-track {
+            background-color: #323339;
+        }
+
+        .chatlog__attachment-text-content::-webkit-scrollbar-thumb {
+            background-color: #767780;
+            border-radius: 4px;
+        }
+
+        .chatlog__attachment-text-content::-webkit-scrollbar-thumb:hover {
+            background-color: #8c8d96;
+        }
+
+        .chatlog__attachment-text-pre {
+            margin: 0;
+            padding: 0;
+            font-family: "Consolas", "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #dbdee1;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .chatlog__attachment-text-remaining {
+            color: #949ba4;
+            font-style: italic;
+            display: inline-block;
+            margin-top: 4px;
+        }
+
+        .chatlog__attachment-text-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background-color: #393a41;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            user-select: none;
+        }
+
+        .chatlog__attachment-text-footer-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .chatlog__attachment-text-toggle {
+            background: #383a40;
+            border: none;
+            color: #dbdee1;
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.15s ease, color 0.15s ease, transform 0.2s ease;
+            transform: rotate(0deg);
+        }
+
+        .chatlog__attachment-text-toggle:hover {
+            background-color: #404249;
+            color: #ffffff;
+        }
+
+        .chatlog__attachment-text-toggle.chatlog__attachment-text-toggle--collapsed {
+            transform: rotate(180deg);
+        }
+
+        .chatlog__attachment-text-meta {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .chatlog__attachment-text-filename {
+            color: #f2f3f5;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chatlog__attachment-text-filesize {
+            color: #949ba4;
+            font-size: 11px;
+        }
+
+        .chatlog__attachment-text-footer-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .chatlog__attachment-text-action-btn {
+            background: transparent;
+            color: #b5bac1;
+            border: none;
+            padding: 6px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none !important;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+
+        .chatlog__attachment-text-action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        .chatlog__text-modal-content {
+            background-color: #1e1f22;
+            border-radius: 8px;
+            width: 85%;
+            max-width: 1000px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            margin: auto;
+        }
+
+        .chatlog__text-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background-color: #2b2d31;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            color: #f2f3f5;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .chatlog__text-modal-body {
+            padding: 16px;
+            overflow-y: auto;
+            color: #dbdee1;
+            font-family: "Consolas", "Courier New", Courier, monospace;
+            font-size: 13px;
+            line-height: 1.45;
+            white-space: pre-wrap;
+            word-break: break-word;
+            scrollbar-width: thin;
+            scrollbar-color: #1a1b1e transparent;
+        }
+
+        .chatlog__text-modal-body::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .chatlog__text-modal-body::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        .chatlog__text-modal-body::-webkit-scrollbar-thumb {
+            background-color: #1a1b1e;
+            border-radius: 4px;
+        }
+
+        .chatlog__text-modal-body::-webkit-scrollbar-thumb:hover {
+            background-color: #2b2d31;
         }
 
         .chatlog__attachment-filesize {
@@ -1694,6 +1957,7 @@
 
             .chatlog__embed,
             .chatlog__attachment-container,
+            .chatlog__attachment-text-container,
             .chatlog__attachment-audio-container {
                 max-width: 100%;
             }
@@ -1979,7 +2243,7 @@
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice 🧪</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 17:42">15-11-2026 17:42</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:19">15-11-2026 18:19</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1001" id="message-1001">
@@ -2018,7 +2282,7 @@
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 17:43">15-11-2026 17:43</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:20">15-11-2026 18:20</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1002" id="message-1002">
@@ -2047,7 +2311,7 @@
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice 🧪</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 17:47">15-11-2026 17:47</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:24">15-11-2026 18:24</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1003" id="message-1003">
@@ -2078,7 +2342,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 17:52">15-11-2026 17:52</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:29">15-11-2026 18:29</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1004" id="message-1004">
@@ -2135,7 +2399,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
          height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="#ffffff"></path></svg>
     <span>APP</span>
 </span>
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 17:57">15-11-2026 17:57</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:34">15-11-2026 18:34</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1005" id="message-1005">
@@ -2193,7 +2457,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
         </div>
 
         <div class="chatlog__embed-footer">
-    <img class="chatlog__embed-footer-icon" src="https://lyxios.xouxou-hosting.fr/images/white_black.png" alt="Embed footer icon" title="Embed footer icon"><span class="chatlog__embed-footer-text">Généré automatiquement • 15/11/2026 17:42</span>
+    <img class="chatlog__embed-footer-icon" src="https://lyxios.xouxou-hosting.fr/images/white_black.png" alt="Embed footer icon" title="Embed footer icon"><span class="chatlog__embed-footer-text">Généré automatiquement • 15/11/2026 18:19</span>
 </div>
 
     </div>
@@ -2222,7 +2486,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
          height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="#ffffff"></path></svg>
     <span>APP</span>
 </span>
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:02">15-11-2026 18:02</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:39">15-11-2026 18:39</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1006" id="message-1006">
@@ -2265,7 +2529,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
          height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="#ffffff"></path></svg>
     <span>APP</span>
 </span>
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:03">15-11-2026 18:03</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:40">15-11-2026 18:40</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1007" id="message-1007">
@@ -2332,7 +2596,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice 🧪</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:07">15-11-2026 18:07</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:44">15-11-2026 18:44</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1008" id="message-1008">
@@ -2373,7 +2637,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice 🧪</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:17">15-11-2026 18:17</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:54">15-11-2026 18:54</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1010" id="message-1010">
@@ -2414,7 +2678,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
          height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="#ffffff"></path></svg>
     <span>APP</span>
 </span>
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:22">15-11-2026 18:22</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:59">15-11-2026 18:59</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1011" id="message-1011">
@@ -2443,11 +2707,11 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice 🧪</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:27">15-11-2026 18:27</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:04">15-11-2026 19:04</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1014" id="message-1014">
-                    <div class="chatlog__markdown-preserve">Ce message a été modifié. <span class="chatlog__reference-edited-timestamp" data-timestamp="dimanche 15 novembre 2026 18:28">(edited)</span></div>
+                    <div class="chatlog__markdown-preserve">Ce message a été modifié. <span class="chatlog__reference-edited-timestamp" data-timestamp="dimanche 15 novembre 2026 19:05">(edited)</span></div>
 
                     
 
@@ -2489,7 +2753,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:32">15-11-2026 18:32</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:09">15-11-2026 19:09</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1017" id="message-1017">
@@ -2504,7 +2768,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                     <a href=https://data.freetouse.com/music/tracks/15baf58e-2e84-43b0-a30a-b147308c8088/file/mp3>musique.mp3</a>
                 </div>
                 <div class="chatlog__attachment-filesize">
-                    1.0 MB
+                    1 Mo
                 </div>
                 <audio controls>
                     <source src="https://data.freetouse.com/music/tracks/15baf58e-2e84-43b0-a30a-b147308c8088/file/mp3" alt="Audio Attachment" title="musique.mp3">
@@ -2535,7 +2799,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice 🧪</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:34">15-11-2026 18:34</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:11">15-11-2026 19:11</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1018" id="message-1018">
@@ -2568,7 +2832,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:37">15-11-2026 18:37</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:14">15-11-2026 19:14</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1019" id="message-1019">
@@ -2597,7 +2861,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice 🧪</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:40">15-11-2026 18:40</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:17">15-11-2026 19:17</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1020" id="message-1020">
@@ -2634,7 +2898,7 @@ Et voici un emoji personnalisé : <img class="emoji emoji--small" src="https://c
          height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="#ffffff"></path></svg>
     <span>APP</span>
 </span>
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:41">15-11-2026 18:41</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:18">15-11-2026 19:18</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1021" id="message-1021">
@@ -2773,7 +3037,7 @@ Gérez vos paramètres utilisateur et vos préférences directement depuis ce me
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice 🧪</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:42">15-11-2026 18:42</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:19">15-11-2026 19:19</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1022" id="message-1022">
@@ -2802,7 +3066,7 @@ Gérez vos paramètres utilisateur et vos préférences directement depuis ce me
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:42">15-11-2026 18:42</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:19">15-11-2026 19:19</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1009" id="message-1009">
@@ -2838,7 +3102,7 @@ Gérez vos paramètres utilisateur et vos préférences directement depuis ce me
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:43">15-11-2026 18:43</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:20">15-11-2026 19:20</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1023" id="message-1023">
@@ -2903,7 +3167,7 @@ Gérez vos paramètres utilisateur et vos préférences directement depuis ce me
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice 🧪</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:44">15-11-2026 18:44</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:21">15-11-2026 19:21</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1024" id="message-1024">
@@ -2940,27 +3204,67 @@ Gérez vos paramètres utilisateur et vos préférences directement depuis ce me
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Bob#8462" data-user-id="2" data-user-color="#FFFFFF">Bob</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:45">15-11-2026 18:45</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:22">15-11-2026 19:22</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1025" id="message-1025">
                     <div class="chatlog__markdown-preserve">Voici plusieurs fichiers pour le dossier : </div>
 
-                    <div class=chatlog__attachment>
-    <div class="" onclick="">
-        <div class="">
-            <div class="chatlog__attachment-container">
-                <img src="https://cdn.jsdelivr.net/gh/mahtoid/DiscordUtils@master/discord-document.svg" class="chatlog__attachment-icon" alt="Attachment icon">
-                <div class="chatlog__attachment-filename">
-                    <a href=https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/README.md>notes.txt</a>
+                    <div class="chatlog__attachment">
+    <div class="chatlog__attachment-text-container">
+        <div class="chatlog__attachment-text-content">
+            <pre class="chatlog__attachment-text-pre">De tout temps, l&#x27;homme a tenté de comprendre puis de reproduire l&#x27;extraordinaire machine qu&#x27;est l&#x27;être humain. Les premiers automates nous font sourire aujourd&#x27;hui. Les premiers ordinateurs également, mais un peu moins. Et lorsqu&#x27;un certain McCullogn, aidé de Pitts, invente en 1943 le premier neurone formel, on ne rigole plus. L&#x27;ordinateur est devenu capable de reproduire des neurones artificiels. Le &quot;complexe de Frankenstein&quot; va alors freiner les recherches. On commence à entendre parler du concept d&#x27;Intelligence Artificielle, plus connu sous les termes d&#x27;IA. Cela fait peur.
+
+De tout temps, l&#x27;homme a tenté de comprendre puis de reproduire l&#x27;extraordinaire machine qu&#x27;est l&#x27;être humain. Les premiers automates nous font sourire aujourd&#x27;hui. Les premiers ordinateurs également, mais un peu moins. Et lorsqu&#x27;un certain McCullogn, aidé de Pitts, invente en 1943 le premier neurone formel, on ne rigole plus. L&#x27;ordinateur est devenu capable de reproduire des neurones artificiels. Le &quot;complexe de Frankenstein&quot; va alors freiner les recherches. On commence à entendre parler du concept d&#x27;Intelligence Artificielle, plus connu sous les termes d&#x27;IA. Cela fait peur.
+
+Cela ressemblait aux gros ordinateurs que David avait pu voir dans des films de science fiction. Beaucoup de petites lumières indiquaient qu&#x27;il était en fonction. À la base, une sorte d&#x27;aquarium avait été installé tout autour. Certainement le système de refroidissement car des bulles montaient sans cesse, preuve que l&#x27;eau était en ébullition. Soudain, David resta bouche bée. Une voix caverneuse sortie des écrans où venait de s&#x27;afficher le mot « Prélude ».
+
+David comprenait très bien où voulait en venir Prélude. Lorsqu&#x27;il l&#x27;avait créé, il détestait ce monde. S&#x27;il avait eu la possibilité de le changer, il l&#x27;aurait certainement fait. Il l&#x27;aurait fait en pensé, mais pas en geste. David n&#x27;était pas du genre méchant. Jamais il n&#x27;aurait fait de mal à qui que ce soit, mais il avait certainement mis cette idée dans la programmation de Prélude sans le vouloir.
+
+Le seul moyen de le stopper serait d&#x27;arrêter tous les ordinateurs, ce qui aurait les mêmes conséquences que de laisser Prélude lancer les bombes. Depuis longtemps, toutes les installations à risque étaient contrôlées par des ordinateurs. Si l&#x27;on stoppait les ordinateurs, les centrales nucléaires s&#x27;emballeraient, les silos nucléaires cracheraient leur mort sur toute la planète. Bien entendu, l&#x27;économie mondiale dirigée par la bourse, s&#x27;effondrerait. David ne savait plus quoi faire et, manifestement, tous les militaires présents dans la salle comptaient sur lui pour résoudre cette crise.
+
+En 1975, John Holland construisit un système artificiel qui s&#x27;appuyait sur les principes de sélection de Darwin et sur les méthodes de combinaison des gènes de Mendel. L&#x27;Algorithme Génétique, ou GA, était né. Un renouveau de l&#x27;Intelligence Artificielle allait voir</pre>
+            <div class="chatlog__attachment-text-remaining-bar"><span class="chatlog__attachment-text-remaining-tag">... (9 Ko restants)</span></div>
+        </div>
+        <div class="chatlog__attachment-text-footer">
+            <div class="chatlog__attachment-text-footer-left">
+                <button type="button" class="chatlog__attachment-text-toggle" onclick="toggleTextAttachment(this)" title="Toggle" aria-label="Toggle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                </button>
+                <div class="chatlog__attachment-text-meta">
+                    <span class="chatlog__attachment-text-filename">message.txt</span>
+                    <span class="chatlog__attachment-text-filesize">9 Ko</span>
                 </div>
-                <div class="chatlog__attachment-filesize">
-                    1.0 KB
-                </div>
+            </div>
+            <div class="chatlog__attachment-text-footer-right">
+                <a href="https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/README.md" target="_blank" rel="noopener noreferrer" class="chatlog__attachment-text-action-btn" title="Open original" aria-label="Open original">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                </a>
+                <a href="https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/README.md" target="_blank" rel="noopener noreferrer" class="chatlog__attachment-text-action-btn" title="Fullscreen" aria-label="Fullscreen" onclick="openTextModal(event, this)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <polyline points="9 21 3 21 3 15"></polyline>
+                        <line x1="21" y1="3" x2="14" y2="10"></line>
+                        <line x1="3" y1="21" x2="10" y2="14"></line>
+                    </svg>
+                </a>
+                <a href="https://raw.githubusercontent.com/Xougui/DiscordTranscript/main/README.md" download="message.txt" target="_blank" rel="noopener noreferrer" class="chatlog__attachment-text-action-btn" title="Download" aria-label="Download">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </a>
             </div>
         </div>
     </div>
-</div><div class="chatlog__attachment">
+</div>
+<div class="chatlog__attachment">
     <a href="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800" target="_blank" rel="noopener noreferrer" title="View image attachment" class="" onclick="showSpoiler(event, this)">
         <img class="chatlog__attachment-thumbnail" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800" alt="Image attachment">
     </a>
@@ -2987,7 +3291,7 @@ Gérez vos paramètres utilisateur et vos préférences directement depuis ce me
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice 🧪</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:46">15-11-2026 18:46</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:23">15-11-2026 19:23</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1026" id="message-1026">
@@ -3043,7 +3347,7 @@ Et du code inline <span class="pre pre-inline">print(&#x27;test&#x27;)</span>. <
          height="16" viewBox="0 0 16 15.2"><path d="M7.4,11.17,4,8.62,5,7.26l2,1.53L10.64,4l1.36,1Z" fill="#ffffff"></path></svg>
     <span>APP</span>
 </span>
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:47">15-11-2026 18:47</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:24">15-11-2026 19:24</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1027" id="message-1027">
@@ -3106,7 +3410,7 @@ Et du code inline <span class="pre pre-inline">print(&#x27;test&#x27;)</span>. <
                 <div class="chatlog__header">
                     <span class="chatlog__author-name chatlog__author-name--colored" title="Alice 🧪#1378" data-user-id="1" data-user-color="#FFFFFF">Alice 🧪</span>
                     
-                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 18:48">15-11-2026 18:48</span>
+                    <span class="chatlog__timestamp" data-timestamp="dimanche 15 novembre 2026 19:25">15-11-2026 19:25</span>
                 </div>
 
                 <div class="chatlog__content chatlog__markdown" data-message-id="1028" id="message-1028">
@@ -3148,8 +3452,8 @@ print(&#x27;Ligne de code numéro 20&#x27;)</div> </div>
     </div>
 
     <div class="footer">
-        <span class="footer__text">Ce transcript a été généré le 15 novembre 2026 à 17:42:00 (UTC)</span>
-        <div class="footer__powered" data-version="Généré avec la v1.5.1.dev6+gfd5fe9c0a.d20260808">
+        <span class="footer__text">Ce transcript a été généré le 15 novembre 2026 à 18:19:01 (UTC)</span>
+        <div class="footer__powered" data-version="Généré avec la v1.5.1.dev17+g6cbb1273e.d20260823">
             <span>Propulsé par</span>
             <a href="https://discord-transcript.xouxou-hosting.fr/index" class="footer__powered-link" target="_blank"
                 rel="noopener">
@@ -3182,7 +3486,7 @@ print(&#x27;Ligne de code numéro 20&#x27;)</div> </div>
             </div>
             <div class="meta__field">
                 <div class="meta__title">Date de création du salon</div>
-                <div class="meta__value">15 nov. 2026 (17:42:00)</div>
+                <div class="meta__value">15 nov. 2026 (18:19:01)</div>
             </div>
             <div class="meta__field">
                 <div class="meta__title">Nombre total de messages</div>
@@ -3283,6 +3587,23 @@ print(&#x27;Ligne de code numéro 20&#x27;)</div> </div>
         <span class="modal-close">&times;</span>
         <img class="modal-content" id="modal-image">
         <a id="modal-caption" href="#" target="_blank" rel="noopener">Ouvrir l'original</a>
+    </div>
+
+    <div id="text-modal" class="modal">
+        <span class="modal-close" onclick="closeTextModal()">&times;</span>
+        <div class="chatlog__text-modal-content">
+            <div class="chatlog__text-modal-header">
+                <span id="text-modal-filename">document.txt</span>
+                <a id="text-modal-download" href="#" download class="chatlog__attachment-text-action-btn" title="Télécharger">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </a>
+            </div>
+            <pre class="chatlog__text-modal-body" id="text-modal-body"></pre>
+        </div>
     </div>
 
     <script>
@@ -3613,10 +3934,66 @@ for(var i = 0; i < timeStamps.length; i++) {
             }
 
             document.addEventListener('keydown', function (event) {
-                if (event.key === "Escape" && modal.style.display === "flex") {
-                    modal.style.display = "none";
+                if (event.key === "Escape") {
+                    if (modal.style.display === "flex") {
+                        modal.style.display = "none";
+                    }
+                    const textModal = document.getElementById("text-modal");
+                    if (textModal && textModal.style.display === "flex") {
+                        textModal.style.display = "none";
+                    }
                 }
             });
+        });
+
+        function toggleTextAttachment(btn) {
+            const container = btn.closest('.chatlog__attachment-text-container');
+            if (!container) return;
+            container.classList.toggle('chatlog__attachment-text-container--collapsed');
+            btn.classList.toggle('chatlog__attachment-text-toggle--collapsed');
+        }
+
+        function openTextModal(event, btn) {
+            event.preventDefault();
+            const container = btn.closest('.chatlog__attachment-text-container');
+            if (!container) return;
+            const pre = container.querySelector('.chatlog__attachment-text-pre');
+            const filenameEl = container.querySelector('.chatlog__attachment-text-filename');
+            const textModal = document.getElementById("text-modal");
+            const modalBody = document.getElementById("text-modal-body");
+            const modalFilename = document.getElementById("text-modal-filename");
+            const modalDownload = document.getElementById("text-modal-download");
+
+            if (textModal && modalBody) {
+                modalBody.textContent = pre ? pre.textContent : "";
+                if (modalFilename && filenameEl) {
+                    modalFilename.textContent = filenameEl.textContent;
+                }
+                if (modalDownload) {
+                    modalDownload.href = btn.href;
+                    if (filenameEl) modalDownload.download = filenameEl.textContent.trim();
+                }
+                textModal.style.display = "flex";
+            }
+        }
+
+        function closeTextModal() {
+            const textModal = document.getElementById("text-modal");
+            if (textModal) {
+                textModal.style.display = "none";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const textModal = document.getElementById("text-modal");
+            if (textModal) {
+                textModal.addEventListener('click', function(e) {
+                    const content = textModal.querySelector('.chatlog__text-modal-content');
+                    if (content && !content.contains(e.target) && !e.target.classList.contains('modal-close')) {
+                        textModal.style.display = "none";
+                    }
+                });
+            }
         });
     </script>
 

@@ -138,6 +138,7 @@ img_attachment = read_file(dir_path + "/html/attachment/image.html")
 msg_attachment = read_file(dir_path + "/html/attachment/message.html")
 audio_attachment = read_file(dir_path + "/html/attachment/audio.html")
 video_attachment = read_file(dir_path + "/html/attachment/video.html")
+text_attachment = read_file(dir_path + "/html/attachment/text.html")
 
 
 total = read_file(dir_path + "/html/base.html")

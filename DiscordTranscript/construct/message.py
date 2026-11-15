@@ -520,7 +520,11 @@ class MessageConstruct:
                 ):
                     att = await self.attachment_handler.process_asset(att)
                 return await Attachment(
-                    att, self.guild, bot=self.bot, timezone=self.pytz_timezone
+                    att,
+                    self.guild,
+                    bot=self.bot,
+                    timezone=self.pytz_timezone,
+                    language=self.language,
                 ).flow()
 
             att_results = await asyncio.gather(
