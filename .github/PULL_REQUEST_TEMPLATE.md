@@ -2,7 +2,11 @@
 
 ## 🔗 Ticket / Module concerné
 - Module : DiscordTranscript
-- Type : [ ] Correction [ ] Nouvelle fonctionnalité [ ] Amélioration [ ] Refactorisation
+- Type : 
+- [ ] Correction 
+- [ ] Nouvelle fonctionnalité 
+- [ ] Amélioration 
+- [ ] Refactorisation
 
 ## ✅ Checklist de vérification
 - [ ] **1 PR = 1 Changement** : Cette PR concerne un seul sujet/module (ou des modifications directement liées).
