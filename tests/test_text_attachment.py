@@ -3,7 +3,14 @@ from DiscordTranscript.construct.assets.attachment import Attachment
 
 
 class DummyAttachment:
-    def __init__(self, filename, content_type="text/plain", size=1024, text=None, url="https://example.com/test.txt"):
+    def __init__(
+        self,
+        filename,
+        content_type="text/plain",
+        size=1024,
+        text=None,
+        url="https://example.com/test.txt",
+    ):
         self.filename = filename
         self.content_type = content_type
         self.size = size
@@ -14,7 +21,9 @@ class DummyAttachment:
 
 @pytest.mark.asyncio
 async def test_text_attachment_preview():
-    att = DummyAttachment("test.txt", "text/plain", 1024, text="Ceci est un test de contenu textuel.")
+    att = DummyAttachment(
+        "test.txt", "text/plain", 1024, text="Ceci est un test de contenu textuel."
+    )
     attachment_obj = Attachment(att, None, language="fr")
     html = await attachment_obj.flow()
     assert "chatlog__attachment-text-container" in html
